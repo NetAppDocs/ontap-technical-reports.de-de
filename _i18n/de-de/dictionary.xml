@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blocks>
-  <block id="f1574d51fcf9f775687f0113052df518" category="summary">Diese technischen Berichte bieten einen Überblick über ONTAP sowie empfohlene Vorgehensweisen</block>
   <block id="4434424bd2c1011098a508e85df56b94" category="doc">Technische Berichte von ONTAP</block>
   <block id="f282b1ca0090a5b43997888b90926fdd" category="summary">Diese technischen Berichte bieten einen Überblick über die Branchenlösungen mit NetApp ONTAP sowie empfohlene Vorgehensweisen</block>
   <block id="0fa7990fb9bf5e1fa283be0a561304a6" category="doc">Technische Berichte zu Branchenlösungen</block>
@@ -411,4 +410,5 @@ In diesem Dokument werden die Techniken und Technologien beschrieben, mit denen 
   <block id="0dca6505dd29defef873a6ae40e5ba67" category="sidebar">VMware vSphere Virtual Volumes (VVols) mit ONTAP</block>
   <block id="2d90ac09cbf108bddad31dd341f8614e" category="sidebar">VMware Site Recovery Manager mit ONTAP</block>
   <block id="16d877785afd5e8f401c4bd07d5afe32" category="sidebar">Weitere technische Berichte zur Virtualisierung</block>
+  <block id="606ae2d52250c5830b4f47feec9aadee" category="summary">Technische Berichte von ONTAP bieten zusätzlichen Kontext für die Planung und Optimierung von ONTAP-Implementierungen in verschiedenen Ecosystemen oder mit verschiedenen Protokollen sowie empfohlene Best Practices für ONTAP-Funktionen.</block>
 </blocks>
