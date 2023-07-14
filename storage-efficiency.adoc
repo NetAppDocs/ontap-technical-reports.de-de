@@ -1,0 +1,27 @@
+---
+layout: landing-page 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
+permalink: storage-efficiency.html 
+summary: Diese technischen Berichte bieten einen Überblick über die Storage-Effizienz in NetApp ONTAP sowie empfohlene Vorgehensweisen. 
+---
+= Technische Berichte zur Storage-Effizienz
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP bietet ein umfassendes Portfolio an Funktionen für effizienteren Storage. Inline-Datenkomprimierung, -Deduplizierung und -Data-Compaction sorgen zusammen für niedrigere Storage-Kosten und eine maximale effektive Datenkapazität. Außerdem können Sie Ihre Einsparungen mit platzsparenden NetApp Snapshot Kopien, Thin Provisioning, Replizierung und Klontechnologien vervielfachen.
+
+[NOTE]
+====
+Die Verfahrensdokumentation zur Deduplizierung ist unter verfügbar link:https://docs.netapp.com/us-en/ontap/volumes/enable-deduplication-volume-task.html["Dokumentation der Deduplizierung"]
+Verfahrensdokumentation für die Komprimierung finden Sie unter link:https://docs.netapp.com/us-en/ontap/volumes/enable-data-compression-volume-task.html["Dokumentation der Komprimierung"]
+Verfahrensdokumentation zur temperaturempfindlichen Lagereffizienz finden Sie unter link:https://docs.netapp.com/us-en/ontap/volumes/enable-temperature-sensitive-efficiency-concept.html["Dokumentation zur temperaturempfindlichen Storage-Effizienz"]
+Die Verfahrensdokumentation für die Data-Compaction finden Sie unter link:https://docs.netapp.com/us-en/ontap/volumes/enable-inline-data-compaction-fas-systems-task.html["Data-Compaction-Dokumentation"]
+
+====

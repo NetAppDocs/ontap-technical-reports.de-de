@@ -1,0 +1,33 @@
+---
+sidebar: sidebar 
+permalink: change-log-display.html 
+summary: Protokoll der letzten Änderungen an den technischen Berichten von ONTAP 
+keywords: netapp, ontap, catalog, change, log 
+---
+= Technische Berichte von ONTAP Änderungsprotokoll
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:table-stripes: odd
+:imagesdir: ./media/
+
+
+[role="lead"]
+Aktuelle Änderungen an technischen Berichten von ONTAP Die letzten Änderungen werden zuerst aufgeführt.
+
+[role="tabbed-block"]
+====
+.Alle Änderungen
+--
+|===
+
+
+| *Datum* | *TR-Nummer* | *Betreff* | *Beschreibung der Änderung* 
+
+
+| 07/12/2023 | K. A. | Allgemein | Erste Version des Repositorys für technische Berichte von ONTAP 
+|===
+--
+====

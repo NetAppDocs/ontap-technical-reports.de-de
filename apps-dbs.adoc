@@ -1,0 +1,73 @@
+---
+layout: landing-page 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
+permalink: apps-dbs.html 
+summary: Diese technischen Berichte bieten einen Überblick über Applikationen und Datenbanken auf ONTAP sowie empfohlene Vorgehensweisen 
+---
+= Technische Berichte zu Applikationen und Datenbanken
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP ist die Grundlage für Datenmanagement und Datensicherung für zahlreiche Enterprise-Applikationen und Datenbanktechnologien. Die folgenden technischen Berichte enthalten Anleitungen zu von NetApp empfohlenen Vorgehensweisen und Implementierungsverfahren für Microsoft SQL Server, MySQL, Oracle und PostgreSQL.
+
+
+
+== Microsoft SQL Server
+
+link:https://www.netapp.com/pdf.html?item=/media/8585-tr4590.pdf["TR-4590: Best Practice Guide für Microsoft SQL Server mit ONTAP"^]
+Erfahren Sie, wie Storage-Administratoren und Datenbankadministratoren Microsoft SQL Server auf ONTAP Storage erfolgreich bereitstellen können.
+
+link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["TR-4714: Best Practices für Microsoft SQL Server mit SnapCenter"^]
+Erfahren Sie mehr darüber, wie Sie Microsoft SQL Server erfolgreich auf ONTAP Storage mit SnapCenter Technologie zur Datensicherung implementieren.
+
+
+
+== MySQL
+
+link:https://www.netapp.com/pdf.html?item=/media/16423-tr-4722pdf.pdf["MySQL Datenbank auf ONTAP"^]
+MySQL und seine Varianten, darunter MariaDB und Percona, sind weit verbreitet für viele Unternehmensanwendungen. Diese Anwendungen reichen von globalen Websites sozialer Netzwerke und massiven E-Commerce-Systemen bis hin zu SMB-Hosting-Systemen mit Tausenden von Datenbankinstanzen. Erfahren Sie mehr über die Konfigurationsanforderungen und Anleitungen zur Optimierung und Storage-Konfiguration für die Implementierung von MySQL auf ONTAP.
+
+
+
+== Oracle
+
+link:https://www.netapp.com/pdf.html?item=/media/8744-tr3633pdf.pdf["TR-3633: Oracle Databases on ONTAP"^]
+Erfahren Sie, wie Storage-Administratoren und Datenbankadministratoren Oracle auf ONTAP Storage erfolgreich einsetzen können, und lernen Sie dabei empfohlene Vorgehensweisen kennen.
+
+link:https://www.netapp.com/pdf.html?item=/media/85630-tr-4969.pdf["TR-4969: Performance von Oracle Database auf AFF A-Series und C-Series"^]
+ONTAP ist eine leistungsstarke Datenmanagementplattform mit nativen Funktionen, die Inline-Komprimierung, unterbrechungsfreie Hardware-Upgrades und die Möglichkeit zum Import einer LUN aus einem fremden Storage-Array umfassen. Bis zu 24 Nodes können in einem Cluster zusammengefasst werden und gleichzeitig Daten über die Protokolle Network File System (NFS), Server Message Block (SMB), iSCSI, Fibre Channel (FC) und Nonvolatile Memory Express (NVMe) bereitstellen. Zudem bildet die Snapshot Technologie die Grundlage für die Erstellung von Zehntausenden von Online-Backups und vollständig einsatzbereiten Datenbankklonen. Neben den umfassenden Funktionen von ONTAP gibt es eine Vielzahl von Benutzeranforderungen, darunter Datenbankgröße, Performance-Anforderungen und Datensicherung. Erfahren Sie mehr über die Performance von Bare Metal-Datenbanken mit AFF Storage-Systemen, einschließlich Der A-Series und C-Series, und es werden sowohl Maximalwerte als auch der praktische Unterschied zwischen den beiden AFF Optionen abgedeckt.
+
+link:https://www.netapp.com/pdf.html?item=/media/85629-tr-4971.pdf["TR-4971: Virtualisierte Oracle Datenbank-Performance auf AFF A-Series und C-Series"^]
+ONTAP ist eine leistungsstarke Datenmanagementplattform mit nativen Funktionen, die Inline-Komprimierung, unterbrechungsfreie Hardware-Upgrades und die Möglichkeit zum Import einer LUN aus einem fremden Storage-Array umfassen. Bis zu 24 Nodes können in einem Cluster zusammengefasst werden und gleichzeitig Daten über die Protokolle Network File System (NFS), Server Message Block (SMB), iSCSI, Fibre Channel FC) und Nonvolatile Memory Express (NVMe) bereitstellen. Zudem bildet die Snapshot Technologie die Grundlage für die Erstellung von Zehntausenden von Online-Backups und vollständig einsatzbereiten Datenbankklonen. Neben den umfassenden Funktionen von ONTAP gibt es eine Vielzahl von Benutzeranforderungen, darunter Datenbankgröße, Performance-Anforderungen und Datensicherung. Erfahren Sie mehr über die virtualisierte Datenbank-Performance bei Verwendung von AFF Storage-Systemen, einschließlich A-Series und C-Series, und es werden sowohl Maximalwerte als auch die praktischen Unterschiede zwischen den beiden AFF Optionen behandelt.
+
+link:https://www.netapp.com/pdf.html?item=/media/19666-tr-4591.pdf["TR-4591: Oracle Datensicherung: Backup, Recovery, Replizierung und Disaster Recovery"^]
+Informieren Sie sich über empfohlene Vorgehensweisen, mit denen Storage-Administratoren und Datenbankadministratoren erfolgreich Backups, Recoverys, Replizierungen und Disaster Recovery für Oracle auf ONTAP Storage durchführen können.
+
+link:https://www.netapp.com/pdf.html?item=/media/8583-tr4592.pdf["TR-4592: Oracle auf MetroCluster"^]
+Erfahren Sie mehr über empfohlene Vorgehensweisen, Testverfahren und andere Überlegungen beim Betrieb von Oracle-Datenbanken mit synchroner MetroCluster-Replikationsfunktion.
+
+link:https://www.netapp.com/pdf.html?item=/media/19750-tr-4534.pdf["TR-4534: Migration von Oracle-Datenbanken auf ONTAP-Speichersysteme"^]
+Erfahren Sie mehr über die allgemeinen Überlegungen bei der Planung einer Migrationsstrategie, die drei verschiedenen Ebenen, auf denen die Datenverschiebung stattfindet, und gehen Sie auf einige der verschiedenen verfügbaren Verfahren ein.
+
+link:https://www.netapp.com/pdf.html?item=/media/9138-tr4695.pdf["TR-4695: Datenbank-Storage-Tiering mit FabricPool"^]
+Informieren Sie sich über die Vorteile und Konfigurationsoptionen von FabricPool mit unterschiedlichen Datenbanken, wie etwa dem relationalen Datenbankmanagementsystem (RDBMS) von Oracle.
+
+link:https://www.netapp.com/pdf.html?item=/media/40384-tr-4899.pdf["TR-4899: Transparentes Applikations-Failover für Oracle Database mit SnapMirror Business Continuity"^]
+SnapMirror Business Continuity (SM-BC) und Oracle Real Application Cluster (RAC) sorgen für transparentes Applikations-Failover (TAF) und Continuity bei Standortausfällen und echten Notfällen. Erfahren Sie mehr über Konfigurationsanleitungen und empfohlene Vorgehensweisen für ein AFF-Speicher-Array mit SM-BC als Speicherkomponente von Oracle RAC.
+
+link:https://www.netapp.com/pdf.html?item=/media/21901-tr-4876.pdf["TR-4876:Best Practices für Oracle Mandantenfähigkeit mit ONTAP und Implementierung"^]
+Erfahren Sie mehr über die empfohlenen Vorgehensweisen zur Bereitstellung, zum Management und zur Sicherung von mandantenfähigen Oracle Datenbanken durch die Verwendung von ONTAP Storage. So können Sie die Vorteile der mandantenfähigen Oracle Datenbanken und der Funktionen der ONTAP Software maximieren.
+
+
+
+== PostgreSQL
+
+link:https://www.netapp.com/pdf.html?item=/media/17140-tr4770.pdf["TR-4770: PostgreSQL Datenbank auf ONTAP"^]
+PostgreSQL wird mit Varianten wie PostgreSQL, PostgreSQL Plus und EDB Postgres Advanced Server (EPAS) geliefert. PostgreSQL wird typischerweise als Back-End-Datenbank für Multi-Tier-Applikationen implementiert. Es wird von gängigen Middleware-Paketen (wie PHP, Java, Python, Tcl/TK, ODBC, Und JDBC) und war in der Vergangenheit eine beliebte Wahl für Open-Source-Datenbankmanagementsysteme. Erfahren Sie mehr über die Konfigurationsanforderungen und Anleitungen zur Optimierung und Storage-Konfiguration für die Implementierung von PostgreSQL auf ONTAP.

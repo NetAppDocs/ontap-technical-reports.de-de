@@ -1,0 +1,74 @@
+---
+layout: landing-page 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, NAS, best practices, best-practices 
+permalink: nas.html 
+summary: Diese technischen Berichte bieten einen Überblick über NFS, SMB/CIFS, S3, Name Services in NetApp ONTAP sowie empfohlene Vorgehensweisen. 
+---
+= Technische Berichte von NAS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+NetApp NAS-Lösungen vereinfachen das Datenmanagement, halten mit dem Datenwachstum Schritt und optimieren gleichzeitig die Kosten. ONTAP NAS-Lösungen sorgen für unterbrechungsfreien Betrieb, Effizienz und nahtlose Skalierbarkeit in einer Unified Architecture. Scale-out-NAS mit NetApp ONTAP Technologie nutzt das enorme ONTAP Ecosystem, in dem wir einen bedeutenden Innovationsvorsprung und auch eine Vision für aggressive zukünftige Innovationen haben.
+
+[NOTE]
+====
+Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/nas-management/index.html["ONTAP NAS-Storage-Management"] Und link:https://docs.netapp.com/us-en/ontap/object-storage-management/index.html["ONTAP S3 Storage-Management"] Produktdokumentation:
+
+====
+
+
+== NFS
+
+link:https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["TR-4067: NFS in ONTAP Best Practice und Implementierungsleitfaden"^]
+Informieren Sie sich über grundlegende Konzepte, Support-Informationen, Konfigurationstipps und empfohlene Vorgehensweisen für NFS in ONTAP.
+
+link:https://www.netapp.com/pdf.html?item=/media/84595-tr-4962.pdf["TR-4962: NFSv4.2 – Erweiterte Attribute"^]
+Erfahren Sie mehr über die Aktivierung und Verwendung von erweiterten NFSv4.2-Attributen in ONTAP 9.12.1 und höher.
+
+
+
+== SMB
+
+link:https://www.netapp.com/pdf.html?item=/media/17136-tr4740.pdf["TR-4740: SMB 3.0 Multichannel"^]
+Microsoft hat Multichannel im SMB 3.0-Protokoll eingeführt, um das SMB3-Protokoll zu verbessern, indem es die Leistungs- und Zuverlässigkeitseinschränkungen von SMB1 und SMB2 berücksichtigt. Erfahren Sie mehr über die Multichannel-Funktion in ONTAP, einschließlich seiner Funktionen, empfohlenen Vorgehensweisen und Ergebnisse von Leistungstests.
+
+
+
+== Multi-Protokoll
+
+link:https://www.netapp.com/pdf.html?item=/media/27436-tr-4887.pdf["TR-4887: Übersicht über Multiprotokoll-NAS in ONTAP und Best Practices"^]
+Erfahren Sie, wie der Multiprotokoll-NAS-Zugriff in ONTAP funktioniert und welche empfohlenen Praktiken für Multi-Protokoll-Umgebungen kommen.
+
+
+
+== ONTAP S3
+
+link:https://www.netapp.com/pdf.html?item=/media/17219-tr4814.pdf["TR-4814: S3 in ONTAP Best Practices"^]
+Lernen Sie empfohlene Vorgehensweisen für die Verwendung des Amazon Simple Storage Service (S3) mit ONTAP Software kennen. Darüber hinaus erhalten Sie Funktionen und Konfigurationen für die Verwendung von ONTAP als Objektspeicher mit nativen S3-Applikationen oder als Tiering-Ziel für FabricPool.
+
+
+
+== Name Services
+
+link:https://www.netapp.com/pdf.html?item=/media/19370-tr-4523.pdf["TR-4523: DNS-Lastverteilung in ONTAP"^]
+Erfahren Sie, wie Sie ONTAP für die Verwendung mit DNS-Lastausgleichsmethoden konfigurieren, einschließlich DNS in ONTAP, verschiedene Konfigurationsmethoden und empfohlene Vorgehensweisen.
+
+link:https://www.netapp.com/pdf.html?item=/media/16328-tr-4668.pdf["TR-4668: Name Services Best Practices Guide"^]
+Erfahren Sie mehr über empfohlene Vorgehensweisen, Einschränkungen und Überlegungen bei der Implementierung von NAS-Lösungen (Network-Attached Storage) wie CIFS/SMB und NFS in ONTAP.
+
+link:https://www.netapp.com/pdf.html?item=/media/19423-tr-4835.pdf["TR-4835: Konfiguration von LDAP in ONTAP-Multiprotokoll-NAS-Identitätsmanagement"^]
+Erfahren Sie, wie Sie das Lightweight Directory Access Protocol (LDAP)-Identitätsmanagement in ONTAP für Multiprotokoll-NAS konfigurieren.
+
+
+
+== NAS-Sicherheit
+
+link:https://www.netapp.com/pdf.html?item=/media/19384-tr-4616.pdf["TR-4616: NFS Kerberos im ONTAP"^]
+Informieren Sie sich über NFS Kerberos in ONTAP, einschließlich Konfigurationsschritte mit Active Directory- und Red hat Enterprise Linux (RHEL)-Clients.

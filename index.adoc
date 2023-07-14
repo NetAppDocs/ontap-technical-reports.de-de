@@ -1,0 +1,16 @@
+---
+layout: landing-page 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
+permalink: index.html 
+summary: Diese technischen Berichte bieten einen Überblick über ONTAP sowie empfohlene Vorgehensweisen 
+---
+= Technische Berichte von ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+

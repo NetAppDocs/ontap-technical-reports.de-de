@@ -1,0 +1,12 @@
+= 
+:allow-uri-read: 
+
+
+|===
+
+
+| *Datum* | *TR-Nummer* | *Betreff* | *Beschreibung der Änderung* 
+
+
+| 07/12/2023 | K. A. | Allgemein | Erste Version des Repositorys für technische Berichte von ONTAP 
+|===

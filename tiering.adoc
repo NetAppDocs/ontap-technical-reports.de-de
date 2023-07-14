@@ -1,0 +1,31 @@
+---
+layout: landing-page 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
+permalink: tiering.html 
+summary: Diese technischen Berichte bieten einen Überblick über das Tiering in NetApp ONTAP sowie empfohlene Vorgehensweisen. 
+---
+= Tiering von technischen Berichten
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+
+
+[role="lead"]
+Mit der Daten-Tiering-Lösung von FabricPool wird die Benutzerfreundlichkeit von Flash-Systemen in Unternehmen insgesamt verbessert, während gleichzeitig die Anpassung der Applikationsarchitektur für Storage-Effizienz mühsam vermieden wird. FabricPool senkt den Storage-Platzbedarf und die damit verbundenen Kosten für eine Systemumgebung. Aktive Daten bleiben auf High-Performance-SSDs. Inaktive Daten werden auf kostengünstigen Objektspeicher verschoben, wobei die Storage-Effizienz erhalten bleibt.
+
+[NOTE]
+====
+Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/fabricpool/index.html["ONTAP FabricPool"] Produktdokumentation:
+
+====
+link:https://www.netapp.com/pdf.html?item=/media/17239-tr4598.pdf["TR-4598: FabricPool Best Practices"^]
+Erfahren Sie mehr über die Funktionen, Anforderungen, Implementierung und empfohlene Practices für FabricPool.
+
+link:https://www.netapp.com/pdf.html?item=/media/19403-tr-4826.pdf["TR-4826: NetApp FabricPool with StorageGRID Recommendation Guide"^]
+Erfahren Sie mehr über die empfohlenen Vorgehensweisen für die Implementierung und Größenbestimmung von StorageGRID als Kapazitäts-Tier für die FabricPool der ONTAP-Komponente. Dieses Dokument behandelt außerdem die Kernfunktionen, Anforderungen, Implementierung und empfohlene Vorgehensweisen bei der Verwendung von StorageGRID.
+
+link:https://www.netapp.com/pdf.html?item=/media/9138-tr4695.pdf["TR-4695: Datenbank-Storage-Tiering mit NetApp FabricPool"^]
+Informieren Sie sich über die Vorteile und Konfigurationsoptionen von FabricPool mit unterschiedlichen Datenbanken, wie etwa dem relationalen Datenbankmanagementsystem (RDBMS) von Oracle.

@@ -1,0 +1,71 @@
+---
+layout: landing-page 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, MAV, MFA, Ransomware, Security, best practices, best-practices, tamperproof, tamper proof, tamperproof snapshots tamper-proof snapshots 
+permalink: security.html 
+summary: Diese technischen Berichte bieten einen Überblick über die Sicherheit in NetApp ONTAP sowie empfohlene Vorgehensweisen. 
+---
+= Technische Sicherheitsberichte
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP entwickelt sich weiter und Sicherheit ist dabei ein integraler Bestandteil der Lösung. Die neueste Version von ONTAP enthält viele neue Sicherheitsfunktionen, die für Ihr Unternehmen von unschätzbarem Wert sind, um die Daten in der gesamten Hybrid Cloud zu schützen, Ransomware-Angriffen vorzubeugen und die von der Branche empfohlenen Vorgehensweisen einzuhalten. Diese neuen Funktionen unterstützen Ihr Unternehmen außerdem dabei, sich weiter in Richtung eines Zero-Trust-Modells zu bewegen.
+
+[NOTE]
+====
+Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/security-encryption/index.html["ONTAP Sicherheit und Datenverschlüsselung"] Produktdokumentation:
+
+====
+
+
+== Ransomware
+
+link:https://www.netapp.com/pdf.html?item=/media/7334-tr4572.pdf["TR-4572: Die NetApp Lösung für Ransomware"^]
+Erfahren Sie, wie sich Ransomware weiterentwickelt hat, und wie Sie Angriffe identifizieren, die Ausbreitung verhindern und mit der NetApp Lösung für Ransomware so schnell wie möglich wiederherstellen können. Die in diesem Dokument enthaltenen Anleitungen und Lösungen sollen Unternehmen dabei helfen, über Cyber-resiliente Lösungen zu verfügen und gleichzeitig ihre vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen zu erfüllen.
+
+link:https://www.netapp.com/pdf.html?item=/media/6158-tr4526.pdf["TR-4526: Konformer WORM Storage mit NetApp SnapLock"^]
+Viele Unternehmen setzen auf WORM-Storage (Write Once, Read Many), um gesetzliche Vorgaben einzuhalten oder einfach nur um eine weitere Schicht zu ihrer Datensicherungsstrategie hinzuzufügen. Erfahren Sie, wie Sie SnapLock, die WORM-Lösung in ONTAP, in Umgebungen integrieren, die WORM-Datenspeicher erfordern.
+
+
+
+== Zero Trust
+
+link:https://www.netapp.com/pdf.html?item=/media/19756-tr-4829.pdf["TR-4829: NetApp und Zero Trust"^]
+Zero Trust war bisher ein netzwerkorientierter Ansatz der Architektur von Microcore and Perimeter (MCAP) zum Schutz von Daten, Services, Applikationen oder Assets mit Kontrolloptionen, die als Segmentierungsgateway bekannt sind. ONTAP verfolgt für Zero Trust einen Daten-orientierten Ansatz, bei dem das Storage-Managementsystem zum Segmentierungs-Gateway wird, um die Daten unserer Kunden zu schützen und den Zugriff darauf zu überwachen. Insbesondere die FPolicy Zero Trust Engine und das FPolicy Partner-Ecosystem werden zum Kontrollzentrum, um normale und fehlende Datenzugriffsmuster detailliert zu verstehen und Bedrohungen von innen zu erkennen.
+
+
+
+== Multi-Faktor-Authentifizierung
+
+link:https://www.netapp.com/pdf.html?item=/media/17055-tr4647.pdf["TR-4647: Multi-Faktor-Authentifizierung in ONTAP Best Practices and Implementation Guide"^]
+Informieren Sie sich über die Multi-Faktor-Authentifizierung von ONTAP für administrativen Zugriff über System Manager, Active IQ Unified Manager und ONTAP Secure Shell (SSH)-CLI-Authentifizierung.
+
+link:https://www.netapp.com/pdf.html?item=/media/17036-tr4717.pdf["TR-4717: ONTAP-SSH-Authentifizierung mit einer gemeinsamen Zugriffskarte"^]
+Erfahren Sie, wie Sie SSH-Clients von Drittanbietern in Verbindung mit der ActivClient-Software konfigurieren und testen, um einen ONTAP-Storage-Administrator über den öffentlichen Schlüssel zu authentifizieren, der auf einer Common Access Card (CAC) gespeichert ist, wenn er in ONTAP konfiguriert ist.
+
+
+
+== Mandantenfähigkeit
+
+link:https://www.netapp.com/pdf.html?item=/media/16886-tr-4160.pdf["TR-4160: Sichere Mandantenfähigkeit in ONTAP"^]
+Erfahren Sie, wie Sie mithilfe von Storage-VMs in ONTAP sichere Mandantenfähigkeit implementieren. Hierzu gehören auch Entwurfsüberlegungen und empfohlene Vorgehensweisen.
+
+
+
+== Protokollierung
+
+link:https://www.netapp.com/pdf.html?item=/media/16880-tr-4303.pdf["TR-4303: Anmelden ONTAP"^]
+Erfahren Sie, wie Sie die verschiedenen vom ONTAP generierten Protokolle, die angebotenen Funktionen und das Anzeigen und Abrufen von Protokollen definieren.
+
+
+
+== Standards
+
+link:https://www.netapp.com/pdf.html?item=/media/17180-tr4401.pdf["TR-4401: PCI-DSS 4.0 und ONTAP"^]
+Erfahren Sie, wie Sie ein System anhand des PCI DSS 4.0-Standards validieren und die Anforderungen der für ein NetApp ONTAP-System geltenden Kontrollen erfüllen.
