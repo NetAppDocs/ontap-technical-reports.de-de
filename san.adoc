@@ -28,9 +28,6 @@ Erfahren Sie mehr über Blockprotokolle in ONTAP sowie Empfehlungen.
 link:https://www.netapp.com/pdf.html?item=/media/10681-tr4684.pdf["TR-4684: Implementation and Configuring Modern SANs with NVMe over Fabrics (NVMe-of)"^]
 Erfahren Sie, wie Sie NVMe over Fabrics-Übertragungen (NVMe over Fibre Channel und NVMe over TCP) implementieren und konfigurieren. Die Themen umfassen Design, Implementierung, Konfiguration, Management-Richtlinien und empfohlene Praktiken zum Aufbau von hochverfügbaren, hochperformanten modernen SAN-Lösungen unter Verwendung von NVMe-Protokollen und -Übertragungen.
 
-link:https://www.netapp.com/pdf.html?item=/media/10379-tr4515.pdf["TR-4515: ONTAP AFF All-SAN-Array (ASA)-Systeme"^]
-Erfahren Sie mehr über die All-SAN-Array-Systeme (ASA) von NetApp AFF und die Implementierung anhand von empfohlenen Vorgehensweisen für stets verfügbare, geschäftskritische SAN-Konfigurationen.
-
 link:https://www.netapp.com/pdf.html?item=/media/85671-tr-4968.pdf["TR-4968: NetApp All-SAN-Array Datenverfügbarkeit und -Integrität"^]
 Erfahren Sie, wie die verschiedenen Datenschutz- und Datenintegritätsfunktionen eines All-SAN-Array-Systems eine maximale Applikations-Uptime erreichen und empfohlene Vorgehensweisen für das Design, die Implementierung und das Management eines SAN-Netzwerks erhalten.
 
