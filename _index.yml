@@ -8,13 +8,15 @@ indexpage:
   tiles:
   - title: Applikationen und Datenbanken
     links:
-    - title: Microsoft SQL Server mit ONTAP
+    - title: Microsoft SQL Server-Datenbanken auf ONTAP
       url: apps-dbs.html
-    - title: Performance von Oracle Database auf AFF A-Series und C-Series
-      url: apps-dbs.html
-    - title: Virtualisierte Oracle Datenbank-Performance auf AFF A-Serie und C-Serie
+    - title: MySQL-Datenbanken auf ONTAP
       url: apps-dbs.html
     - title: Oracle-Datenbanken auf ONTAP
+      url: apps-dbs.html
+    - title: PostgreSQL-Datenbanken auf ONTAP
+      url: apps-dbs.html
+    - title: SAP HANA auf ONTAP
       url: apps-dbs.html
     - title: Zusätzliche technische Berichte zu Applikationen und Datenbanken
       url: apps-dbs.html

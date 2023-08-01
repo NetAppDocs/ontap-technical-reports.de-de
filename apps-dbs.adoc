@@ -14,7 +14,7 @@ summary: Diese technischen Berichte bieten einen Überblick über Applikationen 
 
 
 [role="lead"]
-ONTAP ist die Grundlage für Datenmanagement und Datensicherung für zahlreiche Enterprise-Applikationen und Datenbanktechnologien. Die folgenden technischen Berichte enthalten Anleitungen zu von NetApp empfohlenen Vorgehensweisen und Implementierungsverfahren für Microsoft SQL Server, MySQL, Oracle und PostgreSQL.
+ONTAP ist die Grundlage für Datenmanagement und Datensicherung für zahlreiche Enterprise-Applikationen und Datenbanktechnologien. Die folgenden technischen Berichte enthalten Anleitungen zu von NetApp empfohlenen Vorgehensweisen und Implementierungsverfahren für Microsoft SQL Server, MySQL, Oracle, PostgreSQL und SAP HANA.
 
 
 
