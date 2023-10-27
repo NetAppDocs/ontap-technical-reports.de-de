@@ -57,13 +57,6 @@ Erfahren Sie, wie Sie mithilfe von Storage-VMs in ONTAP sichere Mandantenfähigk
 
 
 
-== Protokollierung
-
-link:https://www.netapp.com/pdf.html?item=/media/16880-tr-4303.pdf["TR-4303: Anmelden ONTAP"^]
-Erfahren Sie, wie Sie die verschiedenen vom ONTAP generierten Protokolle, die angebotenen Funktionen und das Anzeigen und Abrufen von Protokollen definieren.
-
-
-
 == Standards
 
 link:https://www.netapp.com/pdf.html?item=/media/17180-tr4401.pdf["TR-4401: PCI-DSS 4.0 und ONTAP"^]
