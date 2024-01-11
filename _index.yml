@@ -8,18 +8,16 @@ indexpage:
   tiles:
   - title: Applikationen und Datenbanken
     links:
-    - title: Microsoft SQL Server-Datenbanken auf ONTAP
-      url: apps-dbs.html
+    - title: Microsoft SQL Server auf ONTAP
+      url: apps-dbs.html#microsoft-sql-server
     - title: MySQL-Datenbanken auf ONTAP
-      url: apps-dbs.html
+      url: apps-dbs.html#mysql
     - title: Oracle-Datenbanken auf ONTAP
-      url: apps-dbs.html
+      url: apps-dbs.html#oracle
     - title: PostgreSQL-Datenbanken auf ONTAP
-      url: apps-dbs.html
+      url: apps-dbs.html#postgresql
     - title: SAP HANA auf ONTAP
-      url: apps-dbs.html
-    - title: Zusätzliche technische Berichte zu Applikationen und Datenbanken
-      url: apps-dbs.html
+      url: apps-dbs.html#sap-hana
   - title: Business Continuity
     links:
     - title: SnapMirror Business Continuity (SM-BC)

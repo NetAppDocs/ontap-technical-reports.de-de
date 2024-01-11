@@ -44,5 +44,5 @@ Erfahren Sie mehr über eine Disaster-Recovery-Konfiguration für Datacenter mit
 
 == Applikationen und Infrastruktur mit SnapMirror
 
-link:https://docs.netapp.com/us-en/netapp-solutions/virtualization/vsrm-ontap9_1._introduction_to_srm_with_ontap.html["TR-4900: VMware Site Recovery Manager mit ONTAP"]
+link:link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/srm/overview.html["TR-4900: VMware Site Recovery Manager mit ONTAP"]
 ONTAP ist seit seiner Einführung in das moderne Datacenter im Jahr 2002 eine der führenden Storage-Lösungen für VMware vSphere Umgebungen und wird kontinuierlich um innovative Funktionen erweitert, die nicht nur zur Vereinfachung des Managements, sondern auch zu Kostensenkungen beitragen. Erfahren Sie mehr über die empfohlene ONTAP Lösung für VMware Site Recovery Manager (SRM), die branchenführende Disaster Recovery (DR) Software von VMware. Sie enthält die neuesten Produktinformationen und empfohlene Verfahren, um die Implementierung zu optimieren, Risiken zu reduzieren und das fortlaufende Management zu vereinfachen.
