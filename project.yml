@@ -1,6 +1,6 @@
 ---
 settings:
-  name: ONTAP technical reports
+  name: ONTAP Technical Reports
   internal:
     pdf_enabled: false
   prod:
@@ -9,7 +9,7 @@ settings:
   langs: de-de,us-en,ja-jp,ko-kr,zh-cn,zh-tw,es-es,fr-fr,it-it
 sidebar:
   entries:
-  - title: Technische Berichte von ONTAP
+  - title: Technische Berichte zu ONTAP
     url: "/index.html"
   - title: Applikationen und Datenbanken
     url: "/apps-dbs.html"
