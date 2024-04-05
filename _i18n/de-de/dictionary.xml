@@ -463,8 +463,8 @@ Informieren Sie sich über empfohlene Vorgehensweisen, mit denen Storage-Adminis
 <block ref="ddd7bb6791d512b6bbd035245f183b42" category="inline-link-macro-rx"></block>
 <block ref="2f9e1ae374fcd81bbb2bbbd4546951d9" category="inline-link-macro-rx"></block></block>
   <block id="beb3ca55ed0a53a38a2b97540b05d6e4" category="sidebar">Microsoft SQL Server auf ONTAP</block>
-  <block id="8db7df66ab1d7ab5f1dc947acdb5fae4" category="section-title">Protokollierung</block>
-  <block id="4f86fd480a3b60659d82af4d7287d57a" category="inline-link-macro">TR-4303: Anmelden ONTAP</block>
-  <block id="ffd46bdf1b63cf5b513ae89527869e27" category="paragraph"><block ref="9345b88722e99c268b49c1da01abbe4c" category="inline-link-macro-rx"></block>
-Erfahren Sie, wie Sie die verschiedenen vom ONTAP generierten Protokolle, die angebotenen Funktionen und das Anzeigen und Abrufen von Protokollen definieren.</block>
+  <block id="4ffeff5e5bc550c2069e1c9f5c8faf9b" category="inline-link-macro">TR-4568: NetApp Implementierungsrichtlinien und Storage Best Practices für Windows Server</block>
+  <block id="11001fb821f9ba1fb2e3a93608a688cb" category="paragraph"><block ref="c141febea7d2bd403fd12cb6dd24d35c" category="inline-link-macro-rx"></block>
+Microsoft Windows Server ist ein Betriebssystem der Enterprise-Klasse, das Netzwerk, Sicherheit, Virtualisierung, Cloud, virtuelle Desktop-Infrastruktur, Zugriffsschutz, Informationsschutz, Web-Services, Anwendungsplattformen-Infrastruktur und vieles mehr. Der Schwerpunkt dieses Dokuments liegt auf Microsoft Windows. Der Schwerpunkt liegt dabei auf der Hyper-V Virtualisierungstechnologie, einschließlich der neuesten Produktinformationen und empfohlenen Vorgehensweisen, um die Implementierung zu optimieren, Risiken zu reduzieren und das Management zu vereinfachen.</block>
+  <block id="b0da974886af36b76614baf1f4df0289" category="sidebar">Microsoft Windows Server (Hyper-V)</block>
 </blocks>
