@@ -35,8 +35,7 @@ Viele Unternehmen setzen auf WORM-Storage (Write Once, Read Many), um gesetzlich
 
 == Zero Trust
 
-link:https://www.netapp.com/pdf.html?item=/media/19756-tr-4829.pdf["TR-4829: NetApp und Zero Trust"^]
-Zero Trust war bisher ein netzwerkorientierter Ansatz der Architektur von Microcore and Perimeter (MCAP) zum Schutz von Daten, Services, Applikationen oder Assets mit Kontrolloptionen, die als Segmentierungsgateway bekannt sind. ONTAP verfolgt für Zero Trust einen Daten-orientierten Ansatz, bei dem das Storage-Managementsystem zum Segmentierungs-Gateway wird, um die Daten unserer Kunden zu schützen und den Zugriff darauf zu überwachen. Insbesondere die FPolicy Zero Trust Engine und das FPolicy Partner-Ecosystem werden zum Kontrollzentrum, um normale und fehlende Datenzugriffsmuster detailliert zu verstehen und Bedrohungen von innen zu erkennen.
+link:https://docs.netapp.com/us-en/ontap/zero-trust/zero-trust-overview.html["NetApp und Zero Trust"] Zero Trust war bisher ein netzwerkorientierter Ansatz der Architektur von Microcore and Perimeter (MCAP) zum Schutz von Daten, Services, Applikationen oder Assets mit Kontrolloptionen, die als Segmentierungsgateway bekannt sind. ONTAP verfolgt für Zero Trust einen Daten-orientierten Ansatz, bei dem das Storage-Managementsystem zum Segmentierungs-Gateway wird, um die Daten unserer Kunden zu schützen und den Zugriff darauf zu überwachen. Insbesondere die FPolicy Zero Trust Engine und das FPolicy Partner-Ecosystem werden zum Kontrollzentrum, um normale und fehlende Datenzugriffsmuster detailliert zu verstehen und Bedrohungen von innen zu erkennen.
 
 
 
