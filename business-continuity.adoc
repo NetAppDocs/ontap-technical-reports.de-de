@@ -1,6 +1,6 @@
 ---
 sidebar: sidebar 
-keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices, SM-BC, SnapMirror Business Continuity 
 permalink: business-continuity.html 
 summary: Diese technischen Berichte geben einen Überblick über die Business Continuity in NetApp ONTAP sowie empfohlene Vorgehensweisen 
 ---
@@ -14,19 +14,18 @@ summary: Diese technischen Berichte geben einen Überblick über die Business Co
 
 
 [role="lead"]
-NetApp bietet eine breite Palette an Lösungen, die Ihre Performance kostengünstig optimieren, indem Ihre Applikationen und Daten effizienter gespeichert werden. Datensicherung, Replizierung und kontinuierliche Verfügbarkeit: Das ONTAP Datenmanagement vereinfacht die Datensicherung, da alle Richtlinien für das Storage-Management nur einmal konfiguriert werden und dann von selbst genutzt werden können. Gleichzeitig sichern MetroCluster und SnapMirror Business Continuity.
+NetApp bietet eine breite Palette an Lösungen, die Ihre Performance kostengünstig optimieren, indem Ihre Applikationen und Daten effizienter gespeichert werden. Datensicherung, Replizierung und kontinuierliche Verfügbarkeit: Das ONTAP Datenmanagement vereinfacht die Datensicherung, da alle Richtlinien für das Storage-Management nur einmal konfiguriert werden und dann von selbst genutzt werden können. Gleichzeitig sichern MetroCluster und SnapMirror die aktive Synchronisierung.
 
 [NOTE]
 ====
-Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/smbc/index.html["Business Continuity von ONTAP SnapMirror"] Und link:https://docs.netapp.com/us-en/ontap-metrocluster/index.html["ONTAP MetroCluster"] Produktdokumentation:
+Diese technischen Berichte enthalten eine weitere Erweiterung der link:https://docs.netapp.com/us-en/ontap/smbc/index.html["ONTAP SnapMirror Active Sync"] und link:https://docs.netapp.com/us-en/ontap-metrocluster/index.html["ONTAP MetroCluster"] Produktdokumentation.
 
 ====
 
 
-== SnapMirror Business Continuity (SM-BC)
+== SnapMirror Active Sync (ehemals SM-BC)
 
-link:https://www.netapp.com/pdf.html?item=/media/21888-tr-4878.pdf["TR-4878: SnapMirror Business Continuity (SM-BC)"^]
-SnapMirror Business Continuity (SM-BC) ist eine kontinuierlich verfügbare Storage-Lösung mit Granularität auf Applikationsebene. Sie steht für ONTAP zur Verfügung, die auf AFF Storage- oder ASA Storage-Systemen (All SAN Array) ausgeführt werden, um die RPO 0- und RTO 0-Anforderungen der kritischsten Business-Applikationen zu erfüllen.
+link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/index.html["TR-4878: SnapMirror Active Sync"^] SnapMirror Active Sync ist eine kontinuierlich verfügbare Storage-Lösung mit Granularität auf Applikationsebene, die für ONTAP verfügbar ist, die auf AFF- oder ASA-Storage-Systemen (All SAN Array) ausgeführt werden, um die RPO 0- und RTO 0-Anforderungen der kritischsten Business-Applikationen zu erfüllen.
 
 
 
