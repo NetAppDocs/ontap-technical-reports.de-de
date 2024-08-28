@@ -25,8 +25,7 @@ Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-e
 
 == Ransomware
 
-link:https://www.netapp.com/pdf.html?item=/media/7334-tr4572.pdf["TR-4572: Die NetApp Lösung für Ransomware"^]
-Erfahren Sie, wie sich Ransomware weiterentwickelt hat, und wie Sie Angriffe identifizieren, die Ausbreitung verhindern und mit der NetApp Lösung für Ransomware so schnell wie möglich wiederherstellen können. Die in diesem Dokument enthaltenen Anleitungen und Lösungen sollen Unternehmen dabei helfen, über Cyber-resiliente Lösungen zu verfügen und gleichzeitig ihre vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen zu erfüllen.
+link:https://docs.netapp.com/us-en/ontap/ransomware-solutions/ransomware-overview.html["TR-4572: Die NetApp Lösung für Ransomware"^] Erfahren Sie, wie sich Ransomware weiterentwickelt hat, und wie Sie Angriffe identifizieren, die Ausbreitung verhindern und mit der NetApp Lösung für Ransomware so schnell wie möglich wiederherstellen können. Die in diesem Dokument enthaltenen Anleitungen und Lösungen sollen Unternehmen dabei helfen, über Cyber-resiliente Lösungen zu verfügen und gleichzeitig ihre vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen zu erfüllen.
 
 link:https://www.netapp.com/pdf.html?item=/media/6158-tr4526.pdf["TR-4526: Konformer WORM Storage mit NetApp SnapLock"^]
 Viele Unternehmen setzen auf WORM-Storage (Write Once, Read Many), um gesetzliche Vorgaben einzuhalten oder einfach nur um eine weitere Schicht zu ihrer Datensicherungsstrategie hinzuzufügen. Erfahren Sie, wie Sie SnapLock, die WORM-Lösung in ONTAP, in Umgebungen integrieren, die WORM-Datenspeicher erfordern.
