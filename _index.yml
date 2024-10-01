@@ -90,6 +90,8 @@ indexpage:
     links:
     - title: Leitfäden zur Erhöhung der Sicherheit
       url: security-hardening-guides.html
+    - title: 'Cyber-Vault: ONTAP'
+      url: https://docs.netapp.com/us-en/netapp-solutions/cyber-vault/ontap-cyber-vault-overview.html
     - title: Die NetApp Lösung für Ransomware
       url: https://docs.netapp.com/us-en/ontap/ransomware-solutions/ransomware-overview.html
     - title: NetApp und Zero Trust

@@ -18,9 +18,15 @@ ONTAP entwickelt sich weiter und Sicherheit ist dabei ein integraler Bestandteil
 
 [NOTE]
 ====
-Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/security-encryption/index.html["ONTAP Sicherheit und Datenverschlüsselung"] Produktdokumentation:
+Diese technischen Berichte erweitern die link:https://docs.netapp.com/us-en/ontap/security-encryption/index.html["ONTAP Sicherheit und Datenverschlüsselung"^]Produktdokumentation.
 
 ====
+
+
+== Cyber-Vault: ONTAP
+
+link:https://docs.netapp.com/us-en/netapp-solutions/cyber-vault/ontap-cyber-vault-overview.html["Cyber-Vault: ONTAP"^] Die auf ONTAP basierende Cyber-Vault von NetApp bietet Unternehmen eine umfassende und flexible Lösung für den Schutz ihrer wichtigsten Datenbestände. Dank der Nutzung logischer Air-Gapping-Verfahren zur robusten Härtung können Sie mit ONTAP sichere, isolierte Storage-Umgebungen erstellen, die gegen neue Cyberbedrohungen gewappnet sind. Mit ONTAP gewährleisten Sie die Vertraulichkeit, Integrität und Verfügbarkeit Ihrer Daten und profitieren gleichzeitig von der Agilität und Effizienz Ihrer Storage-Infrastruktur.
+
 
 
 == Ransomware
