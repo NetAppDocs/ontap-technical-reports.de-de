@@ -10,10 +10,11 @@ summary: Diese technischen Berichte bieten einen Überblick über das Tiering in
 :nofooter: 
 :icons: font
 :linkattrs: 
+:imagesdir: ./media/
 
 
 [role="lead"]
-Mit der Daten-Tiering-Lösung von FabricPool wird die Benutzerfreundlichkeit von Flash-Systemen in Unternehmen insgesamt verbessert, während gleichzeitig die Anpassung der Applikationsarchitektur für Storage-Effizienz mühsam vermieden wird. FabricPool senkt den Storage-Platzbedarf und die damit verbundenen Kosten für eine Systemumgebung. Aktive Daten bleiben auf High-Performance-SSDs. Inaktive Daten werden auf kostengünstigen Objektspeicher verschoben, wobei die Storage-Effizienz erhalten bleibt.
+Mit der Daten-Tiering-Lösung von FabricPool wird die Benutzerfreundlichkeit von Flash-Systemen in Unternehmen verbessert, während gleichzeitig die Anpassung der Applikationsarchitektur für Storage-Effizienz mühsam vermieden wird. FabricPool senkt den Storage-Platzbedarf und die damit verbundenen Kosten für eine Systemumgebung. Aktive Daten bleiben auf High-Performance-SSDs. Inaktive Daten werden auf kostengünstigen Objektspeicher verschoben, wobei die Storage-Effizienz erhalten bleibt.
 
 [NOTE]
 ====
