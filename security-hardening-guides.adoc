@@ -40,3 +40,5 @@ Erfahren Sie, wie Sie NetApp Active IQ Unified Manager so konfigurieren, dass Un
 
 link:https://www.netapp.com/pdf.html?item=/media/78941-tr-4945.pdf["TR-4945: Leitfaden zur Erhöhung der Sicherheit für NetApp Manageability SDK"^]
 Erfahren Sie, wie Sie das NetApp Manageability SDK (NMSDK) konfigurieren, damit Unternehmen die vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen erfüllen können.
+
+link:https://docs.netapp.com/us-en/ontap-metrocluster/tiebreaker/install_security.html["Leitfaden zur Erhöhung der Sicherheit für MetroCluster Tiebreaker Host und Datenbank"^] Erfahren Sie, wie Sie den NetApp MetroCluster Tiebreaker Host und die Datenbank konfigurieren, um Unternehmen dabei zu unterstützen, die vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit des Informationssystems zu erfüllen.

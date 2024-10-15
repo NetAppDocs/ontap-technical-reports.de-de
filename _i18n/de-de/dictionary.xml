@@ -456,4 +456,6 @@ Microsoft Windows Server ist ein Betriebssystem der Enterprise-Klasse, das Netzw
   <block id="6393d669ce30abc667ac49b55f562310" category="sidebar">Datensicherung, Disaster Recovery und Business Continuity</block>
   <block id="64af762eb6280d5cce6eda4b03a6e65c" category="sidebar">Konfiguration von SnapMirror und Best Practices</block>
   <block id="0d59051e1739c44ad573da05fecfe0e1" category="sidebar">MetroCluster IP und FC</block>
+  <block id="b845152aee89efdb663c0e7c1522d7bf" category="inline-link-macro">Leitfaden zur Erhöhung der Sicherheit für MetroCluster Tiebreaker Host und Datenbank</block>
+  <block id="ee1c2b388c2a8f940cf512d5f930d4f5" category="paragraph"><block ref="3ba6a3982660c818149aaeadc40d89b3" category="inline-link-macro-rx"></block> Erfahren Sie, wie Sie den NetApp MetroCluster Tiebreaker Host und die Datenbank konfigurieren, um Unternehmen dabei zu unterstützen, die vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit des Informationssystems zu erfüllen.</block>
 </blocks>
