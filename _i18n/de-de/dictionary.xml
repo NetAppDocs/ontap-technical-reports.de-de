@@ -125,8 +125,6 @@ Microsoft hat Multichannel im SMB 3.0-Protokoll eingeführt, um das SMB3-Protoko
 Erfahren Sie, wie der Multiprotokoll-NAS-Zugriff in ONTAP funktioniert und welche empfohlenen Praktiken für Multi-Protokoll-Umgebungen kommen.</block>
   <block id="1716834171e243de0f898a67621b6624" category="section-title">ONTAP S3</block>
   <block id="12d693aa0c15330c6f5d608b0a1eb6c3" category="inline-link-macro">TR-4814: S3 in ONTAP Best Practices</block>
-  <block id="8a9f413c7d192f7ee13320a2b74b4ecc" category="paragraph"><block ref="3f5613d82639ca68ec10bef37723bdeb" category="inline-link-macro-rx"></block>
-Lernen Sie empfohlene Vorgehensweisen für die Verwendung des Amazon Simple Storage Service (S3) mit ONTAP Software kennen. Darüber hinaus erhalten Sie Funktionen und Konfigurationen für die Verwendung von ONTAP als Objektspeicher mit nativen S3-Applikationen oder als Tiering-Ziel für FabricPool.</block>
   <block id="a4273e3e312edbc9d5bd7c188aecc370" category="section-title">Name Services</block>
   <block id="98c6ad5dad288854428df19a0833d709" category="inline-link-macro">TR-4523: DNS-Lastverteilung in ONTAP</block>
   <block id="7a50564c3d71f025f2e39ea6c508a8ab" category="paragraph"><block ref="ea931303ddc872579ef3f1a3e7507b66" category="inline-link-macro-rx"></block>
@@ -458,4 +456,5 @@ Microsoft Windows Server ist ein Betriebssystem der Enterprise-Klasse, das Netzw
   <block id="0d59051e1739c44ad573da05fecfe0e1" category="sidebar">MetroCluster IP und FC</block>
   <block id="b845152aee89efdb663c0e7c1522d7bf" category="inline-link-macro">Leitfaden zur Erhöhung der Sicherheit für MetroCluster Tiebreaker Host und Datenbank</block>
   <block id="ee1c2b388c2a8f940cf512d5f930d4f5" category="paragraph"><block ref="3ba6a3982660c818149aaeadc40d89b3" category="inline-link-macro-rx"></block> Erfahren Sie, wie Sie den NetApp MetroCluster Tiebreaker Host und die Datenbank konfigurieren, um Unternehmen dabei zu unterstützen, die vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit des Informationssystems zu erfüllen.</block>
+  <block id="3e0f59fca19e9a4d246c3e746b14f879" category="paragraph"><block ref="e2f5d130ca2d9c5351a2d7cbfddc082b" category="inline-link-macro-rx"></block> Lernen Sie empfohlene Vorgehensweisen für die Verwendung des Amazon Simple Storage Service (S3) mit ONTAP Software kennen. Darüber hinaus erhalten Sie Funktionen und Konfigurationen für die Verwendung von ONTAP als Objektspeicher mit nativen S3-Applikationen oder als Tiering-Ziel für FabricPool.</block>
 </blocks>

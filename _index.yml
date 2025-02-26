@@ -58,7 +58,7 @@ indexpage:
     - title: Multi-Protokoll-NAS in ONTAP – Übersicht und Best Practices
       url: nas.html
     - title: S3 in ONTAP Best Practices
-      url: nas.html
+      url: https://docs.netapp.com/us-en/ontap/s3-config/index.html
     - title: Best Practices für Services benennen
       url: nas.html
     - title: NFS Kerberos in ONTAP
