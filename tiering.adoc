@@ -1,10 +1,10 @@
 ---
+permalink: tiering.html 
 sidebar: sidebar 
 keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
-permalink: tiering.html 
 summary: Diese technischen Berichte bieten einen Überblick über das Tiering in NetApp ONTAP sowie empfohlene Vorgehensweisen. 
 ---
-= Tiering von technischen Berichten
+= Technische Berichte zum ONTAP Tiering
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -18,7 +18,7 @@ Mit der Daten-Tiering-Lösung von FabricPool wird die Benutzerfreundlichkeit von
 
 [NOTE]
 ====
-Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/fabricpool/index.html["ONTAP FabricPool"] Produktdokumentation:
+Diese technischen Berichte erweitern die link:https://docs.netapp.com/us-en/ontap/fabricpool/index.html["ONTAP FabricPool"^]Produktdokumentation.
 
 ====
 link:https://www.netapp.com/pdf.html?item=/media/17239-tr4598.pdf["TR-4598: FabricPool Best Practices"^]

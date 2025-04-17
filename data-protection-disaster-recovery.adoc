@@ -1,10 +1,10 @@
 ---
+permalink: data-protection-disaster-recovery.html 
 sidebar: sidebar 
 keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, best practices, best-practices 
-permalink: data-protection-disaster-recovery.html 
 summary: Diese technischen Berichte bieten einen Überblick über die Datensicherung und Disaster Recovery in ONTAP sowie Empfehlungen für Vorgehensweisen 
 ---
-= Technische Berichte zur Datensicherung und Disaster Recovery
+= Technische Berichte zur ONTAP Datensicherung und Disaster Recovery
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -18,33 +18,30 @@ SnapMirror ist eine kostengünstige, benutzerfreundliche und einheitliche Repliz
 
 [NOTE]
 ====
-Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/data-protection-disaster-recovery/index.html["ONTAP Datensicherung und Disaster Recovery"] Produktdokumentation:
+Diese technischen Berichte erweitern die link:https://docs.netapp.com/us-en/ontap/data-protection-disaster-recovery/index.html["ONTAP Datensicherung und Disaster Recovery"^]Produktdokumentation.
 
 ====
 
 
 == SnapMirror
 
-*SnapMirror Asynchron*
-link:https://www.netapp.com/pdf.html?item=/media/17229-tr4015.pdf["TR-4015: Asynchrone Konfiguration mit SnapMirror und Best Practices"^]
-Lernen Sie empfohlene Vorgehensweisen für die Konfiguration der asynchronen SnapMirror (SM-A) Replizierung von Volumes, Konsistenzgruppen und Storage Virtual Machines (SVM-Disaster Recovery) kennen.
+.SnapMirror Asynchron
+link:https://www.netapp.com/pdf.html?item=/media/17229-tr4015.pdf["TR-4015: Asynchrone Konfiguration mit SnapMirror und Best Practices"^] Lernen Sie empfohlene Vorgehensweisen für die Konfiguration der asynchronen SnapMirror-Replikation (SM-A) von Volumes, Konsistenzgruppen und virtuellen Storage-Maschinen (SVM-Disaster Recovery) kennen.
 
 link:https://www.netapp.com/pdf.html?item=/media/17064-tr4678.pdf["TR-4678: Datensicherheit und Backup-ONTAP FlexGroup-Volumen"^]
 Erfahren Sie mehr über empfohlene Datensicherungs- und Backup-Funktionen für FlexGroup Volumes. Themen sind Snapshot Kopien, SnapMirror und weitere Datensicherungs- und Backup-Lösungen.
 
-*SnapMirror synchron*
-link:https://www.netapp.com/pdf.html?item=/media/17174-tr4733.pdf["TR-4733: Synchrone Konfiguration mit SnapMirror und Best Practices"^]
-Hier finden Sie Empfehlungen für die Konfiguration der SnapMirror Synchronous (SM-S)-Replizierung.
+.SnapMirror Synchronous
+link:https://www.netapp.com/pdf.html?item=/media/17174-tr4733.pdf["TR-4733: Synchrone Konfiguration mit SnapMirror und Best Practices"^] Erfahren Sie mehr über empfohlene Vorgehensweisen für die Konfiguration der SnapMirror Synchronous (SM-S) Replikation.
 
-*SnapMirror DR für drei Datacenter*
-link:https://www.netapp.com/pdf.html?item=/media/19369-tr-4832.pdf["TR-4832: Drei-Datacenter-Disaster Recovery mit NetApp SnapMirror für ONTAP 9.7"^]
-Erfahren Sie mehr über eine Disaster-Recovery-Konfiguration für Datacenter mit ONTAP SnapMirror Technologie zur Replizierung.
+.SnapMirror DR mit drei Datacentern
+link:https://www.netapp.com/pdf.html?item=/media/19369-tr-4832.pdf["TR-4832: Drei-Datacenter-Disaster Recovery mit NetApp SnapMirror für ONTAP 9.7"^] Erfahren Sie mehr über eine Disaster-Recovery-Konfiguration für drei Datacenter mit ONTAP SnapMirror Technologie zur Replizierung.
 
 
 
 == Applikationen und Infrastruktur mit SnapMirror
 
-link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-srm-overview.html["TR-4900: VMware Site Recovery Manager mit ONTAP"] ONTAP ist seit seiner Einführung in das moderne Datacenter im Jahr 2002 eine der führenden Storage-Lösungen für VMware vSphere Umgebungen und wird kontinuierlich um innovative Funktionen erweitert, die nicht nur zur Vereinfachung des Managements, sondern auch zu Kostensenkungen beitragen. Erfahren Sie mehr über die empfohlene ONTAP-Lösung für VMware Site Recovery Manager (SRM), die branchenführende Disaster Recovery (DR)-Software von VMware. Sie enthält die neuesten Produktinformationen und empfohlene Vorgehensweisen zur Optimierung der Bereitstellung, Risikominderung und Vereinfachung des fortlaufenden Managements.
+link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-srm-overview.html["TR-4900: VMware Site Recovery Manager mit ONTAP"^] ONTAP ist seit seiner Einführung in das moderne Datacenter im Jahr 2002 eine der führenden Storage-Lösungen für VMware vSphere Umgebungen und wird kontinuierlich um innovative Funktionen erweitert, die nicht nur zur Vereinfachung des Managements, sondern auch zu Kostensenkungen beitragen. Erfahren Sie mehr über die empfohlene ONTAP-Lösung für VMware Site Recovery Manager (SRM), die branchenführende Disaster Recovery (DR)-Software von VMware. Sie enthält die neuesten Produktinformationen und empfohlene Vorgehensweisen zur Optimierung der Bereitstellung, Risikominderung und Vereinfachung des fortlaufenden Managements.
 
 
 

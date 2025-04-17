@@ -81,9 +81,9 @@ indexpage:
     - title: 'Cyber-Vault: ONTAP'
       url: https://docs.netapp.com/us-en/netapp-solutions/cyber-vault/ontap-cyber-vault-overview.html
     - title: Die NetApp Lösung für Ransomware
-      url: https://docs.netapp.com/us-en/ontap/ransomware-solutions/ransomware-overview.html
+      url: "/ransomware-solutions/ransomware-overview.html"
     - title: NetApp und Zero Trust
-      url: https://docs.netapp.com/us-en/ontap/zero-trust/zero-trust-overview.html
+      url: "/zero-trust/zero-trust-overview.html"
     - title: Authentifizierung (SSH, MFA)
       url: security.html
     - title: Zusätzliche technische Sicherheitsberichte

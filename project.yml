@@ -27,9 +27,17 @@ sidebar:
   - title: San
     url: "/san.html"
   - title: Sicherheit
-    url: "/security.html"
-  - title: Leitfäden zur Erhöhung der Sicherheit
-    url: "/security-hardening-guides.html"
+    entries:
+    - title: Überblick
+      url: "/security.html"
+    - section: ransomware-solutions
+    - section: zero-trust
+    - section: abac
+  - title: Verstärkte Sicherheit
+    entries:
+    - title: Überblick
+      url: "/security-hardening-guides.html"
+    - section: ontap-security-hardening
   - title: SnapCenter
     url: "/snapcenter.html"
   - title: Tiering

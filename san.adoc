@@ -1,10 +1,10 @@
 ---
+permalink: san.html 
 sidebar: sidebar 
 keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, SAN, NVMe, NVMeoF, NVMeoTCP, NVMeoFC, iSCSI, fibre channel, fiber channel, igroups, namespaces, namespace, LUN, subsystem, best practices, best-practices 
-permalink: san.html 
 summary: Diese technischen Berichte bieten einen Überblick über die Blockprotokolle in ONTAP sowie über empfohlene Vorgehensweisen. 
 ---
-= TECHNISCHE BERICHTE ZU SAN
+= Technische Berichte zum ONTAP SAN
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,11 +14,11 @@ summary: Diese technischen Berichte bieten einen Überblick über die Blockproto
 
 
 [role="lead"]
-ONTAP SAN-Storage sorgt für eine vereinfachte SAN-Erfahrung, die eine hohe Verfügbarkeit für geschäftskritische Datenbanken und andere SAN-Workloads Ihres Unternehmens bietet. Durch die Integration erstklassiger Datenservices in Oracle-, SAP- und Microsoft SQL Server-Datenbanken, VMware und andere führende Hypervisoren bietet ONTAP SAN eine schnellere Amortisierung für Enterprise-Datenbankapplikationen.
+ONTAP SAN-Storage sorgt für eine vereinfachte SAN-Erfahrung und bietet Hochverfügbarkeit für geschäftskritische Datenbanken und andere SAN Workloads Ihres Unternehmens. Durch die Integration erstklassiger Datenservices in Oracle-, SAP- und Microsoft SQL Server-Datenbanken, VMware und andere führende Hypervisoren bietet ONTAP SAN eine schnellere Amortisierung für Enterprise-Datenbankapplikationen.
 
 [NOTE]
 ====
-Diese technischen Berichte werden im erweitert link:https://docs.netapp.com/us-en/ontap/san-management/index.html["ONTAP SAN Storage-Management"] Produktdokumentation:
+Diese technischen Berichte erweitern die link:https://docs.netapp.com/us-en/ontap/san-management/index.html["ONTAP SAN Storage-Management"^]Produktdokumentation.
 
 ====
 link:https://www.netapp.com/pdf.html?item=/media/10680-tr4080.pdf["TR-4080: Best Practices für modernes SAN in ONTAP"^]
