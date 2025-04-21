@@ -1,6 +1,6 @@
 ---
 section: ontap-security-hardening
-title: Richtlinien zur ONTAP-Härtung
+title: Richtlinien zur Erhöhung der Sicherheit durch ONTAP
 entries:
 - title: Übersicht über die Erhöhung der Sicherheit durch ONTAP
   url: "/ontap-security-hardening/security-hardening-overview.html"
