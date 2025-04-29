@@ -41,3 +41,5 @@ cluster1::> security ipsec policy create -vserver vs1 -name test34 -local-ip-sub
 
 When prompted enter and confirm the pre shared secret (PSK).
 ----
+.Verwandte Informationen
+link:https://docs.netapp.com/us-en/ontap/networking/ipsec-prepare.html["Bereiten Sie die Verwendung der IP-Sicherheit im ONTAP-Netzwerk vor"^]
