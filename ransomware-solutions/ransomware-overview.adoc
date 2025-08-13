@@ -75,7 +75,7 @@ Der NetApp Schutz vor Ransomware sorgt in einer sich ständig weiterentwickelnde
 
 .Weitere Schutzoptionen
 * link:ransomware-active-iq.html["Digital Advisor Ransomware-Schutz"]
-* link:ransomware-CI-workload-security.html["Cloud Insights Storage-Workload-Sicherheit (CISWS)"]
+* link:ransomware-DII-workload-security.html["Data Infrastructure Insights Speicher-Workload-Sicherheit"]
 * link:ransomware-fpolicy.html["FPolicy"]
 * link:ransomware-snaplock-tamperproof-snapshots.html["SnapLock und manipulationssichere Snapshots"]
 
