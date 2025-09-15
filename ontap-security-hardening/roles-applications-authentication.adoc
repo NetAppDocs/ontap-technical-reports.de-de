@@ -188,7 +188,7 @@ NOTE: Die `autosupport` Rolle wird dem vordefinierten `autosupport` Konto zugewi
 `vsadmin-volume`
  a| 
 * Verwalten Sie Ihr eigenes Benutzerkonto mit lokalen Kennwörtern und Schlüsselinformationen
-* Managen von Volumes, einschließlich Volume-Verschiebungen
+* Verwalten von Volumes, mit Ausnahme von Volume-Verschiebungen
 * Managen von Kontingenten, qtrees, Snapshots und Dateien
 * LUNs managen
 * Konfigurationsprotokolle: NFS, SMB, iSCSI, FC, FCoE, NVMe/FC und NVMe/TCP
