@@ -32,8 +32,7 @@ link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-otv-hardening-ov
 link:https://www.netapp.com/pdf.html?item=/media/82393-tr-4957.pdf["TR-4957: Handbuch zur Erhöhung der Sicherheit für NetApp SnapCenter"^]
 Erfahren Sie, wie Sie die NetApp SnapCenter Software so konfigurieren, dass Unternehmen die vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen erfüllen können.
 
-link:https://www.netapp.com/pdf.html?item=/media/83591-tr-4963.pdf["TR-4963: Leitfaden zur Erhöhung der Sicherheit: BlueXP Cloud Backup für Applikationen"^]
-Erfahren Sie, wie Sie NetApp Cloud Backup für Applikationen konfigurieren, um Unternehmen dabei zu unterstützen, die vorgegebenen Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen zu erfüllen.
+link:https://www.netapp.com/pdf.html?item=/media/83591-tr-4963.pdf["TR-4963: Leitfaden zur Sicherheitshärtung: NetApp Backup and Recovery für Anwendungen"^]Erfahren Sie, wie Sie NetApp Cloud Backup for Applications konfigurieren, um Unternehmen dabei zu helfen, vorgeschriebene Sicherheitsziele hinsichtlich der Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen zu erreichen.
 
 link:https://netapp.com/pdf.html?item=/media/78654-tr-4943.pdf["TR-4943: Handbuch zur Erhöhung der Sicherheit für NetApp Active IQ Unified Manager"^]
 Erfahren Sie, wie Sie NetApp Active IQ Unified Manager so konfigurieren, dass Unternehmen vorgeschriebene Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen erfüllen.

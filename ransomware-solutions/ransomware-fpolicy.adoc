@@ -17,7 +17,7 @@ FPolicy verhindert das Speichern unerwünschter Dateien auf einer Storage Applia
 
 Der native Modus von NetApp FPolicy (eine Weiterentwicklung des Namens, Dateirichtlinie) ist ein blockierendes Framework mit Dateierweiterungen, mit dem Sie unerwünschte Dateierweiterungen je nach Eingang in Ihre Umgebung blockieren können. Seit über einem Jahrzehnt ist ONTAP Cloud Teil von ONTAP. Es ist unglaublich hilfreich, wenn es darum geht, Sie beim Schutz vor Ransomware zu unterstützen. Diese Zero Trust Engine ist wertvoll, weil Sie zusätzliche Sicherheitsmaßnahmen erhalten, die über die Zugriffssteuerungslisten (ACL)-Berechtigungen hinausgehen.
 
-Im ONTAP System Manager und BlueXP  steht eine Liste mit über 3000 Dateierweiterungen als Referenz zur Verfügung.
+Im ONTAP System Manager und der NetApp Console steht eine Liste mit über 3000 Dateierweiterungen als Referenz zur Verfügung.
 
 
 WARNING: Einige Erweiterungen können in Ihrer Umgebung legitim sein, und das Blockieren kann zu unerwarteten Problemen führen. Erstellen Sie zunächst Ihre eigene Liste, die für die jeweilige Umgebung geeignet ist, bevor Sie native FPolicy konfigurieren.
