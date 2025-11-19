@@ -53,4 +53,6 @@ Dies sind die folgenden LIF-Rollen:
 
 
 ====
-Weitere Informationen zum Sichern von LIFs finden Sie im link:https://docs.netapp.com/us-en/ontap/networking/configure_firewall_policies_for_lifs.html["Konfigurieren Sie Firewallrichtlinien für LIFs"^].
+Weitere Informationen zur Sicherung von LIFs finden Sie unter link:https://docs.netapp.com/us-en/ontap/networking/configure_firewall_policies_for_lifs.html["Konfigurieren Sie Firewallrichtlinien für LIFs"^]Die Auf dieser Seite finden Sie außerdem Details zu den LIF-Servicerichtlinien, beginnend mit ONTAP 9.10.1.
+
+Weitere Informationen zum Erstellen einer neuen Servicerichtlinie finden Sie unter `network interface service-policy create` Befehl im link:https://docs.netapp.com/us-en/ontap-cli/network-interface-service-policy-create.html["Befehlsreferenz."^]
