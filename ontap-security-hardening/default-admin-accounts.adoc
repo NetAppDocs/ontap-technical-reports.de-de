@@ -18,9 +18,9 @@ Es gibt zwei standardmäßige Administratorkonten: `admin` Und `diag`.
 Verwaiste Konten sind ein wichtiger Sicherheitsvektor und führen oft zu Schwachstellen, einschließlich der Eskalation von Berechtigungen. Dabei handelt es sich um unnötige und nicht genutzte Konten, die im Benutzerkonto-Repository verbleiben. Dabei handelt es sich in erster Linie um Standardkonten, die nie verwendet wurden oder für die Passwörter nie aktualisiert oder geändert wurden. Um dieses Problem zu beheben, unterstützt ONTAP das Entfernen und Umbenennen von Konten.
 
 
-NOTE: ONTAP kann integrierte Konten nicht entfernen oder umbenennen. NetApp empfiehlt jedoch, nicht benötigte integrierte Konten mit dem Sperrbefehl zu sperren.
+NOTE: Sie können integrierte Konten nicht entfernen oder umbenennen. Wenn ein Administrator das Konto entfernt, wird das integrierte Konto beim Neustart wiederhergestellt. *NetApp empfiehlt*, nicht benötigte integrierte Konten mit dem Befehl `lock` zu sperren.
 
-Auch wenn verwaiste Konten ein erhebliches Sicherheitsproblem darstellen, empfiehlt NetApp dringend, die Auswirkungen des Entfernens von Konten aus dem lokalen Konto-Repository zu testen.
+Obwohl verwaiste Konten ein erhebliches Sicherheitsrisiko darstellen, *NetApp empfiehlt dringend*, die Auswirkungen des Entfernens von Konten aus dem lokalen Kontenspeicher zu testen.
 
 
 
@@ -32,7 +32,7 @@ Führen Sie zum Auflisten der lokalen Konten den Befehl aus `security login show
 ----
 cluster1::*> security login show -vserver cluster1
 
-Vserver: cluster1
+vserver: cluster1
                              Authentication             Acct   Is-Nsswitch
 User/Group Name  Application Method    Role Name        Locked Group
 ---------------- ----------- --------- ---------------- ------ -----------

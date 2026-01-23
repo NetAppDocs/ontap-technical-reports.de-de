@@ -13,7 +13,7 @@ summary: 'Sie müssen CIFS-Überwachung aktivieren, um Auditing-Ereignisse zu ge
 [role="lead"]
 NAS-Dateisysteme nehmen in der heutigen Bedrohungslandschaft einen größeren Platz ein, Audit-Funktionen sind für die Transparenz von entscheidender Bedeutung.
 
-Sicherheit erfordert Validierung. ONTAP 9 bietet mehr Auditing-Ereignisse und Details in der gesamten Lösung. Da NAS-Dateisysteme in der heutigen Bedrohungslandschaft einen größeren Platz einnehmen, sind Audit-Funktionen für die Transparenz von entscheidender Bedeutung. Dank der verbesserten Audit-Funktion von ONTAP 9 sind CIFS-Audit-Details zahlreicher als je zuvor. Wichtige Details, einschließlich folgender, werden mit erstellten Ereignissen protokolliert:
+Sicherheit erfordert Validierung. ONTAP bietet erweiterte Auditing-Ereignisse und -details für die gesamte Lösung. Da NAS-Dateisysteme in der heutigen Bedrohungslandschaft eine immer größere Rolle spielen, sind Audit-Funktionen entscheidend, um Transparenz zu unterstützen. Aufgrund der verbesserten Audit-Fähigkeit in ONTAP sind CIFS-Audit-Details umfangreicher denn je. Wichtige Details, einschließlich der folgenden, werden mit den erstellten Ereignissen protokolliert:
 
 * Datei-, Ordner- und Freigabezugriff
 * Erstellte, bearbeitete oder gelöschte Dateien
@@ -59,6 +59,9 @@ ONTAP bietet Administratorkonten die Möglichkeit, über REST-APIs auf SMB/CIFS-
 === REST-API-Rolle ohne Zugriff erstellen
 
 Sie können verhindern, dass ONTAP-Administratoren REST-APIs für den Dateizugriff verwenden, indem Sie eine REST-API-Rolle erstellen, die über REST keinen Zugriff auf ONTAP Volumes hat. Führen Sie die folgenden Schritte aus, um diese Rolle bereitzustellen.
+
+
+NOTE: Die REST-API /api/storage/volumes wird für mehr als nur den Dateizugriff verwendet. Sie wird vom System Manager und anderen grafischen Benutzeroberflächen zum Erstellen, Anzeigen und Ändern von Volumes verwendet.
 
 .Schritte
 . Erstellen einer neuen REST-Rolle, die keinen Zugriff auf Storage-Volumes hat, aber über alle anderen REST-API-Zugriff verfügt
