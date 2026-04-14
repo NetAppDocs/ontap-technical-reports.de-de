@@ -38,12 +38,6 @@ link:https://docs.netapp.com/us-en/ontap/flexcache-writeback/flexcache-write-bac
 
 == FlexGroup Volumes
 
-link:https://www.netapp.com/pdf.html?item=/media/17251-tr4571a.pdf["TR-4571a: Die zehn wichtigsten Best Practices von FlexGroup"^]
-Dieser technische Bericht ist eine komprimierte Version des TR-4571: NetApp ONTAP FlexGroup Volumes Best Practices and Implementation Guide für den schnellen Verbrauch.
-
-link:https://www.netapp.com/pdf.html?item=/media/7337-tr4557.pdf["TR-4557: NetApp ONTAP FlexGroup Volumes – technischer Überblick"^]
-Erfahren Sie mehr über FlexGroup Volumes, einen ONTAP Scale-out-NAS-Container, der nahezu unbegrenzte Kapazität mit einer vorhersehbaren Performance mit niedriger Latenz bei Workloads mit Metadaten kombiniert.
-
 link:https://www.netapp.com/pdf.html?item=/media/12385-tr4571.pdf["TR-4571: NetApp ONTAP FlexGroup Volumes Best Practices und Implementierungsleitfaden"^]
 Erfahren Sie mehr über FlexGroup Volumes sowie empfohlene Practices und Implementierungstipps. FlexGroup Volumes sind eine Weiterentwicklung von ONTAP-Scale-out-NAS-Containern, die nahezu unbegrenzte Kapazität mit einer planbaren Performance mit niedriger Latenz für Workloads mit vielen Metadaten verbinden.
 
