@@ -1,17 +1,15 @@
 ---
 indexpage:
-  title: Technische Berichte zu ONTAP
-  summary: Technische Berichte von ONTAP bieten einen zusätzlichen Kontext für die
-    Planung und Optimierung von ONTAP Implementierungen in unterschiedlichen Ecosystemen
-    oder mit verschiedenen Protokollen. Einige technische Berichte von ONTAP enthalten
-    Informationen zur Architektur und empfohlene Vorgehensweisen für die Funktionen
-    und Funktionen von ONTAP.
+  title: NetApp Technische Berichte
+  summary: NetApp technische Berichte liefern zusätzlichen Kontext für die Planung
+    und Optimierung von Implementierungen in verschiedenen Ökosystemen oder mit unterschiedlichen
+    Protokollen. Einige ONTAP technische Berichte bieten architektonischen Kontext
+    und empfohlene Vorgehensweisen für ONTAP Funktionen und Fähigkeiten.
   keywords: ONTAP 9, ONTAP, Technical Reports, TR
-  lead: Technische Berichte von ONTAP bieten einen zusätzlichen Kontext für die Planung
-    und Optimierung von ONTAP Implementierungen in unterschiedlichen Ecosystemen oder
-    mit verschiedenen Protokollen. Einige technische Berichte von ONTAP enthalten
-    Informationen zur Architektur und empfohlene Vorgehensweisen für die Funktionen
-    und Funktionen von ONTAP.
+  lead: NetApp technische Berichte liefern zusätzlichen Kontext für die Planung und
+    Optimierung von Implementierungen in verschiedenen Ökosystemen oder mit unterschiedlichen
+    Protokollen. Einige ONTAP technische Berichte bieten architektonischen Kontext
+    und empfohlene Vorgehensweisen für ONTAP Funktionen und Fähigkeiten.
   tiles:
   - title: Applikationen und Datenbanken
     links:

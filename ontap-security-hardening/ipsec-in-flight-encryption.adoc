@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: ontap-security-hardening/ipsec-in-flight-encryption.html 
-keywords: tr-4569, ontap hardening guide, NFS, iSCSI, SMB/CIFS, no Kerberos, IKE v2, SVM, PSK, certificate, no license 
-summary: IPsec bietet eine Alternative zur NFS- oder SMB/CIFS-Verschlüsselung und ist die einzige Option für die Verschlüsselung bei iSCSI-Datenverkehr. 
+keywords: tr-4569, ontap hardening guide, NFS, iSCSI, SMB, Kerberos, IKE v2, SVM, PSK, certificate, no license 
+summary: IPsec bietet eine Alternative zur NFS- oder SMB-Verschlüsselung und ist die einzige Option zur Verschlüsselung während der Übertragung von iSCSI-Datenverkehr. 
 ---
 = IPsec-Verschlüsselung von aktiven Daten
 :allow-uri-read: 

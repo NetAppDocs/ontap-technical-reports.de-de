@@ -1,0 +1,137 @@
+---
+sidebar: sidebar 
+permalink: afx-overview/afx-overview-learn-about.html 
+keywords: netapp afx, ontap, disaggregated architecture, overview, key terms 
+summary: NetApp AFX bietet eine disaggregierte Architektur für NAS- und Objekt-Workloads und gleichzeitig die funktionsreiche ONTAP Software, die Sie kennen und schätzen. 
+---
+= NetApp AFX-Übersicht: Erfahren Sie mehr über NetApp AFX
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx-overview/
+
+
+[role="lead"]
+NetApp AFX ist nach wie vor ONTAP — es ist einfach eine andere Möglichkeit, die Vorteile von ONTAP zu nutzen. NetApp AFX liefert eine disaggregierte Architektur für NAS- und Objekt-Workloads und stellt gleichzeitig die funktionsreiche ONTAP-Software bereit, die Sie kennen und schätzen.
+
+
+
+== Eine Evolution der Innovation: NetApp ONTAP
+
+NetApp ONTAP wurde 1992 als neue Methode zur Bereitstellung von NFS-Workloads für mehrere Clients entwickelt und revolutionierte dabei Leistung, Datenresilienz, zeitpunktgenaue Kopien und mehr. Ursprünglich unterstützte es nur NFSv2, aber mit der steigenden Nachfrage nach neueren NFS-Versionen, anderen Datenprotokollen und mehr Funktionen zum Datenschutz musste NetApp ONTAP sich weiterentwickeln.
+
+Nachfolgend eine verkürzte Zeitleiste einiger der wichtigsten ONTAP-Entwicklungen, die in den letzten 30+ Jahren stattgefunden haben.
+
+*Die Entwicklung von NetApp ONTAP*
+
+|===
+| Jahrzehnt | Features 
+
+
+| 1990s | NFSv2, NFSv3, CIFS, Snapshots, WAFL Dateisystem, AutoSupport, SnapMirror 
+
+
+| 2000s | SnapVault, SnapLock, NFSv4, Blockprotokolle, FlexVols, FlexClone, GX/Scale-out, Deduplizierung, Dateiklone 
+
+
+| 2010s | Clustered ONTAP, Inline-Speichereffizienz, NFSv4.1/pNFS, NVMe, RAID-TEC, FlexGroup Volumes, Volume-Verschlüsselung, AFF, Cloud Volumes ONTAP, QoS, FabricPool, Azure NetApp Files (ANF), Google Cloud NetApp Volumes (GCNV), All SAN Array (ASA) 
+
+
+| 2020s | SnapMirror Business Continuity, FlexCache, ONTAP S3, IPsec, Autonomer Ransomware-Schutz, SnapMirror in und out of ANF und GCNV, Amazon FSxN, ASAr2, NetApp AFX – Sie sind hier 
+|===
+
+
+=== NetApp ONTAP-Persönlichkeiten
+
+Jahrelang lief ONTAP als einheitliche Plattform, die Datei-, Block- und Objektverarbeitung in einem einzigen System vereinte. Dadurch positionierte sich ONTAP als das Schweizer Taschenmesser des Rechenzentrums – eine Plattform, die alles tun konnte, was Sie von ihr verlangten.
+
+Da sich Anwendungen weiterentwickelten und sich die Anforderungen an Rechenzentren durch eine Reihe von Veränderungen in der IT-Branche wandelten, stieg die Nachfrage nach Plattformen mit spezifischen Funktionen. Daher gibt es heute verschiedene Möglichkeiten, ONTAP zu nutzen.
+
+*NetApp ONTAP-Persönlichkeiten*
+
+|===
+| ONTAP Personality | Beschreibung 
+
+
+| Einheitliches ONTAP | Das gleiche ONTAP, das Sie schon immer kannten, wird weiterhin aktiv weiterentwickelt und verbessert. 
+
+
+| Alle SAN-Arrays | ONTAP unterstützt ausschließlich iSCSI, FCP und NVMe über FC/TCP und bietet Aktiv/Aktiv-Controller-Funktionalität sowie disaggregierte Konzepte in ASAr2. 
+
+
+| Cloud-basiertes ONTAP | ONTAP, das in der Cloud läuft; entweder auf Bare-Metal-Systemen in einem Cloud-Rechenzentrum oder auf virtualisierten ONTAP Instanzen. 
+
+
+| Disaggregiertes ONTAP/AFX | ONTAP nutzt eine disaggregierte Architektur für leistungsstarke NAS- und Objekt-Workloads. 
+|===
+
+
+== Überblick über die einheitliche ONTAP-Architektur
+
+Das folgende Diagramm zeigt die allgemeine Architektur von unified ONTAP, darunter wird beschrieben, wie alles zusammenpasst.
+
+*Allgemeine ONTAP Architektur*
+
+image:image3.png["Bild"]
+
+Einige wichtige Aspekte der ONTAP Architektur:
+
+* Unterstützung für Dateien, Objekte und Blöcke
+* Die Protokolle werden über ein Frontend-Client-Datennetzwerk bereitgestellt.
+* Mehrere unabhängige Knoten können zu einem Cluster zusammengefasst werden
+* Jeder Knoten kann unabhängige Floating-IP-Adressen für Daten- und Verwaltungsanwendungen bereitstellen
+* Cluster-Knoten verbinden sich über ein von NetApp bereitgestelltes Backend-Switch über ein Cluster-VLAN.
+* Die Knoten werden als HA-Paare dargestellt, um Ausfallsicherheit im Falle von Hardware- oder Stromausfällen zu gewährleisten.
+* HA-Paare verfügen über direkt verbundene NVRAM-Karten, die replizieren, um Schreibvorgänge zu schützen
+* Jedem Knoten ist mindestens ein Aggregat zugewiesen und er besitzt eine Teilmenge der Gesamtzahl der Festplatten
+* Bei einem Failover werden die Festplatten eines Knotens dem HA-Partner (und nur dem HA-Partner) neu zugewiesen.
+* Festplattengehäuse werden üblicherweise über Multipath-Verkabelung direkt mit den Knoten verbunden, aber höherwertige Systeme führen das Konzept von Speichernetzwerken auf demselben Backend-Cluster-Switch ein.
+* Volumes (FlexVols und FlexGroup volumes) bieten die Einstiegspunkte zum Speicher für den Datenzugriff
+
+
+
+
+== Was ist NetApp AFX?
+
+Eines sollte man dabei beachten: NetApp AFX ist immer noch ONTAP.
+
+Es handelt sich lediglich um eine andere Methode, die Vorteile von ONTAP zu nutzen. Das gleiche Image, das Sie für Ihre Unified ONTAP oder All SAN Array Systeme installieren würden, ist das gleiche Image, das mit NetApp AFX verwendet wird. Die Codebasis ist identisch, aber die Art, wie die Systeme starten, bestimmt, welcher Codepfad ausgeführt wird, wie der Backend-Speicher präsentiert wird und welche Funktionen und Protokolle unterstützt werden.
+
+NetApp AFX bietet eine disaggregierte Architektur für NAS- und Objekt-Workloads und gleichzeitig die funktionsreiche ONTAP-Software, die Sie kennen und schätzen. Disaggregiertes ONTAP bezeichnet eine Speicherarchitektur, bei der jeder NetApp Controller-Knoten dank redundanter Netzwerk-Switches und eines schnellen Netzwerks mit geringer Latenz dieselbe Kapazität sieht. Dieser Ansatz ermöglicht es, dass Controller-Knoten und Speicherkapazität unabhängig voneinander skaliert werden können, um die Anforderungen verschiedener Hochleistungs-Workloads besser zu erfüllen. Anders ausgedrückt: Wenn Sie zusätzliche Leistung benötigen, fügen Sie einfach Controller-Knoten hinzu. Wenn Sie zusätzliche Kapazität benötigen, fügen Sie Shelf-Gehäuse hinzu. Dies gibt Speicheradministratoren die Flexibilität, ihren Endbenutzern eine kostengünstigere Speicherlösung bereitzustellen.
+
+Da kein Controller-Knoten eigenständig Festplatten besitzt, gibt es auch keine physischen Aggregate mit eigenen Kapazitäts- und Leistungsbeschränkungen. Stattdessen wird die Kapazität als gemeinsames Modell dargestellt, mit dem alle Knoten interagieren können und das ONTAP automatisch verwalten kann.
+
+*Disaggregiertes ONTAP*
+
+image:image4.png["Bild"]
+
+
+
+== Schlüsselbegriffe und Konzepte
+
+Nachfolgend finden Sie Begriffe, die sich direkt auf AFX beziehen. Für ONTAP-spezifische Terminologie siehe die Produktdokumentation.
+
+link:https://docs.netapp.com/us-en/ontap-family/index.html["ONTAP Produktdokumentation"^].
+
+
+
+=== Disaggregiertes ONTAP
+
+Bezeichnet die neue Architektur, die von ONTAP unterstützt wird und die Möglichkeit bietet, Rechenleistung und Kapazität unabhängig voneinander zu skalieren. Der Begriff „Disaggregated ONTAP“ ist keine Produktbezeichnung, sondern dient der Unterscheidung zwischen Unified ONTAP und NetApp AFX-Architekturen.
+
+
+
+=== NetApp AFX
+
+NetApp AFX ist die offizielle Produktbezeichnung für die disaggregierte ONTAP Architektur und wurde auf NetApp Insight 2025 angekündigt.
+
+
+
+=== Rechenknoten
+
+Ein Compute-Knoten in NetApp AFX bezeichnet den Storage-Controller-Knoten (und wird in der Dokumentation oft synonym verwendet). Diese Knoten verfügen über keine integrierte Festplatte und sind vollständig modular aufgebaut, um die unabhängige Skalierbarkeit zu ermöglichen, die die disaggregierte ONTAP Architektur bietet.
+
+
+
+=== Speicherverfügbarkeitszone
+
+Eine Storage Availability Zone (SAZ) ist der zentrale Speicherpool in einem NetApp AFX-Cluster, in dem alle Festplatten von allen Knoten gemeinsam genutzt werden. Die SAZ ermöglicht Funktionen wie gemeinsam genutzte Kapazität, verbesserte Leistung, globale Deduplizierung und vieles mehr.

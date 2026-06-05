@@ -1,0 +1,105 @@
+---
+sidebar: sidebar 
+permalink: afx-overview/afx-overview-hardware.html 
+keywords: netapp afx, hardware, nodes, shelves, switches, disks, nvme 
+summary: Diese Seite enthält Details zur NetApp AFX-Cluster-Hardware, einschließlich Knoten, Gehäuse, Switches und unterstützter Festplattentypen. 
+---
+= Hardware-Details
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx-overview/
+
+
+[role="lead"]
+Der folgende Abschnitt enthält Details zur NetApp AFX-Cluster-Hardware. Aktuelle Informationen zur NetApp AFX-Hardware finden Sie unter link:https://hwu.netapp.com["https://hwu.netapp.com"^].
+
+
+
+== Unterstützte Hardware
+
+Die aktuellsten Informationen zur unterstützten Hardware für NetApp AFX finden Sie unter link:https://hwu.netapp.com["https://hwu.netapp.com"^].
+
+
+
+== Nodes
+
+NetApp AFX-Knoten basieren auf dem AFF A1K-Knotenmodell für Unified ONTAP Cluster. Diese Knoten verfügen über keine internen Festplatten und sind modular aufgebaut, um je nach Leistungsbedarf einfach Knoten hinzufügen oder entfernen zu können. Jeder Knoten belegt 2 HE im Rack und die Leistung steigt linear mit der Anzahl der Knoten in einem AFX-Cluster.
+
+*NetApp AFX 1K-Knotendetails*
+
+image:image42.png["Bild"]
+
+
+
+=== Hardware-Steckplätze
+
+NetApp AFX 1K-Knoten verwenden die folgenden Slot-Zuweisungen.
+
+* Steckplatz 1 ist für die HA-Replikation vorgesehen
+* Steckplatz 7 ist für die Clusterreplikation vorgesehen
+* Die Steckplätze 10 und 11 sind für die Kommunikation mit dem Storage-Shelf vorgesehen
+
+
+
+
+== Shelfs
+
+NetApp AFX-Einschübe verwenden dieselben Gehäuse wie die AFF-Systeme. Der Hauptunterschied zwischen den Einschüben in AFX liegt im verwendeten Modul. Die NSM140-Module bieten verbesserte Leistungsmerkmale und ermöglichen disaggregiertes ONTAP. Einige wichtige Punkte:
+
+* Nur vollständig bestückte Regale werden unterstützt.
+* Die Regale werden von NetApp AFX automatisch erkannt, sobald sie angeschlossen sind.
+* Derzeit wird keine Unterstützung für die Regalentfernung angeboten.
+
+
+*NetApp AFX-Regalgehäusedetails*
+
+image:image43.png["Bild"]
+
+
+
+== Switches
+
+NetApp AFX nutzt weiterhin Backend-Cluster-Switches für die Intracluster-Kommunikation, wie zum Beispiel die Cluster-Datenbankreplikation, Remote-Datenoperationen, Speicheroperationen und NVRAM-Spiegelung. Funktional bestehen die einzigen Unterschiede zwischen Unified ONTAP und NetApp AFX Cluster-Switches darin:
+
+* 400GbE-Unterstützung
+* Neues HA-VLAN
+* Weitere Informationen finden Sie unter link:https://www.cisco.com/site/us/en/products/collateral/networking/switches/nexus-9000-series-switches/nexus-9300-gx2-series-fixed-switches-data-sheet.html["Cisco Switches Datenblatt"^].
+
+
+*NetApp AFX-Clusterschalter*
+
+image:image44.png["Bild"]
+
+
+
+=== Cluster-Switch-Konnektivität
+
+NetApp AFX nutzt Backend-Cluster-Switches intensiv für viele seiner zentralen Architekturkonzepte. So werden beispielsweise Cluster-Schnittstellen, Speicheradapter, Speichershelfs und NVRAM-Karten an die Cluster-Switches angeschlossen. Aktuell unterstützen all diese Schnittstellen nur 100GB-Kommunikation, während die Switches 400GB unterstützen. Daher werden die 100GB-Schnittstellen über 4 x 100GB-Breakout-Kabel mit den 400GB-Schnittstellen des Switches verbunden. Dadurch wird die Anzahl der Ports an den Switches reduziert. Beispielsweise belegen 16 x 100GB-Speichershelf-Modul-Ports nur 4 Ports an den Switches, während die insgesamt 8 Ports der Nodes 2 Switch-Ports nutzen.
+
+*NetApp AFX-Schalterverkabelung*
+
+image:image45.png["Bild"]
+
+
+
+== Festplattentypen und -größen
+
+NetApp AFX unterstützt derzeit nur NVMe-SSDs in folgenden Größen:
+
+* 7,6 TB
+* 15,3 TB
+* 30,1 TB
+* 60,6 TB
+
+
+
+
+=== TLC vs. QLC
+
+NetApp AFX kann sowohl TLC- als auch QLC-Flashtypen nutzen. Die 7,6- und 15,3-TB-Laufwerke sind TLC-Modelle, während Laufwerke mit mehr als 30,1 TB QLC sein werden. Unabhängig vom Medientyp können die NVIDIA SuperPod Zertifizierungsleistungsstandards erfüllt werden.
+
+Alle mit NetApp AFX verwendeten Laufwerke sind Hochleistungslaufwerke, wobei QLC und TLC beim Lesen nahezu identische Leistungen erbringen. Bei der Schreibleistung liegt QLC im Vergleich zu TLC etwas zurück und kann bei schreibintensiven Anwendungen etwas stärkeren Verschleiß aufweisen.
+
+Die Leistungszahlen finden Sie unter link:afx-overview-performance.html#per-shelf-performance["Leistung pro Regal"].
+
+Bei der Auswahl des Laufwerkstyps sollten Sie berücksichtigen, welche Arbeitslasten der Speicher beherbergen wird und welche Kompromisse zwischen Leistung und Kapazitätsdichte damit verbunden sind.
