@@ -1,13 +1,13 @@
 ---
 sidebar: sidebar 
-permalink: afx-overview/afx-overview-capabilities.html 
+permalink: afx/afx-capabilities.html 
 keywords: netapp afx, networking, security, data protection, nondisruptive, volumes 
 summary: NetApp AFX unterstützt denselben Netzwerk-Stack, dieselben Sicherheitsfunktionen, Datenschutztechnologien, unterbrechungsfreie Betriebsabläufe und Volumentypen wie unified ONTAP, mit einigen Anpassungen. 
 ---
 = Netzwerk, Sicherheit und Betrieb
 :allow-uri-read: 
 :icons: font
-:imagesdir: ../media/afx-overview/
+:imagesdir: ../media/afx/
 
 
 [role="lead"]
@@ -96,4 +96,4 @@ Unified ONTAP unterstützt verschiedene Volume-Typen, wie zum Beispiel:
 
 NetApp AFX bietet volle Unterstützung für jeden dieser Volume-Typen sowie volle Interoperabilität für FlexCache-Volumes mit einheitlichen ONTAP-Systemen.
 
-Weitere Informationen darüber, wie FlexGroup Volumes von der AFX-Architektur profitieren, finden Sie unter link:afx-overview-architecture.html#flexgroup-volume-management-improvements["Verbesserungen beim FlexGroup Volume-Management"].
+Weitere Informationen darüber, wie FlexGroup Volumes von der AFX-Architektur profitieren, finden Sie unter link:afx-architecture.html#flexgroup-volume-management-improvements["Verbesserungen beim FlexGroup Volume-Management"].

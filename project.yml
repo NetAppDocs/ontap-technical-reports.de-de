@@ -41,7 +41,7 @@ sidebar:
   - title: Speichersysteme
     entries:
     - title: AFX
-      section: afx-overview
+      section: afx
   - title: SnapCenter
     url: "/snapcenter.html"
   - title: Tiering

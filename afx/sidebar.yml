@@ -1,0 +1,22 @@
+---
+section: afx
+title: AFX
+entries:
+- title: Überblick
+  url: "/afx/afx-learn-about.html"
+- title: Was ist neu
+  url: "/afx/afx-whats-new.html"
+- title: Architektur
+  url: "/afx/afx-architecture.html"
+- title: Performance
+  url: "/afx/afx-performance.html"
+- title: Management
+  url: "/afx/afx-management.html"
+- title: Sorgen
+  url: "/afx/afx-capabilities.html"
+- title: Hardware
+  url: "/afx/afx-hardware.html"
+- title: Höchstwerte und Grenzwerte
+  url: "/afx/afx-limits.html"
+- title: Verwandte Informationen
+  url: "/afx/afx-related-info.html"
