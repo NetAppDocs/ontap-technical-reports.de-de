@@ -22,6 +22,7 @@ NOTE: Die FIPS-Konfiguration gilt für ONTAP und die Plattform BMC.
 
 
 
+[[netapp-ontaps-fips-mode-configuration]]
 == NetApp ONTAP FIPS-Mode-Konfiguration
 
 NetApp ONTAP verfügt über eine FIPS-Modus-Konfiguration, die eine zusätzliche Sicherheitsstufe der Kontrollebene instanziiert:
@@ -36,6 +37,7 @@ NOTE: NIST hat einen FIPS-140-3-Standard eingereicht und NCSM verfügt über FIP
 
 
 
+[[enable-fips-140-2-and-fips-140-3-compliance-mode]]
 == Ermöglichen Sie den Compliance-Modus nach FIPS-140-2 und FIPS-140-3
 
 Ab ONTAP 9 können die Compliance-Modi FIPS-140-2 und FIPS-140-3 für Cluster-weite Kontrollebene-Schnittstellen aktiviert werden.
@@ -46,6 +48,7 @@ Ab ONTAP 9 können die Compliance-Modi FIPS-140-2 und FIPS-140-3 für Cluster-we
 
 
 
+[[fips-enablement-and-protocols]]
 == FIPS-Enablement und -Protokolle
 
  `security config modify`Mit dem Befehl können Sie die vorhandene Cluster-weite Sicherheitskonfiguration ändern. Wenn Sie den FIPS-konformen Modus aktivieren, wählt das Cluster automatisch nur TLS-Protokolle aus.
@@ -62,6 +65,7 @@ Ab ONTAP 9 können die Compliance-Modi FIPS-140-2 und FIPS-140-3 für Cluster-we
 
 
 
+[[fips-enablement-and-ciphers]]
 == FIPS-Enablement und Verschlüsselung
 
 * Verwenden Sie den `-supported-cipher-suites` Parameter, um nur den Advanced Encryption Standard (AES) oder AES und 3DES zu konfigurieren.
@@ -72,6 +76,7 @@ Ab ONTAP 9 können die Compliance-Modi FIPS-140-2 und FIPS-140-3 für Cluster-we
 
 
 
+[[ssh-and-tls-security-hardening]]
 == Erhöhung der SSH- und TLS-Sicherheit
 
 Für die SSH-Administration von ONTAP 9 ist ein OpenSSH-Client 5.7 oder höher erforderlich. SSH-Clients müssen mit dem öffentlichen Schlüsselalgorithmus Elliptic Curve Digital Signature Algorithm (ECDSA) verhandeln, damit die Verbindung erfolgreich hergestellt werden kann.
@@ -80,6 +85,7 @@ Um TLS-Sicherheit zu erhärten, aktivieren Sie nur TLS 1.2 und verwenden Sie Cip
 
 
 
+[[enable-tlsv1-2-and-pfs-capable-cipher-suites]]
 == Aktivieren Sie TLSv1.2- und PFS-fähige Chiffre-Suites
 
 Um nur TLS 1.2- und PFS-fähige Cipher-Suites `security config modify` zu aktivieren, verwenden Sie den Befehl von der erweiterten Berechtigungsebene aus.

@@ -56,18 +56,21 @@ vs2.example.com         vs2_pol
 
 
 
+[[fpolicy-enhancements]]
 == Verbesserungen von FPolicy
 
 ONTAP 9 umfasst die in den folgenden Abschnitten beschriebenen Verbesserungen von FPolicy.
 
 
 
+[[filtering-controls]]
 === Filterkontrollen
 
 Für und zum Entfernen von Benachrichtigungen zu Verzeichnisaktivitäten stehen neue Filter zur Verfügung `SetAttr` .
 
 
 
+[[async-resiliency]]
 === Asynchrone Ausfallsicherheit
 
 Wenn bei einem FPolicy-Server im asynchronen Modus ein Netzwerkausfall auftritt, werden FPolicy Benachrichtigungen, die während des Ausfalls generiert wurden, auf dem Storage-Node gespeichert. Wenn der FPolicy-Server wieder online geschaltet wird, wird er über die gespeicherten Benachrichtigungen benachrichtigt und kann sie vom Speicher-Node abrufen. Die Länge der Speicherung der Benachrichtigungen während eines Ausfalls kann so bis zu 10 Minuten betragen.

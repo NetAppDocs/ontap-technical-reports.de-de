@@ -13,6 +13,7 @@ Eine entscheidende Waffe im Snap-Arsenal von NetApp ist SnapLock, das sich beim 
 
 
 
+[[snaplock-compliance]]
 == SnapLock-Compliance
 
 SnapLock Compliance (SLC) bietet unlöschbaren Schutz Ihrer Daten. SLC verhindert das Löschen von Daten, selbst wenn ein Administrator versucht, das Array neu zu initialisieren. Im Gegensatz zu anderen Konkurrenzprodukten ist SnapLock Compliance nicht anfällig für Social Engineering-Hacks durch die Support-Teams dieser Produkte. Daten, die durch SnapLock Compliance Volumes geschützt sind, können wiederhergestellt werden, bis sie ihr Ablaufdatum erreicht haben.
@@ -25,6 +26,7 @@ Zur Aktivierung von SnapLock link:https://docs.netapp.com/us-en/ontap/system-adm
 
 
 
+[[tamperproof-snapshots]]
 == Manipulationssichere Snapshots
 
 Manipulationssichere Snapshot Kopien (TPS) bieten eine praktische und schnelle Möglichkeit, Daten vor böswilligen Handlungen zu schützen. Im Gegensatz zu SnapLock Compliance wird TPS in der Regel auf Primärsystemen verwendet, auf denen der Benutzer die Daten für einen bestimmten Zeitraum schützen und lokal für schnelle Wiederherstellungen belassen kann oder wenn Daten nicht vom Primärsystem repliziert werden müssen. TPS verwendet SnapLock-Technologien, um zu verhindern, dass der primäre Snapshot auch von einem ONTAP-Administrator gelöscht wird, der dieselbe SnapLock-Aufbewahrungsfrist verwendet. Das Löschen von Snapshots wird auch dann verhindert, wenn das Volume nicht SnapLock aktiviert ist, obwohl Snapshots nicht dieselbe unlöschbare Eigenschaft von SnapLock Compliance Volumes aufweisen.

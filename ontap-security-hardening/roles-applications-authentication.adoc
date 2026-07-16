@@ -17,12 +17,14 @@ Dies sind die Rollen, die Administratoren von Administratoren und Storage Virtua
 
 
 
+[[roles]]
 == Rollen
 
 Dank rollenbasierter Zugriffssteuerung (Role Based Access Control, RBAC) haben Benutzer nur Zugriff auf die Systeme und Optionen, die für ihre Rollen und Funktionen erforderlich sind. Die RBAC-Lösung in ONTAP beschränkt den administrativen Zugriff der Benutzer auf das Niveau, das für ihre Rolle festgelegt wurde. Administratoren können so Benutzer anhand der zugewiesenen Rolle managen. ONTAP bietet mehrere vordefinierte Rollen. Operatoren und Administratoren können benutzerdefinierte Zugriffskontrollrollen erstellen, ändern oder löschen und Kontobeschränkungen für bestimmte Rollen festlegen.
 
 
 
+[[predefined-roles-for-cluster-administrators]]
 === Vordefinierte Rollen für Cluster-Administratoren
 
 |===
@@ -159,6 +161,7 @@ NOTE: Die `autosupport` Rolle wird dem vordefinierten `autosupport` Konto zugewi
 
 
 
+[[predefined-roles-for-storage-virtual-machine-svm-administrators]]
 === Vordefinierte Rollen für SVM-Administratoren (Storage Virtual Machine
 
 |===
@@ -252,6 +255,7 @@ NOTE: Die `autosupport` Rolle wird dem vordefinierten `autosupport` Konto zugewi
 |===
 
 
+[[application-methods]]
 == Anwendungsmethoden
 
 Die Anwendungsmethode gibt den Zugriffstyp der Anmeldemethode an. Mögliche Werte sind `console, http, ontapi, rsh, snmp, service-processor, ssh,` und `telnet`.
@@ -266,6 +270,7 @@ Mit dem `security protocol modify` Befehl wird die vorhandene Cluster-weite Konf
 
 
 
+[[authentication-methods]]
 == Authentifizierungsmethoden
 
 Der Parameter für die Authentifizierungsmethode gibt die Authentifizierungsmethode an, die für Anmeldungen verwendet wird.
@@ -318,4 +323,4 @@ Ab ONTAP 9.13.1:
 * Public Key Revocation wird mit SSH publickeys sowie Zertifikaten unterstützt, die während SSH auf Ablauf/Widerruf überprüft werden.
 
 
-Weitere Informationen zur Multi-Faktor-Authentifizierung (MFA) für ONTAP System Manager, Active IQ Unified Manager und SSH finden Sie unter link:http://www.netapp.com/us/media/tr-4647.pdf["TR-4647: Multifaktor-Authentifizierung in ONTAP 9"^].
+Weitere Informationen zur Multifaktor-Authentifizierung (MFA) für ONTAP System Manager, Active IQ Unified Manager und SSH sind unter link:https://www.netapp.com/pdf.html?item=/media/17055-tr4647.pdf["TR-4647: Multifaktor-Authentifizierung in ONTAP 9"^] zu finden.

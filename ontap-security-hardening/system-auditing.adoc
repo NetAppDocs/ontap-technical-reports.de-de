@@ -15,6 +15,7 @@ Stellen Sie die Integrität der Ereignisüberwachung sicher, indem Sie ONTAP-Ere
 
 
 
+[[send-out-syslog]]
 == Senden Sie Syslog
 
 Protokoll- und Audit-Informationen sind für ein Unternehmen im Hinblick auf Support und Verfügbarkeit von unschätzbarem Wert. Zudem handelt es sich bei den in Protokollen (Syslog) und Audit-Berichten enthaltenen Informationen und Details in der Regel um sensible Daten. Um die Sicherheitskontrollen und das Sicherheitsniveau aufrechtzuerhalten, müssen Unternehmen die Protokoll- und Audit-Daten unbedingt sicher managen.
@@ -23,6 +24,7 @@ Das verlagern von Syslog-Informationen ist nötig, um den Umfang oder die Auswir
 
 
 
+[[create-a-log-forwarding-destination]]
 === Erstellen Sie ein Ziel für die Protokollweiterleitung
 
 Verwenden Sie den `cluster log-forwarding create` Befehl, um Protokollweiterleitungsziele für die Remote-Protokollierung zu erstellen.
@@ -82,6 +84,7 @@ NOTE: NetApp empfiehlt, die Verbindung zu einem Typ mit dem `cluster log-forward
 
 
 
+[[event-notification]]
 == Ereignisbenachrichtigung
 
 Der Schutz der Informationen und Daten, die ein System verlassen, ist für die Aufrechterhaltung und das Management der Sicherheit des Systems von entscheidender Bedeutung. Die durch die ONTAP Lösung generierten Ereignisse bieten eine Fülle von Informationen über die Lösung, die verarbeiteten Informationen und vieles mehr. Die Vitalität dieser Daten macht deutlich, dass sie sicher gemanagt und migriert werden müssen.

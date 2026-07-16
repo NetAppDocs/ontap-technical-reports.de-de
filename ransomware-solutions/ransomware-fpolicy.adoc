@@ -13,6 +13,7 @@ FPolicy verhindert das Speichern unerwünschter Dateien auf einer Storage Applia
 
 
 
+[[block-malicious-files-with-fpolicy-native-mode]]
 == Blockieren Sie bösartige Dateien mit dem nativen FPolicy-Modus
 
 Der native Modus von NetApp FPolicy (eine Weiterentwicklung des Namens, Dateirichtlinie) ist ein blockierendes Framework mit Dateierweiterungen, mit dem Sie unerwünschte Dateierweiterungen je nach Eingang in Ihre Umgebung blockieren können. Seit über einem Jahrzehnt ist ONTAP Cloud Teil von ONTAP. Es ist unglaublich hilfreich, wenn es darum geht, Sie beim Schutz vor Ransomware zu unterstützen. Diese Zero Trust Engine ist wertvoll, weil Sie zusätzliche Sicherheitsmaßnahmen erhalten, die über die Zugriffssteuerungslisten (ACL)-Berechtigungen hinausgehen.
@@ -30,6 +31,7 @@ Der native FPolicy-Modus ist in allen ONTAP Lizenzen enthalten.
 
 
 
+[[enable-user-and-entity-behavior-analytics-ueba-with-fpolicy-external-mode]]
 == Aktivieren Sie UEBA (User and Entity Behavior Analytics) mit dem externen FPolicy-Modus
 
 Der externe FPolicy-Modus ist ein Benachrichtigungs- und Kontrollframework für die Dateiaktivität, das eine Übersicht über die Datei- und Benutzeraktivität bietet. Diese Benachrichtigungen können von einer externen Lösung verwendet werden, um KI-basierte Analysen durchzuführen, um schädliches Verhalten zu erkennen.

@@ -15,6 +15,7 @@ ONTAP stellt Mechanismen bereit, die sicherstellen, dass das ONTAP-Image beim Up
 
 
 
+[[upgrade-image-validation]]
 == Validierung von Upgrade Images
 
 Mithilfe von Code-Signing kann sichergestellt werden, dass ONTAP Images über unterbrechungsfreie Image-Updates oder automatisierte unterbrechungsfreie Image-Updates, CLIs oder ONTAP APIs authentisch von NetApp erstellt und nicht manipuliert wurden. Die Validierung des Upgrade-Images wurde in ONTAP 9.3 eingeführt.
@@ -23,6 +24,7 @@ Diese Funktion ist eine automatische Sicherheitserweiterung für ONTAP-Upgrades 
 
 
 
+[[boot-time-image-validation]]
 == Image-Validierung beim Booten
 
 Ab ONTAP 9.4 ist sicheres Boot mit Unified Extensible Firmware Interface (UEFI) für NetApp AFF A800, AFF A220, FAS2750 und FAS2720 Systeme und nachfolgende Systeme der nächsten Generation mit UEFI BIOS aktiviert.

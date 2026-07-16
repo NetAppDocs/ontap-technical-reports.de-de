@@ -23,6 +23,7 @@ Diese technischen Berichte erweitern die link:https://docs.netapp.com/us-en/onta
 ====
 
 
+[[hardening-guides]]
 == Härteführungen
 
 link:./ontap-security-hardening/security-hardening-overview.html["TR-4569: Handbuch zur Erhöhung der Sicherheit für NetApp ONTAP"] Erfahren Sie, wie Sie NetApp ONTAP so konfigurieren, dass Unternehmen vorgeschriebene Sicherheitsziele für Vertraulichkeit, Integrität und Verfügbarkeit von Informationssystemen erfüllen.

@@ -15,6 +15,7 @@ Neben der Durchführung von integrierten Sicherheitsvorgängen und -Funktionen m
 
 
 
+[[commonly-used-protocols-and-ports]]
 == Häufig verwendete Protokolle und Ports
 
 [cols="27%,26%,47%"]
@@ -148,6 +149,7 @@ Neben der Durchführung von integrierten Sicherheitsvorgängen und -Funktionen m
 |===
 
 
+[[netapp-internal-ports]]
 == Interne NetApp-Ports
 
 [cols="47%,53%"]

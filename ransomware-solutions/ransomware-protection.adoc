@@ -15,6 +15,7 @@ ARP und ARP/AI können über die integrierte Management-Schnittstelle von ONTAP,
 
 
 
+[[autonomous-ransomware-protection-arp]]
 == Autonomer Schutz durch Ransomware (ARP)
 
 Autonomous Ransomware Protection (ARP), eine weitere seit 9.10.1 integrierte native ONTAP-Lösung, untersucht die Dateiaktivität und Datenentropie des NAS-Storage-Volumes, um potenzielle Ransomware-Angriffe automatisch zu erkennen. ARP bietet Administratoren Erkennung in Echtzeit, Einblicke und einen Punkt für die Daten-Recovery für eine nie dagewesene Erkennung potenzieller Ransomware.
@@ -33,6 +34,7 @@ Um ARP zu aktivieren, link:https://docs.netapp.com/us-en/ontap/system-admin/mana
 
 
 
+[[autonomous-ransomware-protectionai-arpai]]
 == Autonomer Ransomware-Schutz/KI (ARP/AI)
 
 ARP/AI wurde als Tech Preview in ONTAP 9.15.1 eingeführt und ermöglicht eine neue Stufe der Echtzeiterkennung von NAS-Storage-Systemen. Die neue KI-gestützte Erkennungstechnologie ist mit über einer Million Dateien und verschiedenen bekannten Ransomware-Angriffen trainiert. Neben den in ARP verwendeten Signalen erkennt ARP/AI auch die Header-Verschlüsselung. Dank der AI-Leistung und der zusätzlichen Signale kann ARP/AI eine Erkennungsgenauigkeit von über 99 % erzielen. Dies wurde von SE Labs validiert, einem unabhängigen Testlabor, das ARP/AI die höchste AAA-Bewertung verlieh.

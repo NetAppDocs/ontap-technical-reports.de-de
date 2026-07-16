@@ -24,6 +24,7 @@ Obwohl verwaiste Konten ein erhebliches Sicherheitsrisiko darstellen, *NetApp em
 
 
 
+[[list-local-accounts]]
 == Lokale Konten auflisten
 
 Führen Sie zum Auflisten der lokalen Konten den Befehl aus `security login show` .
@@ -47,6 +48,7 @@ autosupport      console     password  autosupport      no     no
 ----
 
 
+[[set-the-diagnostic-diag-account-password]]
 == Legen Sie das Kennwort für das Diagnosekonto (diag) fest
 
 Ein Diagnosekonto mit dem Namen `diag` wird im Lieferumfang des Speichersystems angegeben. Sie können das Konto verwenden `diag` , um Fehlerbehebungsaufgaben im durchzuführen `systemshell`. Das `diag` Konto ist das einzige Konto, mit dem über den privilegierten Befehl auf die Systemshell zugegriffen werden kann `diag` `systemshell`.

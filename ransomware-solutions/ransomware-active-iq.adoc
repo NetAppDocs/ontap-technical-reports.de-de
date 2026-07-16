@@ -11,7 +11,7 @@ summary: Zum Schutz vor Ransomware bei NetApp gehört Digital Advisor, ein digit
 [role="lead"]
 Digital Advisor powered by Active IQ vereinfacht die proaktive Pflege und Optimierung von NetApp Storage mit umsetzbarer Intelligenz für optimales Datenmanagement. Gestützt auf Telemetriedaten aus unserer hochdiversen Installationsbasis nutzt es fortschrittliche KI- und ML-Techniken, um Möglichkeiten zur Risikominderung sowie zur Verbesserung der Leistung und Effizienz Ihrer Speicherumgebung aufzudecken.
 
-Das kann nicht nur https://www.netapp.com/services/support/active-iq/["Digitaler Berater von NetApp"^] helfen https://www.netapp.com/blog/fix-security-vulnerabilities-with-active-iq/["Beseitigung von Sicherheitslücken"^], sondern bietet auch Einblicke und Anleitungen für den Schutz vor Ransomware. Eine dedizierte „Wellness“-Karte zeigt die erforderlichen Maßnahmen und die damit verbundenen Risiken an. So können Sie sicher sein, dass Ihre Systeme diese Best Practices-Empfehlungen erfüllen.
+Nicht nur kann https://www.netapp.com/data-services/digital-advisor/["Digitaler Berater von NetApp"^] helfen https://www.netapp.com/blog/fix-security-vulnerabilities-with-active-iq/["Beseitigung von Sicherheitslücken"^], sondern es bietet auch Einblicke und Anleitungen speziell zum Schutz vor Ransomware. Eine spezielle Statuskarte zeigt die erforderlichen Maßnahmen und die adressierten Risiken an, sodass Sie sicher sein können, dass Ihre Systeme den Empfehlungen für bewährte Verfahren entsprechen.
 
 image:ransomware-solution-dashboard.jpg["Die NetApp überwacht den Systemzustand im Digital Advisor Dashboard"]
 
@@ -21,4 +21,4 @@ Zu den Risiken und Maßnahmen, die auf der Seite „Ransomware Defense Wellness�
 * FPolicy ist nicht für alle Storage Virtual Machines (SVMs) aktiviert, die für NAS-Protokolle konfiguriert sind.
 
 
-Ransomware-Schutz in Aktion sehen:link:https://www.netapp.com/services/support/active-iq/["Digital Advisor"^]
+Ein Beispiel für den Ransomware-Schutz findet sich unter link:https://www.netapp.com/data-services/digital-advisor/["Digital Advisor"^].

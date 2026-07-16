@@ -24,6 +24,7 @@ Sicherheit erfordert Validierung. ONTAP bietet erweiterte Auditing-Ereignisse un
 
 
 
+[[create-an-audit-configuration]]
 == Erstellen Sie eine Überwachungskonfiguration
 
 Sie müssen CIFS-Überwachung aktivieren, um Auditing-Ereignisse zu generieren. Erstellen Sie mit dem `vserver audit create` Befehl eine Überwachungskonfiguration. Standardmäßig verwendet das Audit-Protokoll eine auf Größe basierende Rotationsmethode. Sie können eine zeitbasierte Rotationsoption verwenden, wenn sie im Feld Rotationsparameter angegeben ist. Weitere Konfigurationsdetails für die Protokollaudit-Rotation sind der Rotationszeitplan, die Rotationsgrenzen, die Rotationstage der Woche und die Rotationsgröße. Der folgende Text enthält eine Beispielkonfiguration, die eine Überwachungskonfiguration mit einer monatlichen, zeitbasierten Rotation darstellt, die für alle Wochentage um 12:30 Uhr geplant ist.
@@ -34,6 +35,7 @@ cluster1::> vserver audit create -vserver vs1 -destination /audit_log -rotate-sc
 ----
 
 
+[[cifs-audit-events]]
 == CIFS-Audit-Ereignisse
 
 CIFS-Audit-Ereignisse sind wie folgt:
@@ -50,12 +52,14 @@ NOTE: Diese Funktion basiert auf der Systemaudit-Funktion, mit der ein Administr
 
 
 
+[[effect-of-rest-apis-on-nas-auditing]]
 == Auswirkungen von REST-APIs auf NAS-Auditing
 
 ONTAP bietet Administratorkonten die Möglichkeit, über REST-APIs auf SMB/CIFS- oder NFS-Dateien zuzugreifen und diese zu bearbeiten. Obwohl REST-APIs nur von ONTAP Administratoren ausgeführt werden können, umgehen REST-API-Befehle das NAS-Revisionsprotokoll des Systems. Darüber hinaus können Dateiberechtigungen von ONTAP-Administratoren bei Verwendung von REST-APIs ignoriert werden. Die Aktionen des Administrators mit REST-APIs für Dateien werden jedoch im Verlaufsprotokoll des Systembefehls erfasst.
 
 
 
+[[create-no-access-rest-api-role]]
 === REST-API-Rolle ohne Zugriff erstellen
 
 Sie können verhindern, dass ONTAP-Administratoren REST-APIs für den Dateizugriff verwenden, indem Sie eine REST-API-Rolle erstellen, die über REST keinen Zugriff auf ONTAP Volumes hat. Führen Sie die folgenden Schritte aus, um diese Rolle bereitzustellen.

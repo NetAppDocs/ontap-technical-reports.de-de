@@ -15,12 +15,14 @@ Dies sind wichtige Parameter zur Stärkung der ONTAP-Systemadministration.
 
 
 
+[[command-line-access]]
 == Zugriff über die Befehlszeile
 
 Die Einrichtung eines sicheren Zugriffs auf Systeme ist ein wichtiger Bestandteil der Aufrechterhaltung einer sicheren Lösung. Die häufigsten Optionen für den Zugriff auf die Befehlszeile sind SSH, Telnet und RSH. Davon ist SSH die sicherste, dem Branchenstandard entsprechende Best Practice für den Remote-Zugriff auf die Befehlszeile. NetApp empfiehlt die Verwendung von SSH für den Zugriff über die Befehlszeile auf die ONTAP-Lösung.
 
 
 
+[[ssh-configurations]]
 === SSH-Konfigurationen
 
 Der `security ssh show` Befehl zeigt die Konfigurationen der SSH Schlüsselaustauschalgorithmen, Chiffren und MAC-Algorithmen für das Cluster und SVMs an. Die Schlüsselaustauschmethode verwendet diese Algorithmen und Chiffren, um festzulegen, wie die einmaligen Sitzungsschlüssel für die Verschlüsselung und Authentifizierung generiert werden und wie die Serverauthentifizierung stattfindet.
@@ -46,6 +48,7 @@ vs1             aes256-ctr,   diffie-hellman-group-     hmac-sha1-96
 ----
 
 
+[[login-banners]]
 === Anmeldebanner
 
 Mithilfe von Anmeldebannern kann ein Unternehmen Bedienern, Administratoren und auch Benutzern mit eingeschränkten Berechtigungen die Bedingungen für eine akzeptable Nutzung anzeigen. Die Banner zeigen an, wer berechtigt ist, auf das System zuzugreifen. Dieser Ansatz ist hilfreich, um Erwartungen an den Zugriff und die Nutzung des Systems zu ermitteln. Mit dem `security login banner modify` Befehl wird das Anmeldebanner geändert. Das Anmeldebanner wird kurz vor dem Authentifizierungsschritt während der SSH- und Konsolengeräteanmeldung angezeigt. Der Bannertext muss in doppelten Anführungszeichen („ “) stehen, wie im folgenden Beispiel gezeigt.
@@ -56,6 +59,7 @@ cluster1::> security login banner modify -vserver cluster1 -message "Authorized 
 ----
 
 
+[[login-banner-parameters]]
 === Anmeldebannerparameter
 
 [cols="19%,81%"]
@@ -85,6 +89,7 @@ Die Länge der Nachricht darf 2048 Byte nicht überschreiten. Nicht-ASCII-Zeiche
 |===
 
 
+[[message-of-the-day]]
 === Nachricht des Tages
 
 Der `security login motd modify` Befehl aktualisiert die Nachricht des Tages (MOTD).
@@ -130,6 +135,7 @@ Weitere Informationen zum Konfigurieren der Tagesnachricht in ONTAP finden Sie i
 
 
 
+[[cli-session-timeout]]
 === Zeitüberschreitung für CLI-Sitzung
 
 Das standardmäßige Timeout für die CLI-Sitzung beträgt 30 Minuten. Das Timeout ist wichtig, um veraltete Sitzungen und Session Huckepack zu verhindern.
@@ -138,6 +144,7 @@ Verwenden Sie den `system timeout show` Befehl, um das aktuelle Timeout für die
 
 
 
+[[web-access-with-netapp-ontap-system-manager]]
 == Webzugriff mit NetApp ONTAP System Manager
 
 Wenn ein ONTAP Administrator für den Zugriff und das Management eines Clusters eine grafische Benutzeroberfläche anstelle der CLI verwenden möchte, verwenden Sie NetApp ONTAP System Manager. Sie ist in ONTAP als Webdienst enthalten, standardmäßig aktiviert und über einen Browser zugänglich. Zeigen Sie im Browser auf den Hostnamen, wenn Sie DNS oder die IPv4- oder IPv6-Adresse über verwenden `+https://cluster-management-LIF+`.
@@ -148,6 +155,7 @@ Ab ONTAP 9.3 ist die SAML-Authentifizierung (Security Assertion Markup Language)
 
 
 
+[[saml-authentication-for-ontap-system-manager]]
 === SAML-Authentifizierung für ONTAP System Manager
 
 SAML 2.0 ist ein weit verbreiteter Industriestandard, der es jedem SAML-konformen Identitätsanbieter (IdP) von Drittanbietern ermöglicht, MFA mithilfe von Mechanismen durchzuführen, die für das IdP der Unternehmenswahl einzigartig sind, und als Single Sign-On (SSO)-Quelle.
@@ -164,10 +172,11 @@ Von NetApp validierte IDPs sind Microsoft ADFS, Cisco DUO und Open Source Shibbo
 
 Ab ONTAP 9.14.1 kann Cisco DUO als zweiter Authentifizierungsfaktor für SSH verwendet werden.
 
-Weitere Informationen zu MFA für ONTAP System Manager, Active IQ Unified Manager und SSH finden Sie unter link:http://www.netapp.com/us/media/tr-4647.pdf["TR-4647: Multifaktor-Authentifizierung in ONTAP 9"^].
+Weitere Informationen zur Multi-Faktor-Authentifizierung (MFA) für ONTAP System Manager, Active IQ Unified Manager und SSH sind unter link:https://www.netapp.com/pdf.html?item=/media/17055-tr4647.pdf["TR-4647: Multifaktor-Authentifizierung in ONTAP 9"^] zu finden.
 
 
 
+[[ontap-system-manager-insights]]
 === Einblicke in ONTAP System Manager
 
 Ab ONTAP 9.11.1 bietet ONTAP System Manager Einblicke, die Cluster-Administratoren bei der Optimierung ihrer täglichen Aufgaben unterstützen. Die Erkenntnisse zur Sicherheit basieren auf den Empfehlungen dieses technischen Berichts.
@@ -225,6 +234,7 @@ Weitere Informationen zu den Einblicken in ONTAP System Manager finden Sie in de
 
 
 
+[[system-manager-session-timeout]]
 === Zeitüberschreitung bei System Manager-Sitzung
 
 Sie können das Zeitlimit für die Inaktivität der System Manager Sitzung ändern. Das standardmäßige Zeitlimit für Inaktivität beträgt 30 Minuten. Ein Timeout ist wichtig, um veraltete Sitzungen und Session Huckepack zu verhindern.

@@ -15,6 +15,7 @@ Eine LIF ist eine IP-Adresse oder ein WWPN (Worldwide Port Name) mit zugehörige
 
 
 
+[[lif-roles]]
 == LIF-Rollen
 
 Dies sind die folgenden LIF-Rollen:
@@ -28,6 +29,7 @@ Dies sind die folgenden LIF-Rollen:
 
 
 
+[[security-characteristics-of-each-lif-role]]
 == Sicherheitsmerkmale der einzelnen LIF-Rolle
 
 [cols="21%,13%,14%,18%,18%,16%"]

@@ -15,12 +15,14 @@ Der folgende Abschnitt enthält Details zur NetApp AFX-Cluster-Hardware. Aktuell
 
 
 
+[[supported-hardware]]
 == Unterstützte Hardware
 
 Die aktuellsten Informationen zur unterstützten Hardware für NetApp AFX finden Sie unter link:https://hwu.netapp.com["https://hwu.netapp.com"^].
 
 
 
+[[nodes]]
 == Nodes
 
 NetApp AFX-Knoten basieren auf dem AFF A1K-Knotenmodell für Unified ONTAP Cluster. Diese Knoten verfügen über keine internen Festplatten und sind modular aufgebaut, um je nach Leistungsbedarf einfach Knoten hinzufügen oder entfernen zu können. Jeder Knoten belegt 2 HE im Rack und die Leistung steigt linear mit der Anzahl der Knoten in einem AFX-Cluster.
@@ -31,6 +33,7 @@ image:image42.png["Bild"]
 
 
 
+[[hardware-slots]]
 === Hardware-Steckplätze
 
 NetApp AFX 1K-Knoten verwenden die folgenden Slot-Zuweisungen.
@@ -42,6 +45,7 @@ NetApp AFX 1K-Knoten verwenden die folgenden Slot-Zuweisungen.
 
 
 
+[[shelves]]
 == Shelfs
 
 NetApp AFX-Einschübe verwenden dieselben Gehäuse wie die AFF-Systeme. Der Hauptunterschied zwischen den Einschüben in AFX liegt im verwendeten Modul. Die NSM140-Module bieten verbesserte Leistungsmerkmale und ermöglichen disaggregiertes ONTAP. Einige wichtige Punkte:
@@ -57,6 +61,7 @@ image:image43.png["Bild"]
 
 
 
+[[switches]]
 == Switches
 
 NetApp AFX nutzt weiterhin Backend-Cluster-Switches für die Intracluster-Kommunikation, wie zum Beispiel die Cluster-Datenbankreplikation, Remote-Datenoperationen, Speicheroperationen und NVRAM-Spiegelung. Funktional bestehen die einzigen Unterschiede zwischen Unified ONTAP und NetApp AFX Cluster-Switches darin:
@@ -72,6 +77,7 @@ image:image44.png["Bild"]
 
 
 
+[[cluster-switch-connectivity]]
 === Cluster-Switch-Konnektivität
 
 NetApp AFX nutzt Backend-Cluster-Switches intensiv für viele seiner zentralen Architekturkonzepte. So werden beispielsweise Cluster-Schnittstellen, Speicheradapter, Speichershelfs und NVRAM-Karten an die Cluster-Switches angeschlossen. Aktuell unterstützen all diese Schnittstellen nur 100GB-Kommunikation, während die Switches 400GB unterstützen. Daher werden die 100GB-Schnittstellen über 4 x 100GB-Breakout-Kabel mit den 400GB-Schnittstellen des Switches verbunden. Dadurch wird die Anzahl der Ports an den Switches reduziert. Beispielsweise belegen 16 x 100GB-Speichershelf-Modul-Ports nur 4 Ports an den Switches, während die insgesamt 8 Ports der Nodes 2 Switch-Ports nutzen.
@@ -82,6 +88,7 @@ image:image45.png["Bild"]
 
 
 
+[[disk-types-and-sizes]]
 == Festplattentypen und -größen
 
 NetApp AFX unterstützt derzeit nur NVMe-SSDs in folgenden Größen:
@@ -94,6 +101,7 @@ NetApp AFX unterstützt derzeit nur NVMe-SSDs in folgenden Größen:
 
 
 
+[[tlc-vs-qlc]]
 === TLC vs. QLC
 
 NetApp AFX kann sowohl TLC- als auch QLC-Flashtypen nutzen. Die 7,6- und 15,3-TB-Laufwerke sind TLC-Modelle, während Laufwerke mit mehr als 30,1 TB QLC sein werden. Unabhängig vom Medientyp können die NVIDIA SuperPod Zertifizierungsleistungsstandards erfüllt werden.

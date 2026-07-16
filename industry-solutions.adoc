@@ -18,6 +18,7 @@ Unsere branchenspezifischen Daten-Storage-Lösungen tragen erweitert durch strat
 
 
 
+[[eda]]
 == EDA
 
 link:https://www.netapp.com/pdf.html?item=/media/19368-tr-4617.pdf["Best Practices für Electronic Design Automation in ONTAP"^]
@@ -25,6 +26,7 @@ Erfahren Sie mehr über empfohlene Verfahren und Implementierungstipps für EDA-
 
 
 
+[[healthcare]]
 == Gesundheitswesen
 
 link:https://www.netapp.com/pdf.html?item=/media/17137-tr3928pdf.pdf["NetApp Best Practices für Epic"^]

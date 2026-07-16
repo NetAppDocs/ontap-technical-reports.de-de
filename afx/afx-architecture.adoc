@@ -17,6 +17,7 @@ Wir haben zuvor einen allgemeinen Überblick darüber gegeben, wie die Unified O
 
 
 
+[[how-to-tell-if-a-system-is-running-netapp-afx]]
 == Wie man erkennt, ob auf einem System NetApp AFX ausgeführt wird
 
 Die wichtigste Methode, um festzustellen, ob auf Ihrem System NetApp AFX ausgeführt wird, besteht darin, den folgenden Befehl auszuführen:
@@ -51,6 +52,7 @@ AFX::> storage availability-zone show
 ----
 
 
+[[node-to-disk-relationships]]
 == Knoten-zu-Festplatte-Beziehungen
 
 In der einheitlichen ONTAP-Architektur werden Lese- und Schreibvorgänge an eine bestimmte Teilmenge von Festplatten gerichtet. Selbst wenn Sie 24 Festplattengehäuse in einem 24-Knoten-Cluster haben (ein Gehäuse pro Knoten), kann jeder Knoten zu jedem Zeitpunkt nur direkt auf ein Festplattengehäuse zugreifen, was die im Cluster verfügbare Kapazität und Leistung begrenzt.
@@ -67,6 +69,7 @@ In NetApp AFX gibt es einige wesentliche Änderungen in der Art und Weise, wie F
 
 
 
+[[all-disks-are-visible-to-all-storage-nodes-no-disk-ownership]]
 === Alle Datenträger sind für alle Speicherknoten sichtbar – keine Datenträgerzugehörigkeit
 
 In NetApp AFX sind alle Nodes und Shelfs an denselben Backend-Switch angeschlossen, was es ONTAP ermöglicht, den gesamten Sichtbarkeitsbereich für Festplatten auf den gesamten Stack auszudehnen. Folglich besitzt kein Node bestimmte Festplatten. Stattdessen nehmen alle Festplatten an einem einzigen Kapazitätspool teil, der als Storage Availability Zone bezeichnet wird und einfacheres Kapazitätsmanagement sowie ein erhöhtes Leistungspotenzial bietet (mehr verfügbare Festplatten bedeuten mehr verfügbare Leistung).
@@ -77,6 +80,7 @@ image:image7.png["Bild"]
 
 
 
+[[no-more-physical-aggregates]]
 === Keine physischen Aggregate mehr
 
 Unified ONTAP fasst Festplatten in RAID-Gruppen zusammen und kombiniert diese zu einem Kapazitätskonstrukt, dem sogenannten Aggregat. Dieses Aggregat stellt die physische Kapazität dar und ist die Grenze des Speicherplatzes, der für die Erstellung von Volumes zur Bereitstellung von Daten für Endbenutzer zur Verfügung steht. Jedem Knoten muss mindestens ein Aggregat zugewiesen sein und diese Aggregate haben derzeit ein Limit von 800TB. Sobald dieses Limit erreicht ist, steht kein Speicherplatz mehr für zusätzliche Schreibvorgänge zur Verfügung.
@@ -95,6 +99,7 @@ image:image9.png["Bild"]
 
 
 
+[[nvram-moved-from-direct-connection-to-switched-replication]]
 === NVRAM wurde von direkter Verbindung auf geschaltete Replikation umgestellt
 
 ONTAP verwendet NVRAM als Zwischenspeicher, um eingehende Schreibvorgänge in einem Cluster zu schützen. Jeder Knoten in einem ONTAP Cluster verfügt über eine mit Akku ausgestattete NVRAM-Karte. Wenn ein Schreibvorgang von einem Client an ein Volume gesendet wird, wird dieser zuerst im NVRAM gespeichert. Der NVRAM-Inhalt wird dann auf die Festplatte geschrieben, sobald der NVRAM voll ist oder ein 10-Sekunden-Timer abläuft (je nachdem, was zuerst eintritt). Dies wird als Konsistenzpunkt bezeichnet.
@@ -109,6 +114,7 @@ image:image10.png["Bild"]
 
 
 
+[[data-written-to-any-and-all-disks-in-the-availability-zone]]
 === Daten, die auf beliebige (und alle) Datenträger in der Verfügbarkeitszone geschrieben werden
 
 NetApp AFX beseitigt das Konzept des Festplattenbesitzes und verlagert die physische Aggregatstruktur auf einen virtualisierten Ansatz, der von ONTAP verwaltet wird, wobei die für den Cluster erworbene Kapazität allen an den Cluster angeschlossenen Knoten zur Verfügung steht. Mit AFX können alle Knoten unabhängig von der Knoten:Volume-Zugehörigkeit auf alle Festplatten in der Storage Availability Zone schreiben. Knoten besitzen weiterhin ein Konzept des Volume-Besitzes, da Schreibvorgänge nach wie vor über den NVRAM laufen, aber diese Daten können an beliebiger Stelle innerhalb der verfügbaren Kapazität abgelegt werden. Dies bedeutet, dass eine größere Anzahl von Festplatten an einer einzelnen Arbeitslast teilnehmen kann, was Leistungssteigerungen bietet.
@@ -119,6 +125,7 @@ image:image11.png["Bild"]
 
 
 
+[[independent-scale-of-capacity-and-compute-nodes]]
 === Unabhängige Skalierung der Kapazität und der Rechenknoten
 
 Da die Hardware-Ressourcen in der NetApp AFX-Architektur entkoppelt sind, müssen Knoten nicht mehr mit zugehörigen Festplatten kombiniert werden. Wenn einem Cluster Leistungsressourcen wie RAM, CPU oder Netzwerkdurchsatz fehlen, müssen lediglich Speicherknoten hinzugefügt werden, die die bestehende Storage Availability Zone nutzen können. Wird hingegen mehr Kapazität benötigt, müssen nur zusätzliche Shelves hinzugefügt werden. Diese Flexibilität stellt sicher, dass Sie nur die Ressourcen erwerben, die Sie benötigen, und somit Überprovisionierung vermeiden.
@@ -129,6 +136,7 @@ image:image12.png["Bild"]
 
 
 
+[[linear-scaling-of-node-performance]]
 === Lineare Skalierung der Knotenleistung
 
 Mit dem Hinzufügen von Knoten zu einem AFX-Cluster werden dem Workload mehr CPU-, RAM- und Netzwerkressourcen zur Verfügung gestellt. Sobald diese Ressourcen in die Umgebung integriert werden, verläuft die Leistungssteigerung linear. Die folgende Grafik veranschaulicht, wie die Leistung steigt, wenn Knoten hinzugefügt werden.
@@ -139,6 +147,7 @@ image:image13.png["Bild"]
 
 
 
+[[larger-raid-groups-fewer-parity-drives]]
 === Größere RAID-Gruppen, weniger Paritätslaufwerke
 
 ONTAP bietet eine Kombination aus Datenschutz und Leistung für Festplatten über RAID-Gruppen – insbesondere RAID-TEC, das im Falle von Festplattenausfällen einen dreifachen Paritätsschutz bietet. RAID-TEC kann bis zu drei gleichzeitige Laufwerksausfälle in einer RAID-Gruppe überstehen. In unified ONTAP haben RAID-Gruppen eine maximale Festplattenanzahl von 28, wobei 3 Laufwerke für Parität und 1 Laufwerk als Ersatz reserviert sind. Somit werden 24 der 28 Laufwerke für Datenoperationen/RAID-Stripes verwendet.
@@ -174,6 +183,7 @@ Die folgende Tabelle gibt einen ungefähren Wert für die nutzbare Bruttokapazit
 |===
 
 
+[[faster-disk-failure-rebuild-times]]
 === Schnellere Wiederherstellungszeiten bei Festplattenausfällen
 
 In unified ONTAP besitzt jeder Knoten eine Teilmenge der Festplatten im Speichersystem. Das bedeutet, dass dieser Knoten nur auf diese Festplatten schreibt, aber auch, dass Festplattenwiederherstellungen im Falle eines Festplattenausfalls nur von einem einzelnen Knoten durchgeführt werden.
@@ -186,6 +196,7 @@ image:image16.png["Bild"]
 
 
 
+[[deduplication-domains]]
 === Deduplizierungsdomänen
 
 Die Deduplizierung ermöglicht es einem Speichersystem, doppelte Blöcke in seinem Dateisystem zu finden und anschließend Zeiger auf einen einzelnen Block zu erstellen, um die insgesamt belegte Speicherkapazität zu reduzieren. In unified ONTAP gibt es für die Deduplizierung bestimmte Grenzen, welche Blöcke reduziert werden können. Diese Grenzen hängen von der Art der verwendeten Deduplizierung ab. Im Allgemeinen gilt:
@@ -240,6 +251,7 @@ Die folgende Tabelle zeigt das Kapazitätsverhalten für duplizierte Daten in ve
 |===
 
 
+[[features-that-have-been-removedare-unsupported]]
 == Funktionen, die entfernt wurden/nicht mehr unterstützt werden
 
 NetApp AFX ist für leistungsstarke NAS- und Objekt-Workloads konzipiert – insbesondere (aber nicht ausschließlich) für KI-Training und -Inferenz. Mit dem Design von NetApp AFX wurden einige Entscheidungen getroffen, um bestimmte Funktionen in ONTAP zu deaktivieren.
@@ -256,12 +268,14 @@ NetApp AFX ist für leistungsstarke NAS- und Objekt-Workloads konzipiert – ins
 
 
 
+[[ontap-management-changes]]
 == Änderungen im ONTAP-Management
 
 Im Allgemeinen ändert die NetApp AFX-Verwaltung nichts an den Mechanismen zur Clusterverwaltung. Administratoren können weiterhin die CLI, GUI und REST-APIs nutzen, um sich anzumelden und einen Cluster zu konfigurieren. Aber NetApp AFX bot die Möglichkeit, einige Aspekte der Durchführung von Speicherverwaltungsoperationen zu verbessern.
 
 
 
+[[simpler-capacity-management]]
 === Einfacheres Kapazitätsmanagement
 
 Die NetApp AFX Storage Availability Zone reduziert die Verwaltungspunkte von einem knoten- und aggregatbasierten Ansatz auf einen einzigen Kapazitätspool, der dem gesamten Cluster zur Verfügung steht. Wenn Volumes wachsen oder schrumpfen, leiht und gibt ONTAP automatisch Kapazität an die bzw. aus der Storage Availability Zone zurück.
@@ -288,6 +302,7 @@ image:image21.png["Bild"]
 
 
 
+[[flexgroup-volume-management-improvements]]
 === Verbesserungen beim FlexGroup Volume-Management
 
 Ein FlexGroup-Volume besteht aus mehreren zugrunde liegenden FlexVol-Teilvolumes, die auf verschiedenen Knoten und Aggregaten im Cluster erstellt und NAS-Clients als ein einziger großer Namensraum präsentiert werden. FlexGroup-Volumes bieten Vorteile hinsichtlich Leistung, Skalierbarkeit, Lastverteilung und Dateianzahl für rechenintensive Workloads. Da sie jedoch knoten- und aggregatübergreifend koordiniert werden, stoßen sie gelegentlich an physikalische Grenzen, wenn die Kapazität knapp wird, da die von den Aggregaten bereitgestellten unabhängigen Dateisysteme ebenfalls eine eigene Kapazitätsnutzung und -begrenzung haben. Wenn beispielsweise ein Aggregat mit FlexGroup-Volume-Bestandteilen vor anderen Aggregaten im Cluster voll wird, könnte das gesamte FlexGroup selbst von Kapazitäts- oder Leistungsproblemen betroffen sein.
@@ -308,6 +323,7 @@ image:image23.png["Bild"]
 
 
 
+[[automated-storage-administration-tasks]]
 === Automatisierte Speicherverwaltungsaufgaben
 
 Mit der Storage Availability Zone in NetApp AFX wird die gesamte Kapazität auf alle Knoten verteilt. Obwohl die Knoten weiterhin Volumes besitzen, verwaltet ONTAP die Kapazitätsnutzung jedes Knotens automatisch, indem Kapazität je nach Bedarf ausgeliehen und freigegeben wird. Das bedeutet, dass sich Speicheradministratoren nicht mehr darum kümmern müssen, wie der nutzbare Speicherplatz am besten ausbalanciert wird.
@@ -316,6 +332,7 @@ Darüber hinaus wird die RAID-Gruppenverwaltung von ONTAP automatisiert, wobei n
 
 
 
+[[zero-copy-volume-moves]]
 === Zero-Copy-Volume-Verschiebungen
 
 Unified ONTAP bietet eine Möglichkeit, Volumes unterbrechungsfrei zwischen Knoten oder Aggregaten zu verschieben, um die Performance und Kapazitätsnutzung im gesamten Cluster zu verwalten.
@@ -418,6 +435,7 @@ image:image29.png["Bild"]
 
 
 
+[[cluster-scale-and-expansion]]
 === Clustergröße und -erweiterung
 
 Unified ONTAP-Cluster unterstützen bis zu 24 Knoten und jeder hinzugefügte Knoten muss ebenfalls mit Festplatten hinzugefügt werden (sowohl für Systemfunktionen als auch für Datendienste). Festplattengehäuse können dem Cluster hinzugefügt werden, sind jedoch immer mit einem einzigen HA-Paar verbunden und gehören ausschließlich einem einzelnen Knoten, selbst wenn der Cluster 24 Knoten umfasst. Das bedeutet, dass dem Cluster Kapazität hinzugefügt wird, selbst wenn nur Leistung erforderlich ist, und dass die Leistungssteigerung größtenteils auf einen bestimmten Satz von Festplatten der neuen Knoten beschränkt ist. Dadurch kann es passieren, dass Sie über zusätzliche Kapazität verfügen, die Sie nicht unbedingt benötigen.
@@ -434,6 +452,7 @@ image:image31.png["Bild"]
 
 
 
+[[root-volume-changes]]
 === Änderungen des Root-Volumes
 
 In NetApp ONTAP wird jedem Knoten ein Root-Volume zugewiesen, das für systemspezifische Dateien und Funktionen wie Protokolldateien, Boot-Images, Core-Dateien, Cluster-Datenbanken und mehr verwendet wird.
@@ -444,6 +463,7 @@ NetApp AFX eliminiert physische Aggregate und macht dadurch Root-Aggregate und A
 
 
 
+[[onboard-boot-media]]
 === Onboard-Bootmedien
 
 NetApp AFX-Knoten nutzen ein integriertes Bootmedium, eine NVMe-angeschlossene M.2-Gerät mit ca. 3,8 TB Größe. Diese Bootmedien enthalten Boot-Image-Dateien und replizierte Datenbanken, die von den Speichergehäusen getrennt sind, was zusätzliche Redundanz bei Festplattenzugriffsproblemen bietet. Fällt das Bootmedium aus, wird der Knoten von seinem HA-Partner übernommen und das Bootmedium kann ersetzt werden. Nach dem Austausch lädt ein Speicheradministrator ein neues ONTAP-Image auf das Gerät und ONTAP stellt die Cluster-Datenbank automatisch wieder her, um die volle Funktionalität wiederherzustellen.

@@ -19,6 +19,7 @@ image:zero-trust-architecture.png["Zero-Trust-Architekturdiagramm"]
 
 
 
+[[architect-a-zero-trust-data-centric-mcap]]
 == Entwerfen Sie eine datenorientierte MCAP mit Zero Trust
 
 Gehen Sie wie folgt vor, um einen datenorientierten Zero Trust MCAP zu entwickeln:
@@ -36,24 +37,28 @@ Gehen Sie wie folgt vor, um einen datenorientierten Zero Trust MCAP zu entwickel
 
 
 
+[[identify-the-location-of-all-organizational-data]]
 === Ermitteln Sie den Standort aller Unternehmensdaten
 
 Mit der FPolicy Funktion von ONTAP und dem NetApp Alliance Partner Ecosystem von FPolicy Partnern können Sie herausfinden, wo sich die Daten Ihres Unternehmens befinden und wer Zugriff auf sie hat. Dies erfolgt mithilfe von Benutzerverhaltensanalysen, die feststellen, ob Datenzugriffsmuster gültig sind. Weitere Details zu User Behavioral Analytics werden unter Überwachen und Protokollieren aller Zugriffe erläutert. Wenn Sie nicht verstehen, wo sich Ihre Daten befinden und wer Zugriff darauf hat, kann die Verhaltensanalyse von Benutzern als Grundlage für die Erstellung von Klassifizierungen und Richtlinien anhand empirischer Beobachtungen dienen.
 
 
 
+[[classify-your-data]]
 === Daten klassifizieren
 
-In der Terminologie des Zero-Trust-Modells beinhaltet die Klassifizierung von Daten die Identifizierung toxischer Daten.  Bei toxischen Daten handelt es sich um sensible Daten, die nicht dazu bestimmt sind, außerhalb einer Organisation preisgegeben zu werden.  Die Offenlegung toxischer Daten könnte gegen gesetzliche Vorschriften verstoßen und den Ruf eines Unternehmens schädigen.  Im Hinblick auf die Einhaltung gesetzlicher Vorschriften umfassen toxische Daten Karteninhaberdaten für die https://www.netapp.com/us/media/tr-4401.pdf["Payment Card Industry Data Security Standard (PCI-DSS)"^] , personenbezogene Daten für die EU https://www.netapp.com/us/info/gdpr.aspx["DSGVO (Datenschutz-Grundverordnung)"^] oder Gesundheitsdaten für die https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html["Health Insurance Portability and Accountability Act (HIPAA)"^] .  Sie können NetApp verwenden https://www.netapp.com/data-services/classification/["NetApp Data Classification"^] (früher bekannt als Cloud Data Sense), ein KI-gesteuertes Toolkit zum automatischen Scannen, Analysieren und Kategorisieren Ihrer Daten.
+In der Terminologie des Zero-Trust-Modells umfasst die Klassifizierung von Daten die Identifizierung toxischer Daten. Toxische Daten sind sensible Daten, die nicht außerhalb einer Organisation offengelegt werden sollen. Die Offenlegung toxischer Daten könnte gegen regulatorische Vorgaben verstoßen und den Ruf einer Organisation schädigen. Im Hinblick auf regulatorische Vorgaben zählen zu toxischen Daten Karteninhaberdaten für die  https://www.netapp.com/pdf.html?item=/media/17180-tr4401.pdf["Payment Card Industry Data Security Standard (PCI-DSS)"^], personenbezogene Daten für die EU  https://www.netapp.com/responsibility/trust-center/data-privacy-principles-compliance/gdpr-compliance/["DSGVO (Datenschutz-Grundverordnung)"^] oder Gesundheitsdaten für die  https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html["Health Insurance Portability and Accountability Act (HIPAA)"^]. Mit NetApp https://www.netapp.com/data-services/classification/["NetApp Data Classification"^] (ehemals Cloud Data Sense), einem KI-gestützten Toolkit, lassen sich Ihre Daten automatisch scannen, analysieren und kategorisieren.
 
 
 
+[[securely-dispose-of-data-you-no-longer-require]]
 === Entsorgen Sie Daten, die Sie nicht mehr benötigen
 
 Nach der Klassifizierung Ihrer Unternehmensdaten stellen Sie möglicherweise fest, dass einige Ihrer Daten für die Funktion Ihres Unternehmens nicht mehr erforderlich oder relevant sind. Die Aufbewahrung unnötiger Daten ist eine Haftung, und diese Daten sollten gelöscht werden. Einen erweiterten Mechanismus zum kryptografischen Löschen von Daten finden Sie in der Beschreibung zum sicheren Löschen von Daten im Ruhezustand.
 
 
 
+[[understand-what-roles-should-have-access-to-the-data-classifications-and-apply-the-principle-of-least-privilege-to-enforce-access-controls]]
 === Verstehen Sie, welche Rollen auf die Datenklassifizierungen zugreifen sollten, und wenden Sie das Prinzip der geringsten Berechtigungen an, um Zugriffskontrollen durchzusetzen
 
 Das Zuordnen von Zugriff auf sensible Daten und die Anwendung des Prinzips der geringsten Rechte bedeutet, dass Mitarbeiter in Ihrem Unternehmen nur auf die Daten zugreifen können, die für die Ausführung ihrer Aufgaben erforderlich sind. Dieser Prozess beinhaltet eine rollenbasierte Zugriffssteuerung (https://docs.netapp.com/us-en/ontap/authentication/index.html["RBAC"^], die für den Datenzugriff und administrativen Zugriff gilt.
@@ -66,9 +71,10 @@ Eine andere Möglichkeit, Snapshots zu schützen, ist mit ONTAP link:https://doc
 
 
 
+[[use-multifactor-authentication-for-administrative-access-and-data-access]]
 === Multi-Faktor-Authentifizierung für administrativen Zugriff und Datenzugriff
 
-Zusätzlich zur Cluster-administrativen RBAC https://www.netapp.com/us/media/tr-4647.pdf["Multi-Faktor-Authentifizierung (MFA)"^] kann für den ONTAP Web-administrativen Zugriff und den SSH-Zugriff (Secure Shell) über die Befehlszeile implementiert werden. MFA für administrativen Zugriff ist eine Voraussetzung für US-öffentliche Einrichtungen oder solche, die dem PCI-DSS folgen müssen. MFA macht es einem Angreifer unmöglich, ein Konto mit nur einem Benutzernamen und Passwort zu kompromittieren. MFA erfordert zwei oder mehr unabhängige Faktoren für die Authentifizierung. Ein Beispiel für eine zwei-Faktor-Authentifizierung ist etwas, das ein Benutzer besitzt, wie z. B. einen privaten Schlüssel, und etwas, das ein Benutzer kennt, z. B. ein Kennwort. Administrativer Webzugriff auf ONTAP System Manager oder ActiveIQ Unified Manager wird über die SAML (Security Assertion Markup Language) 2.0 aktiviert. Bei SSH-Befehlszeilenzugriff wird eine verkettete zwei-Faktor-Authentifizierung mit einem öffentlichen Schlüssel und einem Kennwort verwendet.
+Zusätzlich zur rollenbasierten Zugriffskontrolle (RBAC) für die Clusterverwaltung kann https://www.netapp.com/pdf.html?item=/media/17055-tr4647.pdf["Multi-Faktor-Authentifizierung (MFA)"^] für den administrativen Webzugriff auf ONTAP und den Secure Shell (SSH) Befehlszeilenzugriff eingesetzt werden. MFA für administrativen Zugriff ist eine Anforderung für US-amerikanische Organisationen des öffentlichen Sektors oder für solche, die den PCI-DSS einhalten müssen. MFA macht es einem Angreifer unmöglich, ein Konto allein mit Benutzername und Passwort zu kompromittieren. MFA erfordert zwei oder mehr unabhängige Faktoren zur Authentifizierung. Ein Beispiel für Zwei-Faktor-Authentifizierung ist etwas, das ein Benutzer besitzt, wie ein privater Schlüssel, und etwas, das ein Benutzer weiß, wie ein Passwort. Administrativer Webzugriff auf ONTAP System Manager oder Active IQ Unified Manager wird durch Security Assertion Markup Language (SAML) 2.0 ermöglicht. SSH Befehlszeilenzugriff verwendet eine verkettete Zwei-Faktor-Authentifizierung mit einem öffentlichen Schlüssel und einem Passwort.
 
 Mit den Identitäts- und Zugriffsverwaltungsfunktionen von ONTAP können Sie den Benutzer- und Maschinenzugriff über APIs steuern:
 
@@ -89,13 +95,14 @@ Mit den Identitäts- und Zugriffsverwaltungsfunktionen von ONTAP können Sie den
 
 
 
+[[use-encryption-for-data-at-rest-and-data-in-flight]]
 === Verschlüsselung von Daten im Ruhezustand und aktiven Daten
 
 
 
 ==== Verschlüsselung von Daten im Ruhezustand
 
-Jeden Tag gelten neue Anforderungen zur Minderung von Risiken für Storage-Systeme und Infrastrukturlücken, wenn ein Unternehmen Laufwerke wiederverwendet, defekte Laufwerke zurückgibt oder Upgrades auf größere Laufwerke durchführt, indem sie diese verkauft oder eintauschen. Von Storage Engineers wird in ihrer Rolle als Administratoren und Betreiber der Datenbestände erwartet, dass sie die Daten während ihres gesamten Lebenszyklus sicher managen und aufbewahren. https://www.netapp.com/us/media/ds-3898.pdf["NetApp Storage Encryption (NSE), NetApp Volume Encryption (NVE), NetApp Aggregate Encryption"^] Damit können Sie alle Ihre Daten im Ruhezustand jederzeit verschlüsseln – unabhängig davon, ob sie toxisch sind oder nicht, und ohne den täglichen Betrieb zu beeinträchtigen. https://www.netapp.com/us/media/ds-3213-en.pdf["NSE"^] Die ONTAP Hardwarelösung link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/index.html["Daten im Ruhezustand"^] verwendet validierte Self-Encrypting Drives nach FIPS 140-2 Level 2. https://www.netapp.com/us/media/ds-3899.pdf["NVE und NAE"^] Sind eine ONTAP-Softwarelösung link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/index.html["Daten im Ruhezustand"^] , die den nutzt https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4144["Validiertes NetApp Cryptographic Module nach FIPS 140-2 Level 1"^]. Mit NVE und NAE können entweder Festplatten oder Solid State Drives für die Verschlüsselung von Daten im Ruhezustand genutzt werden. Außerdem können NSE-Laufwerke verwendet werden, um eine native, mehrstufige Verschlüsselungslösung für Verschlüsselungsredundanz und zusätzliche Sicherheit bereitzustellen. Ist eine Schicht verletzt, sichert die zweite Schicht weiterhin die Daten. Dank dieser Funktionen ist ONTAP für https://www.netapp.com/us/media/sb-3952.pdf["Quantum-fähige Verschlüsselung"^].
+Täglich entstehen neue Anforderungen an die Risikominderung von Speichersystemen und die Schließung von Infrastrukturlücken, wenn ein Unternehmen Festplatten wiederverwendet, defekte Festplatten zurückgibt oder durch Verkauf oder Inzahlungnahme auf größere Festplatten umsteigt. Als Administratoren und Betreiber von Daten sind Speichertechniker verpflichtet, Daten während ihres gesamten Lebenszyklus sicher zu verwalten und zu pflegen.  https://www.netapp.com/pdf.html?item=/media/19767-ds-3898-netapp-storage-encryption-volume-encryption.pdf["NetApp Storage Encryption (NSE), NetApp Volume Encryption (NVE), NetApp Aggregate Encryption"^] helfen dabei, alle Ihre Daten im Ruhezustand jederzeit zu verschlüsseln, unabhängig davon, ob sie toxisch sind oder nicht, und ohne den täglichen Betrieb zu beeinträchtigen.  https://www.netapp.com/pdf.html?item=/media/7563-ds-3213-en.pdf["NSE"^] ist eine ONTAP Hardware link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/index.html["Daten im Ruhezustand"^] Lösung, die FIPS 140-2 Level 2-validierte selbstverschlüsselnde Festplatten verwendet.  https://www.netapp.com/pdf.html?item=/media/17070-ds-3899.pdf["NVE und NAE"^] sind eine ONTAP Software link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/index.html["Daten im Ruhezustand"^] Lösung, die  https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4144["Validiertes NetApp Cryptographic Module nach FIPS 140-2 Level 1"^] verwendet. Mit NVE und NAE können sowohl Festplatten als auch Solid-State-Laufwerke für die Verschlüsselung von Daten im Ruhezustand eingesetzt werden. Außerdem können NSE-Laufwerke eine native, mehrschichtige Verschlüsselungslösung bereitstellen, die Verschlüsselungsredundanz und zusätzliche Sicherheit bietet. Wird eine Schicht kompromittiert, schützt die zweite Schicht die Daten weiterhin. Diese Funktionen machen ONTAP bestens geeignet für  https://www.netapp.com/pdf.html?item=/media/17002-sb-3952.pdf["Quantum-fähige Verschlüsselung"^].
 
 NVE bietet zudem eine Funktion namens „ https://blog.netapp.com/flash-memory-summit-award/["Sicheres Löschen"^] kryptografisch“ zur Beseitigung toxischer Daten bei Verschütten von Daten, wenn sensible Dateien auf ein nicht klassifiziertes Volume geschrieben werden.
 
@@ -113,6 +120,7 @@ Die ONTAP Verschlüsselung von aktiven Daten sichert den Zugriff auf Benutzerdat
 
 
 
+[[monitor-and-log-all-access]]
 === Überwachen und protokollieren Sie den gesamten Zugriff
 
 Nachdem die RBAC-Richtlinien festgelegt sind, müssen Sie aktive Monitoring-, Audit- und Warnfunktionen implementieren. Die FPolicy Zero-Trust-Engine von NetApp ONTAP bietet in Kombination mit dem die https://www.netapp.com/partners/partner-connect["Partner-Ecosystem von NetApp FPolicy"^]erforderlichen Kontrollen für das datenorientierte Zero-Trust-Modell. NetApp ONTAP ist eine sicherheitsrelevante Datenmanagement-Software und link:https://docs.netapp.com/us-en/ontap/nas-audit/two-parts-fpolicy-solution-concept.html["FPolicy"^] eine branchenführende ONTAP-Funktion, die eine granulare, dateibasierte Ereignisbenachrichtigung bietet. NetApp FPolicy Partner können diese Schnittstelle nutzen, um den Datenzugriff innerhalb von ONTAP besser zu nutzen. Mit der FPolicy Funktion von ONTAP und dem NetApp Alliance Partner Ecosystem von FPolicy Partnern können Sie feststellen, wo sich die Daten Ihres Unternehmens befinden und wer Zugriff auf sie hat. Dies erfolgt mithilfe von Benutzerverhaltensanalysen, die feststellen, ob Datenzugriffsmuster gültig sind. Mithilfe von Analysen des Benutzerverhaltens lässt sich ein Alarm bei verdächtigem oder irridenem Datenzugriff erstellen, der nicht dem normalen Muster entspricht, und gegebenenfalls Maßnahmen ergreifen, um den Zugriff zu verweigern.

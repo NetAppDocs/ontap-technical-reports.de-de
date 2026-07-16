@@ -16,10 +16,11 @@ Zero Trust war bisher ein netzwerkorientierter Ansatz der Architektur von Microc
 
 NOTE: Ab Juli 2024 ist der Inhalt des technischen Berichts _TR-4829: NetApp and Zero Trust: Enabling a Data-Centric Zero Trust model_, der zuvor als PDF veröffentlicht wurde, auf docs.netapp.com verfügbar.
 
-Ihre Daten sind die wichtigsten Ressourcen in Ihrem Unternehmen. Insider-Bedrohungen sind laut 2022 die Ursache von 18 % der Datenschutzverletzungen. https://enterprise.verizon.com/resources/reports/dbir/["Verizon Data Breach Investigations Report"^] Die branchenführende Zero-Trust-Kontrolle rund um Ihre Daten mit der Datenmanagement-Software von NetApp ONTAP sorgt für eine erhöhte Wachsamkeit.
+Daten sind das wichtigste Gut Ihres Unternehmens. Insiderbedrohungen sind laut dem Bericht von 2022 die Ursache für 18 % aller Datenschutzverletzungen https://www.verizon.com/business/resources/["Verizon Data Breach Investigations Report"^]. Unternehmen können ihre Wachsamkeit erhöhen, indem sie branchenführende Zero Trust-Kontrollen rund um Daten mit der NetApp ONTAP Datenmanagement-Software einsetzen.
 
 
 
+[[what-is-zero-trust]]
 == Was Ist Zero Trust?
 
 Das Zero-Trust-Modell wurde zuerst von John Kindervag bei Forrester Research entwickelt. Sie sieht Netzwerksicherheit von innen nach außen statt von außen vor. Der Inside-Out Zero Trust-Ansatz identifiziert einen Microcore und Perimeter (MCAP). Bei MCAP handelt es sich um eine interne Definition von Daten, Services, Applikationen und Assets, die durch umfassende Kontrollen geschützt werden. Das Konzept eines sicheren äußeren Perimeters ist veraltet. Entitäten, denen eine vertrauenswürdige und erfolgreiche Authentifizierung über den Perimeter gestattet ist, können das Unternehmen dann anfällig für Angriffe machen. Insider befinden sich per Definition bereits innerhalb des sicheren Perimeters. Mitarbeiter, Auftragnehmer und Partner sind Insider und müssen für den Betrieb mit entsprechenden Kontrollmechanismen in der Infrastruktur Ihres Unternehmens sorgen.
@@ -38,6 +39,7 @@ Für die Zwecke dieser Dokumentation verwenden wir Konzepte und Terminologie von
 
 
 
+[[security-resources]]
 == Sicherheitsressourcen
 
 Informationen zur Meldung von Schwachstellen und Vorfällen, NetApp Sicherheitsreaktionen und Vertraulichkeit der Kundenvertraulichkeit finden Sie im https://www.netapp.com/company/trust-center/security/["Sicherheitsportal von NetApp"^].

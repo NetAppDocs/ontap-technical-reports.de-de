@@ -15,6 +15,7 @@ NetApp AFX unterstützt denselben Netzwerk-Stack, dieselben Sicherheitsfunktione
 
 
 
+[[networking]]
 == Netzwerkbetrieb
 
 Der Netzwerk-Stack in NetApp AFX ist identisch mit dem von unified ONTAP.
@@ -40,6 +41,7 @@ Zu den wichtigsten Netzwerkunterschieden gehören:
 
 
 
+[[security]]
 == Sicherheit
 
 NetApp AFX läuft auf ONTAP, was bedeutet, dass es dieselbe Sicherheit wie ONTAP verwendet. Alle Kryptomodule sind identisch, was bedeutet, dass die Sicherheitszertifizierungen identisch sein werden, sobald die Zertifizierungsprozesse abgeschlossen sind. NetApp AFX nutzt außerdem dieselbe Unterstützung für Sicherheitsverschlüsselungen wie das einheitliche ONTAP.
@@ -63,6 +65,7 @@ Informationen darüber, welche Zertifizierungen unified ONTAP erhalten hat (sowi
 
 
 
+[[snapshots-and-data-protection]]
 == Snapshots und Datenschutz
 
 NetApp AFX nutzt dieselben Snapshot- und Replikationstechnologien wie unified ONTAP, ohne dass sich die Funktionsweise dieser Features wesentlich ändert. Tatsächlich kann AFX mit unified ONTAP Systemen auf dieselbe link:https://docs.netapp.com/us-en/ontap/data-protection/compatible-ontap-versions-snapmirror-concept.html["Regeln und Konfigurationen"^] Weise replizieren, wie Sie es gewohnt sind.
@@ -71,6 +74,7 @@ Die einzige Ausnahme bei der Replikation in AFX betrifft FlexGroup-Volumes, die 
 
 
 
+[[nondisruptive-operations]]
 == Unterbrechungsfreier Betrieb
 
 ONTAP ermöglicht unterbrechungsfreie Vorgänge wie Datenträgerverschiebungen, Upgrades, Clusterwartung, Speicherausfallsicherungen und mehr. NetApp AFX bietet dieselben unterbrechungsfreien Vorgänge, jedoch mit einigen Anpassungen.
@@ -83,6 +87,7 @@ ONTAP ermöglicht unterbrechungsfreie Vorgänge wie Datenträgerverschiebungen, 
 
 
 
+[[volume-types]]
 == Volumentypen
 
 Unified ONTAP unterstützt verschiedene Volume-Typen, wie zum Beispiel:

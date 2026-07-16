@@ -24,6 +24,7 @@ NetApp empfiehlt Folgendes:
 ====
 
 
+[[supported-ciphers-and-key-exchanges]]
 == Unterstützte Chiffren und Schlüsselaustausch
 
 [cols="42%,58%"]
@@ -59,6 +60,7 @@ NetApp empfiehlt Folgendes:
 |===
 
 
+[[supported-aes-and-3des-symmetric-encryptions]]
 == Unterstützte symmetrische AES- und 3DES-Verschlüsselungen
 
 ONTAP unterstützt auch die folgenden Arten von symmetrischen AES- und 3DES-Verschlüsselungen (auch als Chiffren bezeichnet):
