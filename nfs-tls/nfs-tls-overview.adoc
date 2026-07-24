@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: nfs-tls/nfs-tls-overview.html 
+keywords: nfs, tls, encryption, ontap, rfc9289, in-transit, prerequisites, requirements 
+summary: ONTAP 9.19.1 führt native NFS über TLS ein und ermöglicht die Verschlüsselung des NFS-RPC-Datenverkehrs während der Übertragung gemäß RFC 9289 ohne Kerberos oder IPsec. 
+---
+= NFS über TLS Übersicht
+:toc: macro
+:hardbreaks:
+:toclevels: 1
+:allow-uri-read: 
+:toc: 
+:toclevels: 1
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+:toc-position: content
+
+
+[role="lead"]
+ONTAP 9.19.1 führt NFS over TLS ein, den lang erwarteten „einfachen Knopf“ zur Verschlüsselung Ihres NFS-Datenverkehrs.
+
+Vor dieser Funktion war die Verschlüsselung Ihrer NFS-Nutzlast während der Übertragung auf IPsec oder Kerberos beschränkt. Beide Methoden sind zwar effektiv, die Konfiguration war jedoch umständlich und die Leistungseinbußen konnten erheblich sein. Beide Methoden waren „Aufsatzlösungen“, also Lösungen, die nicht in einem RFC speziell für NFS definiert waren. link:https://www.rfc-editor.org/rfc/rfc9289.html["RFC 9289"], mit dem Titel „Toward Remote Procedure Call Encryption by Default“, änderte dies. Nun können NFSv3 und NFSv4.x den NFS-RPC-Datenverkehr während der Übertragung mit TLS 1.3 verschlüsseln. Kein Kerberos erforderlich. Kein IPsec erforderlich.
+
+
+
+[[prerequisites]]
+== Voraussetzungen
+
+Um ONTAP NFS über TLS zu verwenden, müssen die folgenden Voraussetzungen erfüllt sein.
+
+* ... ONTAP 9.19.1 ausführen
++
+** ONTAP Cloud-Persönlichkeiten werden derzeit nicht unterstützt
+
+
+* ...über eine NFS-Lizenz verfügen
+* ...ist ein NFS-Client im link:https://imt.netapp.com["NetApp Interoperabilitätsmatrix"]
+
+
+
+
+[[what-it-doesnt-do]]
+== Was es nicht tut
+
+NFS over TLS sichert die Transportschicht, es ändert jedoch nichts daran, wie NFS Benutzer authentifiziert.
+
+*Zertifikatbasierte Benutzerauthentifizierung.* NFS über TLS *bietet keinen neuen Mechanismus zur Benutzerauthentifizierung*. Es werden weiterhin entweder  `auth_sys` oder  `krb5` für die Benutzerauthentifizierung benötigt.  `krb5i` und  `krb5p` können weiterhin verwendet werden, aber durch TLS werden deren Integritäts- und Datenschutzmechanismen überflüssig, und es kommt dennoch zu Leistungseinbußen.

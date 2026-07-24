@@ -1,0 +1,66 @@
+---
+sidebar: sidebar 
+permalink: nfs-tls/nfs-tls-monitor.html 
+keywords: nfs, tls, monitor, counters, ems, events, statistics, observability 
+summary: NFS over TLS stellt Counter Manager-Zähler auf dem nfs_tls-Objekt sowie vier EMS-Ereignisse zur Verfügung, die zur Überwachung der Verbindungsintegrität und des Durchsetzungsverhaltens dienen. 
+---
+= NFS über TLS überwachen
+:toc: macro
+:hardbreaks:
+:toclevels: 1
+:allow-uri-read: 
+:toc: 
+:toclevels: 1
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+:toc-position: content
+
+
+[role="lead"]
+NFS over TLS stellt Counter Manager Zähler auf dem  `nfs_tls` Objekt sowie vier EMS-Ereignisse bereit, mit denen der Verbindungsstatus und das Durchsetzungsverhalten nachverfolgt werden können.
+
+
+
+[[counter-manager-counters]]
+== Counter Manager-Zähler
+
+Alle NFS-over-TLS Counter Manager-Zähler befinden sich auf dem Admin-Scope-Objekt `nfs_tls`. Diese sind mit `statistics show -object nfs_tls` einsehbar. Mit `-counter <name>` kann auf einen einzelnen Zähler gefiltert werden, oder mit `-instance` kann der Bereich auf eine bestimmte SVM oder Node-Zeile eingeschränkt werden.
+
+*Identifikator / Bezeichnungszähler (Zeichenkette):*
+
+* `nfs_tls:instance_name`--Instanzname (Bestandteil des SVM-Namens) für die Zeile.
+* `nfs_tls:instance_uuid`--Instance-UUID für die Zeile (Constituent-SVM-Kennung).
+* `nfs_tls:vserver_id`--SVM-Kennungsetikett für eine aggregierte Zeile.
+* `nfs_tls:vserver_name`--SVM-Name-Bezeichnung für eine aggregierte Zeile.
+* `nfs_tls:node_name`-- Node-Name-Label für eine aggregierte Zeile.
+
+
+*Verbindungs-Volume-Zähler (Rate):*
+
+* `nfs_tls:tls_total_connection_requests`--Gesamtanzahl der verarbeiteten NFS-over-TLS-Verbindungsanfragen (Erfolg + Fehler).
+* `nfs_tls:tls_connection_success`erfolgreiche NFS-over-TLS Verbindungen.
+* `nfs_tls:tls_disabled_connection_failures`--Verbindungen wurden abgelehnt, da NFS über TLS auf der SVM deaktiviert ist.
+* `nfs_tls:tls_connection_handshake_failures`--Verbindungen, die während des TLS-Handschlags fehlgeschlagen sind.
+* `nfs_tls:tls_configuration_not_found`--Verbindungsversuche wurden abgelehnt, da keine TLS-Konfiguration für das SVM/LIF-Paar existiert.
+* `nfs_tls:tls_connection_mismatch`--Verbindungen, die fehlschlugen, weil die im Speicher befindliche Verbindungskennung nicht mit der während des Handschlagabschlusses beobachteten Verbindung übereinstimmte.
+
+
+*Latenzzähler (Durchschnitt):*
+
+* `nfs_tls:tls_handshake_average_latency`--durchschnittliche TLS-Handschlag-Latenz in Mikrosekunden. Basiszähler: `tls_connection_success`.
+
+
+
+
+[[event-management-system-ems-messages]]
+== Meldungen des Event Management System (EMS)
+
+Vier für Kunden sichtbare EMS-Ereignisse werden vom NFS-Server auf dem NFS-over-TLS-Datenpfad ausgegeben. Sie können sie mit  `event log show` anzeigen.
+
+`Nblade.TLSConfigError`:: Schweregrad `ERR`, Ratenbegrenzung 10 Minuten. Wird ausgelöst, wenn ein Client versucht, NFS über TLS auf einer SVM/LIF ohne TLS-Konfiguration zu verwenden. Protokollierte Felder: Client-IP-Adresse, SVM-Name, LIF-IP-Adresse. Zur Behebung die Konfiguration mit  `vserver nfs tls interface enable` aktivieren.
+`Nblade.TLSHandshakeFailed`:: Schweregrad `ERR`, rate-limitiert 10 Minuten. Wird ausgelöst, wenn der TLS-Handschlag zwischen Client und Server fehlschlägt. Protokollierte Felder: SVM-Name, LIF-IP-Adresse, Client-(Remote-)IP-Adresse, Serverzertifikat-UUID. Zur Behebung sollte die TLS-Konfiguration auf dem LIF sowie die Netzwerkgesundheit überprüft werden. Wenn das Problem weiterhin besteht, sollte NetApp Support kontaktiert werden.
+`Nblade.NfsTlsDisabled`:: Schweregrad `ALERT`, ratenbegrenzt für 24 Stunden. Wird ausgelöst, wenn ein Client versucht, NFS über TLS auf einer SVM zu verwenden, auf der die Funktion deaktiviert ist. Protokollierte Felder: SVM name.
+`Nblade.nfsTLSAccessErr`:: Schweregrad `ERR`. Wird ausgelöst, wenn ein Client, der einer Exportrichtlinienregel mit `-allow-nfs-tls-only true` entspricht, versucht, den NFS-Pfad ohne TLS einzubinden oder darauf zuzugreifen. Dieses Ereignis dient zur Bestätigung, dass Clients ohne TLS wie vorgesehen blockiert werden.
+

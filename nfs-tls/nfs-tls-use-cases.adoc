@@ -1,0 +1,60 @@
+---
+sidebar: sidebar 
+permalink: nfs-tls/nfs-tls-use-cases.html 
+keywords: nfs, tls, use cases, kerberos, mtls, enforcement, zero trust, workloads, performance, connection churn 
+summary: NFS over TLS bietet Verschlüsselung während der Übertragung ohne Kerberos, TLS-Erzwingung pro Client und gegenseitige Client-Authentifizierung. Nicht jede Arbeitslast ist dafür geeignet. 
+---
+= Anwendungsfälle und Arbeitslasten
+:toc: macro
+:hardbreaks:
+:toclevels: 1
+:allow-uri-read: 
+:toc: 
+:toclevels: 1
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+:toc-position: content
+
+
+[role="lead"]
+NFS over TLS eignet sich gut für drei gängige Einsatzszenarien: Verschlüsselung während der Datenübertragung ohne Kerberos-Infrastruktur, TLS-Erzwingung pro Client bei einem gemeinsam genutzten Export und gegenseitige Client-Authentifizierung.
+
+Nicht jede Arbeitslast profitiert gleichermaßen, die Kenntnis der passenden und unpassenden Muster unterstützt die Planung der Bereitstellung.
+
+
+
+[[use-cases]]
+== Anwendungsfälle
+
+*NFS-Verschlüsselung während der Übertragung ohne Kerberos-Infrastruktur.* Wenn NFS-Datenpfad-Verschlüsselung benötigt wird, aber kein Key Distribution Center (KDC) bereitgestellt und betrieben, keine Keytabs an Clients verteilt oder ein Kerberos-Bereich auf die NAS-Clients ausgeweitet werden soll, bietet NFS über TLS hierfür eine direkte Lösung. Ein Serverzertifikat wird pro Storage Virtual Machine (SVM) installiert, NFS über TLS wird auf jeder Daten Logical Interface (LIF) aktiviert, die verschlüsseltes NFS übertragen soll, und die Clients verhandeln TLS 1.3 im Datenstrom über den Standard-NFS-Port. Kein neuer Authentifizierungsdienst erforderlich.
+
+*Clientbezogene TLS-only-Erzwingung auf einem gemeinsam genutzten NFS Export.* Wenn sowohl Clients mit als auch ohne Verschlüsselungsanforderung vorhanden sind, ist eine Möglichkeit erforderlich, die regulierten Clients auf den verschlüsselten Pfad zu zwingen, ohne die anderen zu beeinträchtigen. Die Export-Policy-Regeloption `-allow-nfs-tls-only true` erfüllt genau diese Funktion. Nicht-TLS-Mounts von entsprechenden Clients über TCP werden abgelehnt, während andere Export-Policy-Regeln unberührt bleiben.
+
+*Gegenseitige Client-Authentifizierung (mTLS) für die Vertrauensstellung zwischen Speicher und Client.* Bei Betrieb nach Zero-Trust-Netzwerkprinzipien oder bei Härtungsanforderungen, die verlangen, dass der Storage-Controller die Hostidentität jedes verbindenden Clients überprüft, empfiehlt sich die Option für gegenseitiges TLS pro LIF. Setzen Sie  `-enforce-host-auth true` auf  `vserver nfs tls interface enable` oder  `vserver nfs tls interface modify`. ONTAP validiert dann das X.509-Zertifikat jedes verbindenden Clients anhand der im SVM installierten Zertifizierungsstellen-Vertrauenskette (CA) zum Zeitpunkt des TLS-Handschlags und lehnt Clients ab, die kein vertrauenswürdiges Zertifikat vorlegen. Dadurch erfolgt eine kryptografische Durchsetzung von „Nur meine registrierte Host-Flotte kann auf diese NFS LIF zugreifen“, zusätzlich zu bestehenden Exportrichtlinien-Hostfiltern.
+
+
+
+[[workloads]]
+== Arbeitslasten
+
+Verschlüsselung ist nicht kostenlos. Der TLS-Handschlag verursacht messbare Kosten, und die TLS-Datensatzverschlüsselung führt bei jedem RPC zu zusätzlichem Aufwand. Die Auswirkungen auf die Leistung variieren stark in Abhängigkeit von Arbeitslast, Plattform und der Verfügbarkeit von Hardware-Offload. Einzelheiten finden sich unter link:nfs-tls-performance.html["Performance"].
+
+
+
+[[workload-patterns]]
+=== Arbeitslastmuster
+
+Langlebige NFS-Mounts mit einer stabilen Client-Population eignen sich hervorragend. Der TLS-Handschlag ist ein pro Verbindung anfallender Aufwand, der beim Mounten und bei der Wiederherstellung der Sitzung entsteht. Bei einer kleinen, stabilen Gruppe von Clients, die einmal mounten und stunden- oder tagelang verbunden bleiben, wird dieser Aufwand problemlos absorbiert.
+
+Wenn Sie die Zuordnung von LIF zu Hostnamen bereits sauber verwalten, beispielsweise mit DNS-Einträgen unter Ihrer Kontrolle, gestaltet sich die Bereitstellung von NFS über TLS unkompliziert. Die Funktion wird pro LIF konfiguriert: Es wird ein Serverzertifikat installiert, dessen Common Name (CN) mit dem Fully Qualified Domain Name (FQDN) des LIF übereinstimmt und dessen Subject Alternative Name (SAN)-Liste die IP-Adresse des LIF enthält.
+
+NFS over TLS ist das richtige Werkzeug, wenn Vertraulichkeit während der Datenübertragung, Serveridentität und optional die Identität des Client-Hosts zu Ihren Sicherheitsanforderungen gehören, genau die Eigenschaften, die TLS bietet.
+
+
+
+[[workload-anti-patterns]]
+=== Workload-Anti-Patterns
+
+Hohe Verbindungsfluktuation oder große Mount-Stürme sind ungeeignet. Jede neue TLS-Verbindung trägt die Kosten des TLS 1.3-Handschlags, einschließlich asymmetrischer Kryptografie, Zertifikatsvalidierung und optionaler mTLS-Kettenvalidierung. Wenn viele Clients mounten, nur wenig Arbeit verrichten, unmounten und sich wiederholt verbinden, fallen diese Handschlag-Kosten immer wieder an, anstatt sich zu amortisieren.

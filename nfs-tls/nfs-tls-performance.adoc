@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: nfs-tls/nfs-tls-performance.html 
+keywords: nfs, tls, performance, cpu, offload, ktls, connectx, handshake latency 
+summary: TLS verursacht zusätzlichen CPU-, Speicher- und Netzwerk-Overhead. Hardware-Offload auf CX6-Dx und CX7 NICs reduziert die CPU-Kosten im Dauerbetrieb deutlich. 
+---
+= Performance
+:toc: macro
+:hardbreaks:
+:toclevels: 1
+:allow-uri-read: 
+:toc: 
+:toclevels: 1
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+:toc-position: content
+
+
+[role="lead"]
+TLS verursacht zusätzliche Kosten in drei Ressourcendimensionen: CPU, Speicher und Netzwerk.
+
+
+
+[[resource-cost-overview]]
+== Ressourcenkostenübersicht
+
+Die CPU ist der Hauptkostenfaktor. Der TLS 1.3-Handschlag ist ein einmaliger Aufwand pro Verbindung und umfasst asymmetrische Kryptografie, Zertifikatsanalyse und Schlüsselaustausch. Nach dem Aufbau einer Verbindung besteht der laufende Overhead in der symmetrischen Verschlüsselung von Datensätzen mit AES-GCM oder ChaCha20-Poly1305. Auf Plattformen mit Mellanox ConnectX-6 Dx (CX6-Dx) oder ConnectX-7 (CX7) NICs übernimmt die NIC selbst die Ver- und Entschlüsselung über Kernel TLS (KTLS) Offload, wodurch die laufenden CPU-Kosten deutlich reduziert werden.
+
+Die *Memory*-Auswirkung ist gering. TLS fügt einen Sitzungsstatus pro Verbindung und einen TLS-Konfigurationscache pro Node hinzu. Die Cache-Größe ist begrenzt; Einträge werden durch die Time-To-Live (TTL) altern und im Hintergrund aktualisiert.
+
+Der Netzwerk-Overhead ist gering. Die TLS 1.3-Datensatzformatierung verursacht einen festen Overhead pro Datensatz und ein Authentifizierungstag. Der Handschlag fügt nur beim Verbindungsaufbau zusätzliche Roundtrips hinzu, nicht pro RPC.
+
+
+
+[[tls-performance-penalty]]
+== TLS-Leistungseinbuße
+
+Es gibt zwei unterschiedliche Pfade für NFS über TLS in ONTAP: den Hardware-Offload-Pfad und den Software-TLS-Pfad. Der Hardware-Offload-Pfad ist auf Plattformen mit CX6-Dx oder CX7 NICs verfügbar. Der Software-TLS-Pfad wird auf Plattformen ohne Offload-fähige NICs verwendet.
+
+Auf Plattformen mit Offload-fähigen Netzwerkkarten lag die Leistung über verschiedene Workloads hinweg innerhalb von etwa 10 % der Leistung von unverschlüsseltem NFS. Auf Plattformen ohne Offload-fähige Netzwerkkarten ist der Software-TLS-Pfad stärker von der Workload abhängig und kann im ungünstigsten Fall Durchsatzreduzierungen von etwa 30 % gegenüber unverschlüsseltem NFS aufweisen. Dies sind Charakterisierungswerte, keine garantierten Spezifikationen. Die Ergebnisse variieren je nach Workload-Typ, I/O-Größe und Verbindungsanzahl. Bei einer Mischung aus TLS- und nicht-TLS-Datenverkehr auf demselben Node ist ebenfalls mit Auswirkungen auf den nicht-TLS-Durchsatz zu rechnen.
+
+
+
+[[scaling-factors]]
+== Skalierungsfaktoren
+
+Die folgenden Faktoren erhöhen die TLS-CPU-Kosten oder die Handschlag-Latenz:
+
+*Verbindungsfluktuation.* Jede neue Verbindung verursacht die Kosten für den Handschlag. Workloads, die häufig TCP-Verbindungen zum NFS-Server öffnen und schließen, weisen eine höhere aggregierte TLS-CPU-Auslastung auf als Workloads mit langlebigen Verbindungen.
+
+*Nach einer Übernahme oder einem Netzwerkereignis können Verbindungsspitzen auftreten.* Workloads, bei denen sich viele Clients gleichzeitig wieder verbinden, wie beispielsweise nach einer HA-Übernahme, zahlen die vollen Handschlag-Kosten des TLS 1.3 pro Verbindung. Verbindungsreserve sollte entsprechend überwacht  `nfs_tls:tls_handshake_average_latency` und eingeplant werden.
+
+*Große Anzahl unterschiedlicher Client-Identitäten (mutual TLS).* Mutual TLS (mTLS)-Implementierungen skalieren die Handschlag-CPU mit der Anzahl der zu validierenden eindeutigen Client-Zertifikate.
+
+*mTLS vs. reines Server-TLS.* Die Aktivierung der Host-Authentifizierung (mTLS) führt zu einer Client-Zertifikatsvalidierung auf der Serverseite, wodurch jeder Handschlag moderat teurer wird als bei reinem Server-TLS. Die Kosten pro RPC bleiben im Steady-State unverändert.
+
+*Taktung der TLS-Konfiguration.* Häufige Änderungen an der TLS-Schnittstellenkonfiguration, wie Zertifikatsrotation oder Aktivierungs-/Deaktivierungszyklen, machen den TLS-Konfigurationscache pro Knoten ungültig und erzwingen Abfragen zurück zum Management-Host, was die Handschlag-Latenz kurzzeitig erhöht.

@@ -1,0 +1,116 @@
+---
+sidebar: sidebar 
+permalink: nfs-tls/nfs-tls-security.html 
+keywords: nfs, tls, security, rbac, encryption, auditing, certificates, mtls 
+summary: NFS over TLS verwendet standardmäßiges ONTAP RBAC, erfordert ein X.509-Serverzertifikat pro LIF und unterstützt nur TLS 1.3. 
+---
+= Sicherheit
+:toc: macro
+:hardbreaks:
+:toclevels: 1
+:allow-uri-read: 
+:toc: 
+:toclevels: 1
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+:toc-position: content
+
+
+[role="lead"]
+Diese Seite behandelt RBAC-Anforderungen, Zertifikatsvalidierung, Verschlüsselungsparameter, Revisionsprotokoll und bekannte Sicherheitsbeschränkungen für NFS über TLS bei ONTAP 9.19.1.
+
+
+
+[[role-and-rbac-requirements]]
+== Rollen- und RBAC-Anforderungen
+
+Die `vserver nfs tls interface` Befehlsfamilie-`enable`, `disable`, `modify` und `show` ist SVM-spezifisch. Sie kann von der Cluster `admin`-Rolle oder von der `vsadmin` der zugehörigen SVM ausgeführt werden.
+
+Das  `-allow-nfs-tls-only` Feld auf  `vserver export-policy rule` ist ein Schreibfeld des bestehenden Exportregel-Objekts. Es verwendet die standardmäßige Export-Policy-Regel-RBAC.
+
+REST-Endpunkte unter  `/api/protocols/nfs/tls/interfaces` entsprechen eins zu eins den oben genannten CLI-Befehlen. Es wird die standardmäßige NAS-Admin-RBAC verwendet. Es ist keine separate REST-Rolle definiert.
+
+
+
+[[authentication-and-authorization]]
+== Authentifizierung und Autorisierung
+
+Die Aktivierung von NFS über TLS auf einem LIF erfordert ein Server-X.509-Zertifikat, das auf der SVM über  `security certificate install` installiert ist. Das Zertifikat wird pro LIF zum Zeitpunkt der Aktivierung mit  `-certificate-name` gebunden.
+
+ONTAP führt zwei Prüfungen des bereitgestellten Serverzertifikats durch:
+
+. Der allgemeine Name (CN) des Zertifikats muss mit dem Fully Qualified Domain Name (FQDN) des LIF übereinstimmen.
+. Die IP-Adresse des LIF muss in der Liste der Subject Alternative Names (SAN) des Zertifikats aufgeführt sein.
+
+
+Ein optionaler  `-skip-san-validation`boolescher Wert (Standardwert  `false`) unterdrückt die SAN Prüfung beim Aktivieren oder Ändern.
+
+Jeder fehlgeschlagene Prüfvorgang liefert eine eindeutige Fehlermeldung.
+
+Die gegenseitige TLS (mTLS) Host-Authentifizierung ist optional.  `-enforce-host-auth true` auf  `vserver nfs tls interface enable` oder  `modify` kann gesetzt werden, um sie zu aktivieren. Standardmäßig ist  `false` eingestellt, was bedeutet, dass nur die Server-Authentifizierung erfolgt. Client-Zertifikate werden anhand der auf dem SVM installierten CA-Vertrauenskette validiert, für deren Bereitstellung Sie verantwortlich sind.
+
+
+
+[[user-authentication]]
+=== Benutzerauthentifizierung
+
+Die Benutzerauthentifizierung bleibt durch TLS unverändert. TLS ergänzt die Datenübertragung um Vertraulichkeit und Host-Authentifizierung. `AUTH_SYS` UNIX UID/GID oder `RPCSEC_GSS`/Kerberos müssen weiterhin für die RPC-Benutzerauthentifizierung verwendet werden. RFC 9289 stellt dies explizit klar: TLS schützt den Transport, während die bestehenden NFS-Authentifizierungsverfahren die Benutzerauthentifizierung wie bisher übernehmen.
+
+
+
+[[encryption]]
+== Verschlüsselung
+
+
+
+[[in-transit]]
+=== Während der Übertragung
+
+Wenn NFS über TLS auf einem LIF aktiviert ist, wird ausschließlich TLS 1.3 verwendet. Die folgenden Cipher Suites werden unterstützt:
+
+* `TLS_AES_128_GCM_SHA256`
+* `TLS_AES_256_GCM_SHA384`
+* `TLS_CHACHA20_POLY1305_SHA256`
+
+
+Der Schlüsselaustausch erfolgt mittels ECDHE auf der `secp384r1` Kurve. Die Verschlüsselung gilt für NFSv3 und NFSv4.x Datenverkehr, der über die TLS-fähige LIF übertragen wird.
+
+
+
+[[auditing]]
+== Prüfung
+
+Alle Änderungen der NFS-over-TLS-Konfiguration werden im standardmäßigen ONTAP Revisionsprotokoll (`security audit log show`) aufgezeichnet. Die folgenden Vorgänge werden protokolliert:
+
+* `vserver nfs tls interface enable`
+* `vserver nfs tls interface modify`
+* `vserver nfs tls interface disable`
+* `vserver export-policy rule create -allow-nfs-tls-only`
+* `vserver export-policy rule modify -allow-nfs-tls-only`
+
+
+Schreibgeschützte `show` und `GET` Operationen folgen der standardmäßigen ONTAP Revisionsprotokollrichtlinie und werden in der Regel nicht aufgezeichnet, es sei denn, das Revisionsprotokoll ist so konfiguriert, dass sie protokolliert werden.
+
+Drei für den Kunden sichtbare EMS-Ereignisse werden auf dem NFS-over-TLS Datenpfad ausgegeben. Details zu den Ereignissen, Auslösebedingungen und Ratenbegrenzungen sind unter link:nfs-tls-monitor.html["EMS-Nachrichten"] zu finden.
+
+
+
+[[tenancy-boundary]]
+== Mandantengrenze
+
+Die NFS over TLS Konfiguration ist pro SVM. Ein SVM-Administrator kann nur die TLS-Konfiguration auf LIFs der eigenen SVM sehen und verwalten. Cluster-Administratoren sehen alle SVMs.
+
+Serverzertifikatsreferenzen sind SVM-lokal. Die Konfiguration wird clusterweit repliziert, sodass jeder Knoten, der einen bestimmten LIF bedient, dieselbe TLS-Konfiguration anwendet.
+
+
+
+[[known-security-relevant-limitations]]
+== Bekannte sicherheitsrelevante Einschränkungen
+
+**Warnung vor selbstsignierten Zertifikaten.** Die CLI `enable` und `modify`-Befehle weisen darauf hin, dass selbstsignierte Zertifikate Sie einem Man-in-the-Middle-Angriff aussetzen. Ein von einer Zertifizierungsstelle signiertes Zertifikat, das über `security certificate install` installiert wurde, sollte verwendet werden.
+
+**Mutual TLS ist optional.** Mit der Standardeinstellung `-enforce-host-auth false` schützt NFS over TLS die Vertraulichkeit und Integrität der Übertragung und authentifiziert den Server gegenüber dem Client, jedoch erfolgt keine kryptografische Authentifizierung des Client-Hosts. Wenn dies erforderlich ist, muss mTLS explizit aktiviert werden.
+
+**Die ausschließliche Verwendung von TLS wird pro Exportrichtlinienregel erzwungen, nicht global.** Bis  `-allow-nfs-tls-only true` in der entsprechenden Exportrichtlinienregel gesetzt ist, kann derselbe LIF weiterhin Nicht-TLS-NFS-Verbindungen von Clients akzeptieren, die ansonsten durch die Regel zugelassen sind.

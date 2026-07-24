@@ -1,0 +1,33 @@
+---
+permalink: smb.html 
+sidebar: sidebar 
+keywords: Technical Reports, TR, NetApp TR, ONTAP TR, ONTAP, ONTAP 9, NAS, best practices, best-practices 
+summary: Diese technischen Berichte bieten einen Überblick über SMB/CIFS in ONTAP sowie empfohlene Vorgehensweisen. 
+---
+= ONTAP SMB Technical Reports
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+NetApp NAS-Lösungen vereinfachen die Datenverwaltung und helfen Ihnen, mit dem Wachstum Schritt zu halten und gleichzeitig die Kosten zu optimieren.
+
+
+
+[[smb]]
+== SMB
+
+link:https://www.netapp.com/pdf.html?item=/media/17136-tr4740.pdf["TR-4740: SMB 3.0 Multichannel"^]
+Microsoft hat Multichannel im SMB 3.0-Protokoll eingeführt, um das SMB3-Protokoll zu verbessern, indem es die Leistungs- und Zuverlässigkeitseinschränkungen von SMB1 und SMB2 berücksichtigt. Erfahren Sie mehr über die Multichannel-Funktion in ONTAP, einschließlich seiner Funktionen, empfohlenen Vorgehensweisen und Ergebnisse von Leistungstests.
+
+
+
+[[multiprotocol]]
+== Multi-Protokoll
+
+link:https://www.netapp.com/pdf.html?item=/media/27436-tr-4887.pdf["TR-4887: Übersicht über Multiprotokoll-NAS in ONTAP und Best Practices"^]
+Erfahren Sie, wie der Multiprotokoll-NAS-Zugriff in ONTAP funktioniert und welche empfohlenen Praktiken für Multi-Protokoll-Umgebungen kommen.
