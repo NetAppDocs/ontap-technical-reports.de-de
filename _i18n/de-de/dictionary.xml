@@ -2256,15 +2256,6 @@ ONTAP ist eine leistungsstarke Datenmanagementplattform mit nativen Funktionen, 
   <block id="db205ae8bdf2835682d741206291c18c" category="list-text">512 Bestandteilvolumina pro FlexGroup volume</block>
   <block id="4bb047f8c530785002e490ef17fa725e" category="section-title">Wo finde ich weitere Informationen</block>
   <block id="7d5b957cd473f6eaf5ad335a9c63c4ff" category="paragraph">Um mehr über die in diesem Dokument beschriebenen Informationen zu erfahren, lesen Sie bitte die folgenden Dokumente und/oder Websites:</block>
-  <block id="edd1ab4aa75a5fec969c05a8b30f7159" category="inline-link-macro"><block ref="edd1ab4aa75a5fec969c05a8b30f7159" category="inline-link-rx"></block></block>
-  <block id="f9cfe6815bd47be353c3bb39a0139fa8" category="list-text">Hardware Universe<block ref="9b728666388740f3273b7fd3c79f41a3" category="inline-link-macro-rx"></block></block>
-  <block id="82d68405cccf1e20bdf17e9113f92699" category="list-text">NetApp AFX-Produktseite <block ref="41c1c71697c17785bd4ba5e736738c42" category="inline-link-rx"></block></block>
-  <block id="ffa8e3dd54a1aebd2bec70c8e324c546" category="inline-link-macro"><block ref="ffa8e3dd54a1aebd2bec70c8e324c546" category="inline-link-rx"></block></block>
-  <block id="858cf9c99b0b862efd234a7e9baf6925" category="list-text">NetApp AFX: Skalierbare, sichere KI Dateninfrastruktur <block ref="3aa6bc3cce342e09582bd41034e5d890" category="inline-link-macro-rx"></block></block>
-  <block id="c2d05aa5a52a26363457404a67c100ec" category="inline-link-macro"><block ref="c2d05aa5a52a26363457404a67c100ec" category="inline-link-rx"></block></block>
-  <block id="113b6ad1210d507cfbdeea8852c55c42" category="list-text">Sie stehen vor der Entscheidung zwischen NFSv3 und NFSv4.x? Die Wahl wird immer klarer… <block ref="557477dbf74915d5a818c1f69c0f8792" category="inline-link-macro-rx"></block></block>
-  <block id="6220eabe39a1109ebb5f7cbb5b71d2b4" category="inline-link-macro"><block ref="6220eabe39a1109ebb5f7cbb5b71d2b4" category="inline-link-rx"></block></block>
-  <block id="56f8963bb7cc32c1d25e21641bd952b7" category="list-text">NetApp AFX-Datenblatt <block ref="41fee6b02e5a22a1b6d68a533a507406" category="inline-link-macro-rx"></block></block>
   <block id="f6a738f75f76f62a241636eca02cd87d" category="section-title">Versionsverlauf</block>
   <block id="34b6cd75171affba6957e308dcbd92be" category="cell">Version</block>
   <block id="44749712dbec183e983dcd78a7736c41" category="cell">Datum</block>
@@ -2351,7 +2342,6 @@ ONTAP ist eine leistungsstarke Datenmanagementplattform mit nativen Funktionen, 
   <block id="458a3f89edcc08eb6255ebe8b1d42393" category="paragraph">*NetApp AFX – NFSv4.1 sequenzielle IO-Leistung in ONTAP 9.18.1*</block>
   <block id="bddd597f0eec2113f06b93b0277da19f" category="paragraph">Noch beeindruckender sind die Verbesserungen bei einem der größten Leistungsengpässe von NFSv4.x – den Metadaten. Dabei handelt es sich um zufällige IOs, üblicherweise im 4K-Bereich, die zur Verwaltung von Dateibesitzern und -attributen, zum Erstellen und Auflisten von Dateien usw. verwendet werden. Aufgrund der Zustandsabhängigkeit von NFSv4.x sind diese Arten von Operationen tendenziell rechenintensiver und latenzbehafteter, was wiederum die insgesamt mögliche Leistung reduziert.</block>
   <block id="8d3bd41fd952027a466e35605cbd651b" category="paragraph">*NetApp AFX – NFSv4.1 Metadaten-IO-Leistung in ONTAP 9.18.1*</block>
-  <block id="cbbe23e446b1acb5414c4f9076c4423a" category="summary">Lesen Sie die folgenden Ressourcen, um mehr über NetApp AFX zu erfahren.</block>
   <block id="739f428040feee735e00029f2f74aaad" category="summary">Diese Seite enthält die neuesten Updates für NetApp AFX und wird mit jeder neuen Version aktualisiert.</block>
   <block id="89bef61b77bccd688eb4c742aab2b38b" category="doc">Was ist neu in NetApp AFX</block>
   <block id="f5cb5bdaaa412361fa89cf3912168e46" category="summary">IPsec bietet eine Alternative zur NFS- oder SMB-Verschlüsselung und ist die einzige Option zur Verschlüsselung während der Übertragung von iSCSI-Datenverkehr.</block>
@@ -2675,4 +2665,14 @@ ONTAP ist eine leistungsstarke Datenmanagementplattform mit nativen Funktionen, 
   <block id="4ade1e690485ace608877ec90f1e5fbc" category="sidebar">NFS über TLS</block>
   <block id="e2ab7c65b21ed8cc1c3b642b5e36429e" category="sidebar">S3</block>
   <block id="d2986ac8cb6bd55892099c1ffd6b1f6f" category="sidebar">Überwachen</block>
+  <block id="df9fc6fb0a33d6cde6e33be08fe5e535" category="summary">In den folgenden Ressourcen finden Sie weitere Informationen zu NetApp AFX.</block>
+  <block id="6ec228dfe84ccdb5f038627d2fe43701" category="list-text"><block ref="6ec228dfe84ccdb5f038627d2fe43701" category="inline-link-macro-rx"></block></block>
+  <block id="9506948fa02ccc59526718a774fd3c27" category="inline-link-macro">AFX Produktseite</block>
+  <block id="32b85f1fb1ba3c98ea8567a645fabe95" category="list-text"><block ref="32b85f1fb1ba3c98ea8567a645fabe95" category="inline-link-macro-rx"></block></block>
+  <block id="ba863d8bcb98bbbfb1e9cd9cc7dcf912" category="inline-link-macro">Aufbau des KI-gestützten Unternehmens: Warum die Infrastruktur entscheidend ist</block>
+  <block id="ec283cf2fa72cc250368fbff3fe539e1" category="list-text"><block ref="ec283cf2fa72cc250368fbff3fe539e1" category="inline-link-macro-rx"></block></block>
+  <block id="ff5020c223b5f9cee31f72d1bd7e8170" category="inline-link-macro">Blog: Entscheidung zwischen NFSv3 und NFSv4.X</block>
+  <block id="083f5724b7ba8a1aee93e65207c1ca46" category="list-text"><block ref="083f5724b7ba8a1aee93e65207c1ca46" category="inline-link-macro-rx"></block></block>
+  <block id="0b177bc573a406d57588f5636aee8329" category="inline-link-macro">AFX Datenblatt</block>
+  <block id="ccc213f9aa4c560ef128ce5b7fec0244" category="list-text"><block ref="ccc213f9aa4c560ef128ce5b7fec0244" category="inline-link-macro-rx"></block></block>
 </blocks>
