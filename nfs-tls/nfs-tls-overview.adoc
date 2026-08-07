@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: nfs-tls/nfs-tls-overview.html 
 keywords: nfs, tls, encryption, ontap, rfc9289, in-transit, prerequisites, requirements 
-summary: ONTAP 9.19.1 führt native NFS über TLS ein und ermöglicht die Verschlüsselung des NFS-RPC-Datenverkehrs während der Übertragung gemäß RFC 9289 ohne Kerberos oder IPsec. 
+summary: ONTAP 9.19.1 führt native NFS über TLS ein und ermöglicht die Verschlüsselung von NFS während der Übertragung gemäß RFC 9289 ohne Kerberos oder IPsec. 
 ---
 = NFS über TLS Übersicht
 :toc: macro
