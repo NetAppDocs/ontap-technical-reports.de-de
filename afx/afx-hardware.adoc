@@ -25,11 +25,15 @@ Die aktuellsten Informationen zur unterstützten Hardware für NetApp AFX finden
 [[nodes]]
 == Nodes
 
-NetApp AFX-Knoten basieren auf dem AFF A1K-Knotenmodell für Unified ONTAP Cluster. Diese Knoten verfügen über keine internen Festplatten und sind modular aufgebaut, um je nach Leistungsbedarf einfach Knoten hinzufügen oder entfernen zu können. Jeder Knoten belegt 2 HE im Rack und die Leistung steigt linear mit der Anzahl der Knoten in einem AFX-Cluster.
+NetApp AFX-Knoten umfassen den AFX 1K (basierend auf dem AFF A1K) und den AFX 2K. Diese Knoten verfügen über keine integrierte Festplatte für die Speicherung und sind modular ausgelegt, sodass Knoten je nach Leistungsanforderungen einfach hinzugefügt oder entfernt werden können. Jeder Knoten belegt 2U Rackplatz und die Leistung steigt linear, wenn sie zu einem AFX-Cluster hinzugefügt werden.
 
 *NetApp AFX 1K-Knotendetails*
 
 image:image42.png["Bild"]
+
+*NetApp AFX 2K-Knotendetails*
+
+image:image46.png["Bild"]
 
 
 
@@ -41,6 +45,13 @@ NetApp AFX 1K-Knoten verwenden die folgenden Slot-Zuweisungen.
 * Steckplatz 1 ist für die HA-Replikation vorgesehen
 * Steckplatz 7 ist für die Clusterreplikation vorgesehen
 * Die Steckplätze 10 und 11 sind für die Kommunikation mit dem Storage-Shelf vorgesehen
+
+
+NetApp AFX 2K-Knoten verwenden die folgenden Slot-Zuweisungen.
+
+* Steckplatz 1 ist für die HA-Replikation vorgesehen
+* Steckplatz 2 ist für die Clusterreplikation vorgesehen
+* Die Steckplätze 8B und 10A sind für die Kommunikation mit den Storage-Shelfs vorgesehen
 
 
 
@@ -80,11 +91,75 @@ image:image44.png["Bild"]
 [[cluster-switch-connectivity]]
 === Cluster-Switch-Konnektivität
 
-NetApp AFX nutzt Backend-Cluster-Switches intensiv für viele seiner zentralen Architekturkonzepte. So werden beispielsweise Cluster-Schnittstellen, Speicheradapter, Speichershelfs und NVRAM-Karten an die Cluster-Switches angeschlossen. Aktuell unterstützen all diese Schnittstellen nur 100GB-Kommunikation, während die Switches 400GB unterstützen. Daher werden die 100GB-Schnittstellen über 4 x 100GB-Breakout-Kabel mit den 400GB-Schnittstellen des Switches verbunden. Dadurch wird die Anzahl der Ports an den Switches reduziert. Beispielsweise belegen 16 x 100GB-Speichershelf-Modul-Ports nur 4 Ports an den Switches, während die insgesamt 8 Ports der Nodes 2 Switch-Ports nutzen.
+NetApp AFX nutzt Backend-Cluster-Switches intensiv für viele seiner zentralen Architekturkonzepte. So werden beispielsweise Cluster-Schnittstellen, Speicheradapter, Speichershelfs und NVRAM-Karten an die Cluster-Switches angeschlossen. Die Cluster-Switches sind 400GB-fähig. Backend-Cluster-Netzwerkports unterstützen auf der AFX 1K Plattform lediglich 100GB-Verbindungen zu den Cluster-Switches und auf der AFX 2K 400GB-Verbindungen. Daher verwenden die Backend-Knotenverbindungen der AFX 1K 4 x 100GB-Breakout-Kabel, um die Anzahl der belegten Ports auf den Switches zu reduzieren. Die AFX 2K nutzt eine 1:1 400GB-Verbindung zu den Switches mit 6 Ports pro Knoten (2 HA, 2 Cluster, 2 Storage). Speichershelf-Module verwenden weiterhin 100GB-Schnittstellen; beispielsweise belegen 16 x 100GB-Speichershelf-Modul-Ports nur 4 Ports auf den Switches, während die insgesamt 8 Ports der AFX 1K-Knoten 2 Switch-Ports belegen.
 
 *NetApp AFX-Schalterverkabelung*
 
 image:image45.png["Bild"]
+
+
+
+[[switch-selection-guidance]]
+=== Leitfaden zur Schalterauswahl
+
+Addieren Sie die benötigten 400GbE-Ports an jedem Switch, dann wählen Sie die kleinste Switch-Klasse, die diese Gesamtzahl abdeckt. NetApp AFX verwendet ein Paar Cluster-Switches; jeder Switch wird unabhängig dimensioniert. Zwei Ports an jedem Switch sind für ISL reserviert (9332: Ports 31–32; 9364: Ports 63–64), wodurch 30 nutzbare Ports am 9332 und 62 nutzbare Ports am 9364 verbleiben.
+
+Anzahl der Ports pro Switch:
+
+* AFX 1K: 1 × 400GbE Port pro Knoten (vier 100GB Node Ports auf einem 4 x 100GB Breakout)
+* AFX 2K: 3 × 400GbE-Ports pro Node pro Switch (6 Ports pro Node bei 1:1 400GB: 2 HA, 2 Cluster, 2 Storage)
+* Regale: 2 × 400GbE-Ports pro Regal (acht 100GB-Regalports pro Switch bei 4 x 100GB-Breakouts)
+
+
+|===
+| Erforderliche kombinierte 400GbE-Ports (pro Switch) | Switch 
+
+
+| Passt in 32 Ports (30 nutzbar nach ISL) | Cisco Nexus 9332D-GX2B (1 HE, 32 x 400GbE) 
+
+
+| Passt in 64 Ports (62 nutzbar nach ISL) | Cisco Nexus 9364D-GX2A (2U, 64 x 400GbE) 
+
+
+| Mehr als 64 Anschlüsse | Cisco Nexus 9808 oder wie in link:https://hwu.netapp.com["Hardware Universe"^] angegeben 
+|===
+
+
+==== 32-Node Cluster
+
+Ein Cluster mit 32 Knoten (das aktuelle Knotenmaximum; siehe link:afx-limits.html["Höchstwerte und Grenzwerte"]) benötigt 32 × 400GbE Ports pro Switch auf AFX 1K und 96 × 400GbE Ports pro Switch auf AFX 2K (32 × 3), vor den Shelfs.
+
+|===
+| Switch | AFX 1K (32 Knoten) | AFX 2K (32 Knoten) 
+
+
+| Cisco Nexus 9332D-GX2B | Nicht unterstützt (32 Knoten-Ports überschreiten 30 nutzbare Ports) | Nicht unterstützt 
+
+
+| Cisco Nexus 9364D-GX2A | 32 Knoten und 8–12 Shelves (4:1 bis 8:3) | Nicht unterstützt (96 Knotenports überschreiten 62 nutzbare Ports) 
+
+
+| Cisco Nexus 9808 | 32 Knoten und 8–12 Shelves (4:1 bis 8:3) | 32 Knoten und 8–12 Shelves (4:1 bis 8:3) 
+|===
+
+
+==== Maximale Knotenanzahl pro Switch
+
+Die Größe muss einem Knoten-zu-Gehäuse-Verhältnis von mindestens 4:1 und höchstens 8:3 entsprechen (siehe link:afx-performance.html#node-to-shelf-ratios["Knoten-zu-Regal-Verhältnisse"]), mit gerader Knotenanzahl (HA-Paare) und mindestens 2 Gehäusen. Die folgenden Kombinationen stellen die maximale Knotenanzahl dar, die in jedem Switch innerhalb dieses Bereichs möglich ist.
+
+|===
+| Switch | AFX 1K (max. Nodes + Shelves) | AFX 2K (maximale Nodes + Shelves) 
+
+
+| Cisco Nexus 9332D-GX2B | 20 Knoten + 5 Regale (4:1; 8:3 passt nicht zu den verbleibenden Ports) | 8 Knoten + 2–3 Shelves 
+
+
+| Cisco Nexus 9364D-GX2A | 32 Nodes + 8–12 Shelves | 16 Nodes + 4–6 Shelves 
+
+
+| Cisco Nexus 9808 | 32 Nodes + 8–12 Shelves | 32 Nodes + 8–12 Shelves 
+|===
+Die aktuell unterstützten Switch-Modelle und Grenzwerte sind unter link:https://hwu.netapp.com["Hardware Universe"^] und dem link:https://docs.netapp.com/us-en/ontap-afx/install-setup/afx-cable-overview.html["AFX Verkabelungsdokumentation"^] zu finden.
 
 
 
@@ -93,7 +168,6 @@ image:image45.png["Bild"]
 
 NetApp AFX unterstützt derzeit nur NVMe-SSDs in folgenden Größen:
 
-* 7,6 TB
 * 15,3 TB
 * 30,1 TB
 * 60,6 TB
@@ -104,10 +178,17 @@ NetApp AFX unterstützt derzeit nur NVMe-SSDs in folgenden Größen:
 [[tlc-vs-qlc]]
 === TLC vs. QLC
 
-NetApp AFX kann sowohl TLC- als auch QLC-Flashtypen nutzen. Die 7,6- und 15,3-TB-Laufwerke sind TLC-Modelle, während Laufwerke mit mehr als 30,1 TB QLC sein werden. Unabhängig vom Medientyp können die NVIDIA SuperPod Zertifizierungsleistungsstandards erfüllt werden.
+NetApp AFX kann sowohl TLC- als auch QLC-Flashtypen nutzen. Die 15,3-TB-Laufwerke sind TLC-Modelle, während Laufwerke mit mehr als 30,1 TB QLC sind. Unabhängig vom Medientyp können die Leistungsstandards der NVIDIA SuperPod Zertifizierung erfüllt werden.
 
 Alle mit NetApp AFX verwendeten Laufwerke sind Hochleistungslaufwerke, wobei QLC und TLC beim Lesen nahezu identische Leistungen erbringen. Bei der Schreibleistung liegt QLC im Vergleich zu TLC etwas zurück und kann bei schreibintensiven Anwendungen etwas stärkeren Verschleiß aufweisen.
 
 Die Leistungszahlen finden Sie unter link:afx-performance.html#per-shelf-performance["Leistung pro Regal"].
 
 Bei der Auswahl des Laufwerkstyps sollten Sie berücksichtigen, welche Arbeitslasten der Speicher beherbergen wird und welche Kompromisse zwischen Leistung und Kapazitätsdichte damit verbunden sind.
+
+[cols="1,1"]
+|===
+
+
+| link:afx-capabilities.html["Zurück"] | link:afx-limits.html["Weiter: Maximalwerte und Grenzwerte"] 
+|===

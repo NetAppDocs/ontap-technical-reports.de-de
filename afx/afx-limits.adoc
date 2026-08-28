@@ -34,7 +34,7 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
 * 800 TB
 
  a| 
-* k. A.
+* Nicht zutreffend (keine physischen Aggregate)
 
 
 
@@ -44,7 +44,7 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
 
  a| 
 * 8 (9.17.1)
-* 32 (9.19.1RC1)
+* 32 (9.19.1GA)
 
 
 
@@ -57,7 +57,7 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
 * 3PB (9.18.1RC1)
 * 16PB (9.18.1GA Release)
 * 20PB (9.19.1RC0)
-* 32PB (9.19.1RC1)
+* 32PB (9.19.1GA)
 
 
 
@@ -69,7 +69,7 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
  a| 
 * 12 pro Cluster (9.18.1GA)
 * 17 pro Cluster (9.19.1RC0)
-* 25 pro Cluster (9.19.1RC1) (keine HA-Paarbeschränkung)
+* 27 pro Cluster (9.19.1GA) (keine HA-Paarbeschränkung)
 
 
 
@@ -81,7 +81,7 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
  a| 
 * 288 pro Cluster (basierend auf Regalanzahlbeschränkungen; keine HA-Paar-Beschränkung)
 * 408 pro Cluster (9.19.1RC0)
-* 600 pro Cluster (9.19.1RC1)
+* 648 pro Cluster (9.19.1GA)
 
 
 
@@ -92,7 +92,18 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
 
  a| 
 * 300TB (FlexVol)
-* 60PB (FlexGroup)*
+* 60PB (FlexGroup vor 9.19.1)*
+* ~153PB (FlexGroup 9.19.1 und später)*
+
+
+
+
+| Maximale FlexGroup Anzahl an Bestandteilen  a| 
+* 200
+
+ a| 
+* 200 (9.18.1 und früher)
+* 512 (9.19.1GA)
 
 
 
@@ -104,6 +115,7 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
  a| 
 * 2 Milliarden (FlexVol)
 * 400 Milliarden (FlexGroup)
+* 1 Billion (FlexGroup - 9.19.1GA und später)
 
 
 
@@ -164,16 +176,6 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
 
 
 
-| Maximale Anzahl an Bestandteilen – FlexGroup  a| 
-* 200
-
- a| 
-* 200
-* 512 in 9.19.1 RC1
-
-
-
-
 | Maximale Anzahl von Intercluster-LIFs  a| 
 * 8
 
@@ -208,4 +210,13 @@ Die aktuellsten Grenzwerte finden Sie unter link:http://hwu.netapp.com/["Hardwar
 * 400
 
 
+|===
+[role="small"]
+_*FlexGroup maximale Größe wird auf 32 PB physische Größe begrenzt._
+
+[cols="1,1"]
+|===
+
+
+| link:afx-hardware.html["Zurück"] | link:afx-related-info.html["Weiter: Verwandte Informationen"] 
 |===

@@ -18,9 +18,15 @@ NetApp AFX wurde mit Blick auf Leistung und Skalierbarkeit entwickelt – spezie
 [[per-node-performance]]
 == Leistung pro Knoten
 
-Jeder NetApp AFX-Speicherknoten bietet einen bestimmten Durchsatz für Lese- und Schreibvorgänge. Mit dem Hinzufügen weiterer Knoten zum Cluster erhöht sich diese Leistung linear, wie im Abschnitt „Lineare Skalierung der Knotenleistung“ dieses Dokuments beschrieben.
+Jeder NetApp AFX-Speicherknoten bietet einen bestimmten Durchsatz für Lese- und Schreibvorgänge. Mit dem Hinzufügen weiterer Knoten zum Cluster erhöht sich diese Leistung linear, wie in link:afx-architecture-independent-scale.html#linear-scaling-of-node-performance["Lineare Skalierung der Knotenleistung"] beschrieben.
 
-Aktuell sind die Knotentypen link:https://www.netapp.com/media/142853-ds-3466-netapp-afx-datasheet.pdf["AFX 1K"^] und bieten einen Durchsatz für Lese- und Schreibvorgänge in etwa in den unten aufgeführten Mengen. Da neuere Hardware für NetApp AFX verfügbar ist, können sich diese Grenzwerte ändern. HINWEIS: Die maximale Leistung wurde durch den Einsatz mehrerer Clients beim Lesen und Schreiben mehrerer Dateien erreicht, wie im Abschnitt „Benchmark-Ergebnisse“ unten dargestellt.
+Aktuell sind die Knotentypen link:https://www.netapp.com/media/142853-ds-3466-netapp-afx-datasheet.pdf["AFX 1K"^] und link:https://www.netapp.com/media/142853-ds-3466-netapp-afx-datasheet.pdf["AFX 2K"^] verfügbar und bieten einen Durchsatz für Lese- und Schreibvorgänge in etwa in den unten aufgeführten Mengen*. Da neuere Hardware für NetApp AFX verfügbar ist, können sich diese Grenzwerte ändern.
+
+* Leistungszahlen wurden mit dem link:https://github.com/breuner/elbencho["ElBencho"^] Benchmark-Tool und sequenziellem Lesen/Schreiben ermittelt.
+
+
+
+NOTE: Die maximale Leistung wurde durch den Einsatz mehrerer Clients erreicht, die mehrere Dateien lesen und schreiben, wie im link:#benchmark-results["Benchmark-Ergebnisse"] folgenden Abschnitt gezeigt wird.
 
 *Leistungsschätzungen pro Knoten*
 
@@ -29,6 +35,9 @@ Aktuell sind die Knotentypen link:https://www.netapp.com/media/142853-ds-3466-ne
 
 
 | AFX 1K | ~35GB/s | ~10GB/s 
+
+
+| AFX 2K | ~35GB/s | ~17GB/s (+70 % Steigerung) 
 |===
 
 NOTE: Die aktuellsten Leistungsschätzungen erhalten Sie von Ihrem NetApp Vertriebsteam.
@@ -60,17 +69,17 @@ Durch die Entkopplung der Speicherknoten von den Regalen in der disaggregierten 
 
 Dieses Konzept der „Leistungsdichte“ ermöglicht es Speicheradministratoren, das Beste aus der vorhandenen Hardware herauszuholen, ohne ihre Speicherumgebung jemals überdimensionieren zu müssen.
 
-In einem einheitlichen ONTAP Cluster, da jeder Knoten über einen eigenen Satz von Festplatten verfügt, wird die Leistung nur auf die Festplatten konzentriert, die dem jeweiligen Knoten gehören, und da nur ein Knoten auf einen Satz von Festplatten zugreifen kann, kann er die verfügbaren Festplatten nicht unbedingt auslasten und seine maximale Leistung erreichen.
-
 *Unified ONTAP – Wie die Leistung aufgeteilt wird*
 
 image:image32.png["Bild"]
 
-NetApp AFX bündelt alle Festplatten in einer einzigen Storage Availability Zone, sodass alle Knoten alle Festplatten nutzen können. Und da die Festplatten und Knoten entkoppelt sind, benötigen Sie nicht so viele Shelfs, um die gleiche Performance zu erzielen. Dies verdichtet die Performance und maximiert das maximale Leistungspotenzial des Shelfs.
+In einem einheitlichen ONTAP Cluster verfügt beispielsweise jeder Knoten über einen eigenen Satz dedizierter Festplatten. Dadurch wird die Leistung ausschließlich auf die Festplatten konzentriert, die dem jeweiligen Knoten gehören. Da nur ein Knoten auf einen Satz Festplatten zugreifen kann, ist die Leistung auf die Festplatten beschränkt, auf die er direkt zugreifen kann.
 
 *NetApp AFX – Leistungsdichte*
 
 image:image33.png["Bild"]
+
+NetApp AFX bündelt alle verfügbaren Festplatten in einem einzigen Kapazitätspool, der Storage Availability Zone (SAZ) genannt wird. Dadurch können alle Knoten alle verfügbaren Festplatten für Lese- und Schreibvorgänge nutzen. Da Festplatten und Knoten entkoppelt sind, ist nicht unbedingt die gleiche Anzahl an Shelfs erforderlich, um im Vergleich zur einheitlichen ONTAP Architektur die gleiche (oder eine bessere) Durchsatzleistung zu erreichen. Die disaggregierte Architektur von NetApp AFX maximiert das Leistungspotenzial eines Festplatten-Shelfs.
 
 
 
@@ -81,7 +90,7 @@ Unified ONTAP-Knoten benötigen mindestens einen Festplattensatz pro Knoten und 
 
 NetApp AFX stellt allen Knoten alle Festplattengehäuse zur Verfügung. Jedes Gehäuse enthält Module mit 16 x 100GB RoCE-fähigen Schnittstellen, um die maximale Leistung pro Gehäuse zu erhöhen. Dadurch können mehrere Knoten ein einzelnes Gehäuse vollständig auslasten, indem sie auf dieselben Festplatten lesen und schreiben.
 
-Ab ONTAP 9.19.1 beträgt das node:shelf Sättigungsverhältnis etwa 4:1.
+Ab ONTAP 9.19.1 beträgt das Verhältnis von Node:Shelf-Sättigung mindestens 4:1, und 8:3 ist möglich.
 
 
 
@@ -91,8 +100,8 @@ Ab ONTAP 9.19.1 beträgt das node:shelf Sättigungsverhältnis etwa 4:1.
 Im folgenden Abschnitt werden Benchmark-Ergebnisse mit einem NetApp AFX-Cluster und den folgenden Konfigurationsparametern dargestellt.
 
 * 4 Knoten, 4 Datenschnittstellen
-* 2 Regale (7,6-TB-Festplatten)
-* ONTAP 9.19.1
+* 2 Shelves
+* ONTAP 9.19.1GA
 * NFSv4.2 (pNFS, Session Trunking)
 * FlexGroup-Volume
 * link:https://github.com/breuner/elbencho["ElBencho"^]Benchmark
@@ -103,6 +112,9 @@ Im folgenden Abschnitt werden Benchmark-Ergebnisse mit einem NetApp AFX-Cluster 
 
 
 Die oben genannte Konfiguration erreichte nahezu die maximal verfügbaren Lesevorgänge des 4-Knoten-Clusters (~134GB/s) und lag genau an den maximal zulässigen Schreibvorgängen pro Knoten (40GB/s).
+
+
+NOTE: Im Abschnitt link:afx-performance-benchmarks.html["Tipps für Leistungs-Benchmarks"] finden sich Hinweise zur Reproduktion dieser Ergebnisse.
 
 *NetApp AFX – ElBencho Leseleistung, 4 Knoten*
 
@@ -146,7 +158,8 @@ NFS Version 3 gilt seit Jahrzehnten als Goldstandard für NFS-Anwendungen – se
 
 NFSv3 hat jedoch auch seine Grenzen. Die Zustandslosigkeit des Protokolls ist zwar vorteilhaft für die Leistung und minimiert Unterbrechungen bei einem Speicherausfall, aber weniger vorteilhaft für die Datenkonsistenz und das Sperrenmanagement. Ein NFS-Server speichert keine Sperrzustände, daher kann der NFS-Server im Fehlerfall die Sperren freigeben oder auch nicht, und der NFS-Client weiß möglicherweise nicht, ob eine Datei gesperrt ist oder nicht.
 
- Security for NFSv3 is also a bit lacking. The protocol requires multiple open firewall ports to function properly and numeric IDs are sent in plaintext over the wire. Furthermore, NFS does not have robust ACL support, and does not include native file and folder auditing. As a result of these limitations, NFSv4 was created in 2003 via link:https://datatracker.ietf.org/doc/html/rfc3530[RFC-3530^] (obsoleted in 2015 by link:https://datatracker.ietf.org/doc/html/rfc7530[RFC-7530^]).
+Die Sicherheit von NFSv3 ist ebenfalls mangelhaft. Das Protokoll benötigt mehrere offene Firewall-Ports für den ordnungsgemäßen Betrieb, und numerische IDs werden unverschlüsselt übertragen. Darüber hinaus bietet NFS keine umfassende ACL-Unterstützung und keine native Datei- und Ordnerüberwachung. Aufgrund dieser Einschränkungen wurde NFSv4 im Jahr 2003 durch link:https://datatracker.ietf.org/doc/html/rfc3530["RFC-3530"^] geschaffen (2015 durch link:https://datatracker.ietf.org/doc/html/rfc7530["RFC-7530"^] abgelöst).
+
 Obwohl NFSv4.x schon seit über 20 Jahren existiert, hat es aus verschiedenen Gründen noch keine breite Akzeptanz gefunden.
 
 * Komplexität des Identitätsmanagements: In vielen Umgebungen ist keine Namensdienstinfrastruktur vorhanden, um die Namenszeichenfolge und die Kerberos-Sicherheitsanforderungen in NFSv4.x richtig nutzen zu können.
@@ -212,6 +225,13 @@ Mit den Änderungen in AFX ONTAP 9.18.1 hat sich die Leistung von NFSv4.x für d
 
 Unsere Performance-Engineering-Teams verglichen die Leistung von Standard-Benchmarks für KI-Bild, EDA und Software-Builds und stellten massive Verbesserungen gegenüber der vorherigen ONTAP Version fest.
 
-*NetApp AFX – NFSv4.1 Metadaten-IO-Leistung in ONTAP 9.18.1*
+*NetApp AFX – NFSv4.1 Metadaten-IO-Leistung in NetApp AFX*
 
 image:image37.png["Bild"]
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-root-volume.html["Vorheriges: Änderungen am Root Volume"] | link:afx-performance-benchmarks.html["Als Nächstes: Tipps zu Leistungsbenchmarks"] 
+|===

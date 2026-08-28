@@ -7,9 +7,35 @@ entries:
 - title: Was ist neu
   url: "/afx/afx-whats-new.html"
 - title: Architektur
-  url: "/afx/afx-architecture.html"
+  entries:
+  - title: Überblick
+    url: "/afx/afx-architecture.html"
+  - title: Knoten-zu-Festplatte-Beziehungen
+    url: "/afx/afx-architecture-node-disk.html"
+  - title: Einzelner Kapazitätspool
+    url: "/afx/afx-architecture-capacity-pool.html"
+  - title: Repliziertes NVRAM und HA Failover-Verhalten
+    url: "/afx/afx-architecture-nvram-ha.html"
+  - title: Unabhängige, lineare Skalierung
+    url: "/afx/afx-architecture-independent-scale.html"
+  - title: RAID-Änderungen
+    url: "/afx/afx-architecture-raid.html"
+  - title: Speichereffizienz
+    url: "/afx/afx-architecture-storage-efficiency.html"
+  - title: Änderungen der ONTAP-Funktionsunterstützung
+    url: "/afx/afx-architecture-feature-support.html"
+  - title: FlexGroup Managementverbesserungen
+    url: "/afx/afx-architecture-flexgroup.html"
+  - title: Volume Moves
+    url: "/afx/afx-architecture-volume-moves.html"
+  - title: Cluster-Skalierung
+    url: "/afx/afx-architecture-cluster-scale.html"
+  - title: Änderungen des Root-Volumes
+    url: "/afx/afx-architecture-root-volume.html"
 - title: Performance
   url: "/afx/afx-performance.html"
+- title: Tipps für Leistungs-Benchmarks
+  url: "/afx/afx-performance-benchmarks.html"
 - title: Management
   url: "/afx/afx-management.html"
 - title: Sorgen

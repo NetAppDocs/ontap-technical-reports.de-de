@@ -1,0 +1,44 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-node-disk.html 
+keywords: netapp afx, node-to-disk relationships, disk ownership, storage availability zone 
+summary: Es wird erläutert, wie NetApp AFX jedem Speicherknoten Sichtbarkeit für jede Festplatte verschafft und die Festplattenzuordnung entfernt. 
+---
+= Knoten-zu-Festplatte-Beziehungen
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+NetApp AFX verändert die Beziehung zwischen Speicherknoten und Festplatten, indem alle Knoten und Gehäuse über dasselbe Backend-Netzwerk verbunden werden.
+
+In der einheitlichen ONTAP-Architektur werden Lese- und Schreibvorgänge an eine bestimmte Teilmenge von Festplatten gerichtet. Selbst wenn Sie 24 Festplattengehäuse in einem 24-Knoten-Cluster haben (ein Gehäuse pro Knoten), kann jeder Knoten zu jedem Zeitpunkt nur direkt auf ein Festplattengehäuse zugreifen, was die im Cluster verfügbare Kapazität und Leistung begrenzt.
+
+image:image5.png["Bild"]
+
+Da NVRAM zwischen HA-Paaren direkt verbunden ist, müssen die Knoten physisch nebeneinander liegen und sind als Failover-Ziele enger gekoppelt. Wenn beispielsweise ein Knoten auf seinen Partnerknoten ausfällt, hat er physisch nur Zugriff auf die Festplatten im HA-Paar-Domäne.
+
+*Vereinheitlichter ONTAP Cluster während eines HA-Failovers*
+
+image:image6.png["Bild"]
+
+In NetApp AFX gibt es einige wesentliche Änderungen in der Art und Weise, wie Festplatten den Rechenknoten präsentiert werden.
+
+
+
+[[all-disks-are-visible-to-all-storage-nodes-no-disk-ownership]]
+== Alle Datenträger sind für alle Speicherknoten sichtbar – keine Datenträgerzugehörigkeit
+
+In NetApp AFX sind alle Nodes und Shelfs an denselben Backend-Switch angeschlossen, was es ONTAP ermöglicht, den gesamten Sichtbarkeitsbereich für Festplatten auf den gesamten Stack auszudehnen. Folglich besitzt kein Node bestimmte Festplatten. Stattdessen nehmen alle Festplatten an einem einzigen Kapazitätspool teil, der als Storage Availability Zone bezeichnet wird und einfacheres Kapazitätsmanagement sowie ein erhöhtes Leistungspotenzial bietet (mehr verfügbare Festplatten bedeuten mehr verfügbare Leistung).
+
+*NetApp AFX-Speicherverfügbarkeitszone*
+
+image:image7.png["Bild"]
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture.html["Vorheriges: Architektur"] | link:afx-architecture-capacity-pool.html["Weiter: Pool mit einheitlicher Kapazität"] 
+|===

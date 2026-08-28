@@ -33,8 +33,8 @@ Der Netzwerk-Stack in NetApp AFX ist identisch mit dem von unified ONTAP.
 
 Zu den wichtigsten Netzwerkunterschieden gehören:
 
-* Die Backend-Cluster-Netzwerkports unterstützen jetzt nur noch 100-GB-Verbindungen zu den Cluster-Switches.
-* Da die Cluster-Switches 400GB-fähig sind, verwenden die Backend-Knotenverbindungen 4 x 100GB Breakout-Kabel, um die Anzahl der an den Switches verwendeten Ports zu reduzieren.
+* Die Backend-Cluster-Netzwerkanschlüsse unterstützen auf der AFX 1K Plattform nur 100GB-Verbindungen zu den Cluster-Switches und auf der AFX 2K 400GB-Verbindungen.
+* Da die Cluster-Switches 400-GB-fähig sind, werden für die Backend-Knotenverbindungen am AFX 1K vier 100-GB-Breakout-Kabel verwendet, um die Anzahl der belegten Ports an den Switches zu reduzieren. Der AFX 2K verwendet eine 1:1 400-GB-Verbindung zu den Switches.
 * NVRAM wird nun über eine neue HA-VLAN-Konfiguration auf den Switches zwischen HA-Paaren im Backend-Cluster-Netzwerk gespiegelt.
 * Ein neues DCN-Netzwerk wird standardmäßig für die AI Data Engine hinzugefügt. Diese IP-Adressen werden automatisch generiert und können bei Bedarf geändert werden.
 
@@ -101,4 +101,11 @@ Unified ONTAP unterstützt verschiedene Volume-Typen, wie zum Beispiel:
 
 NetApp AFX bietet volle Unterstützung für jeden dieser Volume-Typen sowie volle Interoperabilität für FlexCache-Volumes mit einheitlichen ONTAP-Systemen.
 
-Weitere Informationen darüber, wie FlexGroup Volumes von der AFX-Architektur profitieren, finden Sie unter link:afx-architecture.html#flexgroup-volume-management-improvements["Verbesserungen beim FlexGroup Volume-Management"].
+Weitere Informationen darüber, wie FlexGroup Volumes von der AFX-Architektur profitieren, finden Sie unter link:afx-architecture-flexgroup.html#flexgroup-volume-management-improvements["Verbesserungen beim FlexGroup Volume-Management"].
+
+[cols="1,1"]
+|===
+
+
+| link:afx-management.html["Zurück"] | link:afx-hardware.html["Weiter: Hardware"] 
+|===

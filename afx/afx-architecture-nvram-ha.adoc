@@ -1,0 +1,73 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-nvram-ha.html 
+keywords: netapp afx, nvram replication, high availability, ha failover, volume rebalance 
+summary: Es wird erläutert, wie NetApp AFX NVRAM über das Backend-Netzwerk repliziert und Volumes während eines HA-Failovers neu ausgleicht. 
+---
+= Repliziertes NVRAM und HA Failover-Verhalten
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+NetApp AFX verlagert die NVRAM-Replikation in das Backend-Cluster-Netzwerk und nutzt Zero-Copy-Volume-Mobilität, um die Arbeitslast nach einem Knotenausfall neu zu verteilen.
+
+
+
+[[nvram-moved-from-direct-connection-to-switched-replication]]
+== NVRAM wurde von direkter Verbindung auf geschaltete Replikation umgestellt
+
+ONTAP verwendet NVRAM als Zwischenspeicher, um eingehende Schreibvorgänge in einem Cluster zu schützen. Jeder Knoten in einem ONTAP Cluster verfügt über eine mit Akku ausgestattete NVRAM-Karte. Wenn ein Schreibvorgang von einem Client an ein Volume gesendet wird, wird dieser zuerst im NVRAM gespeichert. Der NVRAM-Inhalt wird dann auf die Festplatte geschrieben, sobald der NVRAM voll ist oder ein 10-Sekunden-Timer abläuft (je nachdem, was zuerst eintritt). Dies wird als Konsistenzpunkt bezeichnet.
+
+Der NVRAM-Inhalt wird zudem ständig zwischen den HA-Paaren repliziert, was zusätzlich zur Sicherung der Datenkonsistenz beiträgt, da im Falle eines Knotenausfalls der NVRAM-Inhalt auf dem verbleibenden Knoten erhalten bleibt und auf die Festplatte geschrieben wird.
+
+In Unified ONTAP-Clustern sind die NVRAM-Karten zwischen HA-Paaren direkt miteinander verbunden. NetApp AFX verlagert die NVRAM-Replikation in das Backend-Clusternetzwerk. Dadurch entfällt die strenge Abstandsanforderung für HA-Partnerknoten. Stattdessen können HA-Paare bis zur maximalen Entfernung von Ethernet voneinander getrennt sein.
+
+*NetApp AFX NVRAM Replikation*
+
+image:image10.png["Bild"]
+
+
+
+[[ha-failover-behavior]]
+== HA-Failover-Verhalten
+
+In unified ONTAP besitzt jeder Knoten eigene Festplatten und Aggregate, auf denen Daten über Volumes bereitgestellt werden. Schreibvorgänge werden mithilfe des lokalen NVRAM eines Knotens durchgeführt, um die Daten auf die Festplatten zu schreiben, die der Knoten besitzt. Wenn ein Knoten neu gestartet wird oder ausfällt, löst ONTAP eine Übernahme der Ressourcen des ausgefallenen Knotens aus, wobei der Besitz von Festplatten und Aggregaten auf den Partnerknoten übertragen wird. Netzwerkschnittstellen werden ebenfalls auf Ports im IP-Adressraum umgeschaltet, und da die NVRAM-Inhalte kontinuierlich über das HA-Paar repliziert werden, schreibt der Knoten die NVRAM-Inhalte, um die Schreibvorgänge des ausgefallenen Knotens auf die Festplatten zu committen. Danach besitzt der verbleibende Knoten die Aggregate und Volumes des ausgefallenen Knotens, bis ein Failback des Knotens erfolgt. Das bedeutet, dass der gesamte Datenverkehr zu diesen Volumes – sowie zu den bereits dem verbleibenden Knoten gehörenden Volumes – auf einem einzigen Knoten verarbeitet wird, bis das Failover-Problem behoben ist.
+
+Im Rahmen der initialen Bereitstellung eines einheitlichen ONTAP-Clusters empfiehlt es sich, Failover-Szenarien im Voraus zu planen, um eine Überlastung des Partnerknotens durch einen einzelnen Knoten zu vermeiden. Dies stellt an sich eine Herausforderung dar, da es schwierig ist vorherzusagen, welche Volumes Performance-Bullies sein könnten, aber Funktionen wie unterbrechungsfreie Volume-Verschiebung und Volume-Quality-of-Service-Richtlinien können bei der Risikominderung helfen.
+
+Die folgenden Bilder zeigen, wie es bei vereinheitlichten ONTAP-Clustern zu einer ungleichmäßigen Leistungsverteilung zwischen den Knoten kommen kann und wie ein Failover in manchen Fällen zu Leistungseinbußen führen kann.
+
+*Unified ONTAP – potenzielle Ungleichgewichte bei der Knotenauslastung*
+
+image:image25.png["Bild"]
+
+Wenn die Knoten eines HA-Paares hinsichtlich Volume-Anzahl und Leistungsauslastung unausgewogen sind, beeinträchtigen Knotenausfälle die Gesamtleistung, da der verbleibende Knoten nun alle Volumes des ausgefallenen Knotens verwaltet. Gleichzeitig haben andere Knoten im Cluster möglicherweise Kapazitäten, zusätzliche Aufgaben zu übernehmen.
+
+*Unified ONTAP – Auswirkungen des Ausfalls auf die Knotenauslastung*
+
+image:image26.png["Bild"]
+
+Wenn ein HA-Partner zusätzliche Aufgaben übernehmen muss, kann er überlastet werden und die Leistung aller Volumes auf diesem Knoten beeinträchtigen. Volume-Verschiebungen können die Situation zwar verbessern, erfordern jedoch Kopien zwischen den Knoten (was freien Speicherplatz voraussetzt), und die dafür benötigte Zeit kann die Zeit für das Failback überschreiten. Außerdem wird ein verschobenes Volume nicht auf den ursprünglichen Knoten zurückgesetzt. Stattdessen verbleibt es auf dem Knoten, auf den Sie es verschoben haben.
+
+Mit NetApp AFX verhalten sich Knotenausfälle etwas anders.
+
+* Da die Knoten keine eigenen Festplatten besitzen und keine physischen Aggregate existieren, erfordert ein Knotenausfall keine Übertragung dieser Ressourcen. Stattdessen werden lediglich die Netzwerkschnittstellen und der Volume-Besitz auf andere Knoten übertragen.
+* NVRAM-Commits finden weiterhin statt, jedoch über das HA-Netzwerk anstatt über eine direkte Verbindung.
+* Sobald die Volumes das erste Failover auf den Partnerknoten durchgeführt haben, verteilt AFX die Volumes auf die verbleibenden Knoten im Cluster neu. Dies wird durch Zero-Copy-Volume-Verschiebungen ermöglicht.
+* Sobald der Knoten wiederhergestellt ist, werden die Volumes wieder auf den ursprünglichen Knoten verschoben.
+
+
+NetApp AFX sorgt bereits für eine ausgewogene Leistungsverteilung über alle Knoten im Cluster hinweg, um eine relativ gleichmäßige Auslastung zu gewährleisten. Wenn also ein Failover erfolgt und die Volumes neu verteilt werden, sollte die Knotenauslastung im gesamten Cluster ungefähr gleich sein.
+
+*NetApp AFX – Volumenausgleich nach Failover*
+
+image:image27.png["Bild"]
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-capacity-pool.html["Vorheriges: Pool mit einheitlicher Kapazität"] | link:afx-architecture-independent-scale.html["Als Nächstes: Unabhängige, lineare Skalierung"] 
+|===

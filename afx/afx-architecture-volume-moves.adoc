@@ -1,0 +1,70 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-volume-moves.html 
+keywords: netapp afx, volume moves, zero-copy, performance balancing, automated storage administration 
+summary: Es wird erläutert, wie NetApp AFX Zero-Copy-Volume-Verschiebungen für die automatisierte Administration und den Leistungsausgleich nutzt. 
+---
+= Volume Moves
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+NetApp AFX verschiebt die Volume-Zugehörigkeit zwischen Knoten, ohne die Volume-Daten zu kopieren, und ermöglicht so eine schnelle Automatisierung und Performance-getriebenes Balancing.
+
+
+
+[[how-the-storage-availability-zone-changes-volume-behavior]]
+== Wie die Storage Availability Zone das Volume-Verhalten ändert
+
+Mit der Storage Availability Zone in NetApp AFX wird die gesamte Kapazität über alle Knoten hinweg gemeinsam genutzt. Obwohl die Knoten weiterhin Volumes besitzen, verwaltet ONTAP die Kapazitätsnutzung jedes Knotens automatisch, indem Kapazität je nach Bedarf ausgeliehen und freigegeben wird. Das bedeutet, dass sich Speicheradministratoren nicht mehr damit beschäftigen müssen, wie der nutzbare Speicherplatz am besten ausbalanciert wird. Dieser neue Ansatz bietet außerdem eine Möglichkeit, Volumes freier zwischen den Knoten zu verschieben.
+
+
+
+[[zero-copy-volume-moves]]
+== Zero-Copy-Volume-Verschiebungen
+
+Unified ONTAP bietet eine Möglichkeit, Volumes unterbrechungsfrei zwischen Knoten oder Aggregaten zu verschieben, um die Performance und Kapazitätsnutzung im gesamten Cluster zu verwalten.
+
+Wenn eine Volumenverschiebung gestartet wird, geschieht Folgendes:
+
+* Ein neues leeres Volume wird auf dem angegebenen Zielaggregat erstellt
+* Volume-Metadaten (wie z. B. Informationen zur Speichereffizienz, Dateihandles usw.) werden auf das neue Ziel-Volume repliziert.
+* Volumendaten werden über das Backend-Cluster-Netzwerk mittels SnapMirror-Technologie auf das Zielvolume repliziert – das Zielaggregat muss über ausreichend freien Speicherplatz für die Verschiebung verfügen, andernfalls schlägt der Verschiebungsauftrag fehl
+* Die Volume-Replikation wird erneut durchgeführt, um sicherzustellen, dass beide Volumes mit etwaigen Datenänderungen konsistent sind.
+* Es wird ein Umstellungsprozess eingeleitet, um das Ursprungsvolume offline zu nehmen und das Zielvolume als neues Ursprungsvolume für Clients zu aktivieren.
+* Client-IO erlebt während der Umstellung eine kurze Pause, aber es sind keine erneuten Mounts erforderlich
+
+
+In NetApp AFX stellt die Speicherverfügbarkeitszone allen Knoten die gesamte Kapazität zur Verfügung, und alle Knoten können auf jede Festplatte in diesem Pool schreiben. Einmal abgelegte Daten bleiben an ihrem Speicherort – selbst wenn das Volume verschoben wird. Das bedeutet, dass keine Datenkopie erforderlich ist. Der Volume-Verschiebungsprozess ist identisch mit dem von Unified ONTAP, nur dass keine Replikation der Daten über SnapMirror erforderlich ist. Es wird keine zusätzliche Kapazität benötigt.
+
+*Null-Kopiervolumenverschiebungen in NetApp AFX*
+
+image:image24.png["Bild"]
+
+Dank der leichten Volume-Mobilität kann AFX viele Verwaltungsaufgaben automatisieren, ohne dabei Leistungs- oder Kapazitätseinschränkungen in Kauf nehmen zu müssen, und diese Volume-Verschiebungen werden in einigen neuen Funktionen von NetApp AFX verwendet, wie in den unten aufgeführten Themen beschrieben.
+
+
+
+[[performance-driven-volume-moves]]
+== Performance-getriebene Volumenbewegungen
+
+NetApp AFXs Zero-Copy-Volume-Verschiebungsfunktion bedeutet, dass es Volumes bei Bedarf neu ausbalancieren kann, ohne Daten zu kopieren, was eine schnelle Ausführung ermöglicht und keine zusätzliche Kapazität erfordert. Das bedeutet, dass Volume-Verschiebungen einen größeren Anteil am automatisierten Load Balancing verfügbar für ONTAP-Cluster ausmachen können. Da das Verschieben eines Volumes nun praktisch nichts kostet, kann ONTAP dieses wertvolle Werkzeug nutzen, um Funktionen wie Performance-getriebenes Load Balancing von Volumes zu integrieren.
+
+In NetApp AFX mit ONTAP 9.18.1 und höher werden die Auslastung von Knoten, HA-Paaren und Volumes kontinuierlich überwacht, während Leistungsdaten erfasst und analysiert werden. Wenn die Auslastung eines Knotens außerhalb der definierten Schwellenwerte liegt, wählt ONTAP automatisch ein Volume aus, das auf einen weniger ausgelasteten Knoten verschoben wird, um eine ausgewogene Performance im gesamten Cluster zu gewährleisten.
+
+*Leistungsabhängige Volumenbewegungen in NetApp AFX – hohe Auslastung löst eine Volumenbewegung aus*
+
+image:image28.png["Bild"]
+
+*Leistungsoptimierte Volumenverschiebungen in NetApp AFX – Ausgewogene Knotenauslastung nach Volumenverschiebung*
+
+image:image29.png["Bild"]
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-flexgroup.html["Vorheriges: FlexGroup Managementverbesserungen"] | link:afx-architecture-cluster-scale.html["Nächstes Thema: Cluster Scale"] 
+|===

@@ -1,0 +1,61 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-storage-efficiency.html 
+keywords: netapp afx, storage efficiency, deduplication, global deduplication, storage availability zone 
+summary: Es wird erläutert, wie sich die NetApp AFX-Deduplizierungsdomänen geändert haben und wie ONTAP 9.19.1 globale Deduplizierung bereitstellt. 
+---
+= Speichereffizienz
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+NetApp AFX ändert die Grenzen der Deduplizierung und ab ONTAP 9.19.1 wird eine globale Deduplizierungsdomäne über die Storage Availability Zone hinweg unterstützt.
+
+
+
+[[deduplication-domains]]
+== Deduplizierungsdomänen
+
+Die Deduplizierung ermöglicht es einem Speichersystem, doppelte Blöcke in seinem Dateisystem zu finden und anschließend Zeiger auf einen einzelnen Block zu erstellen, um die insgesamt belegte Speicherkapazität zu reduzieren. In unified ONTAP gibt es für die Deduplizierung bestimmte Grenzen, welche Blöcke reduziert werden können. Diese Grenzen hängen von der Art der verwendeten Deduplizierung ab. Im Allgemeinen gilt:
+
+* Volumenbasierte Deduplizierung -> Volumengrenze
+* Volumenübergreifende Deduplizierung -> Aggregatgrenze
+
+
+*Vereinheitlichte ONTAP-Deduplizierungsdomänen*
+
+image:image17.png["Bild"]
+
+Da NetApp AFX physische Aggregate entfernt und das Kapazitätsmanagement in die neue Storage Availability Zone verlagert, ändern sich auch die Grenzen der Deduplizierungsdomäne. In AFX befindet sich die Deduplizierungsdomäne vor Version 9.19.1 auf Volume-Ebene (wie bei unified ONTAP) und auf Node-Ebene (statt auf Aggregatebene).
+
+Ab ONTAP 9.19.1 unterstützt AFX eine globale Deduplizierungsdomäne auf Ebene der Storage Availability Zone, sodass alle duplizierten Blöcke im Cluster-Speicherpool gleich behandelt werden.
+
+*NetApp AFX – Globale Deduplizierungsdomäne (ONTAP 9.19.1)*
+
+image:image18.png["Bild"]
+
+Die folgende Tabelle vergleicht das Kapazitätsverhalten für duplizierte Daten in verschiedenen Szenarien. Da Dateikopien in Unified ONTAP Knoten und Aggregate (und damit Deduplizierungsdomänen) überspannen, verringern sich die Speicherplatzeinsparungen. In AFX vor 9.19.1 tritt dasselbe auf, wenn Kopien mehrere Knoten umfassen. Ab 9.19.1 gelten durch die globale Deduplizierung die gleichen Einsparungen in der gesamten Storage Availability Zone.
+
+*Deduplizierungsverhalten für identische 10-GB-Dateien – einheitliches ONTAP und NetApp AFX*
+
+[cols="3,1,1,1"]
+|===
+| Szenario | Einheitliches ONTAP | AFX 9.18.1 | AFX 9.19.1 
+
+
+| Vier Kopien derselben 10-GB-Datei, dasselbe Volume (Volume-Deduplizierung) | 10 GB | 10 GB | 10 GB 
+
+
+| Vier Kopien derselben 10-GB-Datei, unterschiedliche Volumes, gleiches Aggregat (unified ONTAP) oder gleicher Knoten (AFX); Volume-übergreifende Deduplizierung aktiviert | 10 GB | 10 GB | 10 GB 
+
+
+| Vier Kopien derselben 10-GB-Datei, vier verschiedene Volumes, vier verschiedene Aggregate (unified ONTAP) oder vier verschiedene Knoten (AFX); Volume-übergreifende Deduplizierung aktiviert | 40 GB | 40 GB | 10 GB 
+|===
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-raid.html["Vorheriges Thema: RAID-Änderungen"] | link:afx-architecture-feature-support.html["Weiter: Änderungen der ONTAP-Funktionsunterstützung"] 
+|===

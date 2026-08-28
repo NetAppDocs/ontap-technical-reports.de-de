@@ -144,3 +144,10 @@ Ein Compute-Knoten in NetApp AFX bezeichnet den Storage-Controller-Knoten (und w
 === Speicherverfügbarkeitszone
 
 Eine Storage Availability Zone (SAZ) ist der zentrale Speicherpool in einem NetApp AFX-Cluster, in dem alle Festplatten von allen Knoten gemeinsam genutzt werden. Die SAZ ermöglicht Funktionen wie gemeinsam genutzte Kapazität, verbesserte Leistung, globale Deduplizierung und vieles mehr.
+
+[cols="1,1"]
+|===
+
+
+|  | link:afx-whats-new.html["Weiter: Was ist neu"] 
+|===

@@ -11,7 +11,7 @@ summary: Diese Seite enthält die neuesten Updates für NetApp AFX und wird mit 
 
 
 [role="lead"]
-Dieser Abschnitt enthält die neuesten Updates für NetApp AFX und wird mit jeder neuen Version aktualisiert. Schauen Sie regelmäßig hier vorbei, um neue Informationen zu erhalten, und lesen Sie auch die Versionshinweise.
+Dieser Abschnitt enthält die neuesten Updates für NetApp AFX und wird mit jeder neuen Version aktualisiert. Hier finden sich regelmäßig neue Informationen, zudem steht die link:https://docs.netapp.com/us-en/ontap-afx/release-notes/whats-new-9191.html["ONTAP 9.19.1 AFX Versionshinweise"^] zur Verfügung.
 
 
 
@@ -20,16 +20,16 @@ Dieser Abschnitt enthält die neuesten Updates für NetApp AFX und wird mit jede
 
 Neueste Version:
 
-ONTAP 9.19.1RC1 (Stand: Mai 2026)
+ONTAP 9.19.1GA (Stand: August 2026)
 
 Neue Funktionen in NetApp AFX:
 
-* Globale Deduplizierung
-* Dynamische Speichereffizienz
-* Erweiterte Lesevorschau
-* Unterstützung für 32 Knoten
-* 32PB-Unterstützung
-* 512 Bestandteilvolumina pro FlexGroup volume
+* link:afx-architecture-storage-efficiency.html#deduplication-domains["Globale Deduplizierung"] (siehe auch link:https://docs.netapp.com/us-en/ontap-afx/administer/additional-ontap-svm.html#global-deduplication["AFX SVM Verwaltung"^])
+* link:https://docs.netapp.com/us-en/ontap-afx/release-notes/whats-new-9191.html["Dynamische Speichereffizienz"^]
+* link:afx-performance.html#aggressive-read-ahead["Erweiterte Lesevorschau"] (Sequenzielles Lesen dateiübergreifend; siehe auch link:https://docs.netapp.com/us-en/ontap-afx/administer/additional-ontap-svm.html#cross-file-sequential-read["AFX SVM Verwaltung"^])
+* link:afx-architecture-cluster-scale.html#cluster-scale-and-expansion["Unterstützung für 32 Knoten"] (siehe auch link:afx-limits.html["Höchstwerte und Grenzwerte"])
+* link:afx-limits.html["32PB-Unterstützung"]
+* link:afx-limits.html["512 Bestandteilvolumina pro FlexGroup volume"]
 
 
 
@@ -41,5 +41,14 @@ Neue Funktionen in NetApp AFX:
 | Version | Datum | Dokumentversionsverlauf 
 
 
+| Version 1.1 | August 2026 | Dieser technische Bericht wurde für ONTAP 9.19.1GA aktualisiert. Behandelt neue AFX-Funktionen, Skalierung auf 32 Knoten und 32 PB, Leistung und Hardware von AFX 1K und AFX 2K, Dimensionierung von Cluster Switches und Shelfs, aktualisierte Plattformgrenzen, eine Seite mit Tipps zu Leistungsbenchmarks sowie zusätzliche Links zur Produktdokumentation. 
+
+
 | Version 1.0 | Juni 2026 | Erstveröffentlichung 
+|===
+[cols="1,1"]
+|===
+
+
+| link:afx-learn-about.html["Zurück"] | link:afx-architecture.html["Weiter: Architektur"] 
 |===

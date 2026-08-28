@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-independent-scale.html 
+keywords: netapp afx, independent scale, linear scale, compute, capacity, performance 
+summary: Es wird erläutert, wie NetApp AFX Rechenleistung und Kapazität unabhängig skaliert und dabei eine lineare Knotenleistung bereitstellt. 
+---
+= Unabhängige, lineare Skalierung
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+Die disaggregierte NetApp AFX Architektur ermöglicht, Kapazität und Rechenressourcen unabhängig voneinander zu skalieren und die Knotenleistung linear zu skalieren.
+
+
+
+[[independent-scale-of-capacity-and-compute-nodes]]
+== Unabhängige Skalierung der Kapazität und der Rechenknoten
+
+Da die Hardware-Ressourcen in der NetApp AFX-Architektur entkoppelt sind, müssen Knoten nicht mehr mit zugehörigen Festplatten kombiniert werden. Wenn einem Cluster Leistungsressourcen wie RAM, CPU oder Netzwerkdurchsatz fehlen, müssen lediglich Speicherknoten hinzugefügt werden, die die bestehende Storage Availability Zone nutzen können. Wird hingegen mehr Kapazität benötigt, müssen nur zusätzliche Shelves hinzugefügt werden. Diese Flexibilität stellt sicher, dass Sie nur die Ressourcen erwerben, die Sie benötigen, und somit Überprovisionierung vermeiden.
+
+*NetApp AFX – Unabhängige Skala*
+
+image:image12.png["Bild"]
+
+
+
+[[linear-scaling-of-node-performance]]
+== Lineare Skalierung der Knotenleistung
+
+Mit dem Hinzufügen von Knoten zu einem AFX-Cluster werden dem Workload mehr CPU-, RAM- und Netzwerkressourcen zur Verfügung gestellt. Sobald diese Ressourcen in die Umgebung integriert werden, verläuft die Leistungssteigerung linear. Die folgende Grafik veranschaulicht, wie die Leistung steigt, wenn Knoten hinzugefügt werden.
+
+*Die Leistung steigt linear mit der Hinzufügung von NetApp AFX-Knoten.*
+
+image:image13.png["Bild"]
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-nvram-ha.html["Vorheriges: Repliziertes NVRAM und HA Failover-Verhalten"] | link:afx-architecture-raid.html["Weiter: RAID-Änderungen"] 
+|===

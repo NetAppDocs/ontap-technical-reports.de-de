@@ -1,0 +1,69 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-cluster-scale.html 
+keywords: netapp afx, cluster scale, node addition, node removal, 32 nodes, 32PB 
+summary: Es wird erläutert, wie NetApp AFX das Hinzufügen und Entfernen von Knoten automatisiert und Cluster auf 32 Knoten und 32 PB skaliert. 
+---
+= Cluster-Skalierung
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+Die NetApp AFX Architektur vereinfacht das Hinzufügen und Entfernen von Knoten und ermöglicht eine größere Cluster-Skalierung, ohne Kapazität oder Performance zu vergeuden.
+
+
+
+[[node-additions-and-removals]]
+== Hinzufügen und Entfernung von Knoten
+
+Sowohl unified ONTAP als auch NetApp AFX ermöglichen das Hinzufügen und Entfernen von Knoten im Cluster. Aufgrund einiger architektonischer Unterschiede unterscheidet sich der Prozess für das Hinzufügen und die Entfernung von Knoten jedoch ein wenig.
+
+
+
+[[node-additionremoval-in-unified-ontap]]
+=== Hinzufügen/Entfernung in Unified ONTAP
+
+Wir haben bereits gelernt, dass Unified ONTAP eine direkte Knoten-zu-Festplatten-Zuordnung vorsieht und dass alle Knoten über einige Festplatten und mindestens ein angeschlossenes Aggregat verfügen müssen. Vor diesem Hintergrund gilt Folgendes für Hinzufügungen und Entfernungen.
+
+* Das Hinzufügen von Knoten in unified ONTAP erfordert keine zusätzlichen Schritte, aber um eine ausgewogene Performance auf allen Knoten (einschließlich der neuen Knoten) bereitzustellen, müssten Volumes auf die neuen Knoten verschoben werden. Dies erfordert eine vorherige Analyse der vorhandenen Volumes und ihrer Workloads, Entscheidungen darüber, welche Volumes verschoben werden sollen, und dann die tatsächlichen Volume-Verschiebungen, die wiederum eine Kopie dieser Daten über das Backend-Cluster-Netzwerk erfordern würden.
+* Das Entfernen von Knoten in Unified ONTAP erfordert die manuelle Evakuierung der vorhandenen Volumes auf dem Knoten, was bedeutet, dass Sie ermitteln müssen, welche Knoten welche Volumes aufnehmen können, um eine gleichbleibende Performance zu gewährleisten, und dass Sie über ausreichend freie Kapazität verfügen müssen, um einen Platz für diese Volumes bereitzustellen. Wenn freie Kapazität eine Herausforderung darstellt, können zusätzliche Volume-Verschiebungen erforderlich sein, um die Workloads im Cluster etwas zu verschieben. Das Entfernen von Knoten bedeutet auch das Entfernen von HA-Paaren, sodass sich der Arbeitsaufwand verdoppelt. Da Knoten Festplatten besitzen, ist für diese Knoten auch eine vollständige Neuinitialisierung der Festplatten erforderlich. Jede dieser Maßnahmen erhöht den Zeit- und Arbeitsaufwand für eine eigentlich relativ einfache Aufgabe.
+
+
+
+
+[[node-additionremoval-in-netapp-afx]]
+=== Hinzufügen/Entfernung von Knoten in NetApp AFX
+
+Wir haben außerdem festgestellt, dass NetApp AFX nicht die standardmäßige Zuordnung von Knoten zu Festplatten nutzt und keine physischen Aggregate zur Kapazitätsbereitstellung im Cluster verwendet. Daher verhalten sich das Hinzufügen und Entfernen von Knoten etwas anders.
+
+* Das Hinzufügen von Knoten in NetApp AFX erfordert weder eine vorherige Volumenanalyse noch einen administrativen Eingriff, um eine gleichmäßige Verteilung der Volumen auf die einzelnen Knoten sicherzustellen. Stattdessen gleicht ONTAP die Volumenanzahl automatisch auf den neu hinzugefügten Knoten aus, um ein möglichst gleichmäßiges Leistungsprofil zu gewährleisten. ONTAP verschiebt Volumen automatisch zwischen den Knoten, ohne etwas zu kopieren, wodurch Zeit, Kapazität und Aufwand für das Hinzufügen von Knoten zu einem Cluster reduziert werden.
+* Das Entfernen von Knoten in NetApp AFX erfordert kaum oder gar keine manuelle Intervention. Wenn ein Knoten zur Entfernung markiert ist, verschiebt ONTAP die Volumes automatisch zwischen den Knoten (ebenfalls ohne Kopieren), um die zu entfernenden Knoten zu evakuieren. Und da keine Festplatten im Besitz der Knoten sind, müssen nach dem Entfernen der Knoten keine Festplatten neu initialisiert werden. Dadurch sind die Knoten in AFX modular aufgebaut und lassen sich einfach nach oben oder unten skalieren.
+
+
+
+
+[[cluster-scale-and-expansion]]
+== Clustergröße und -erweiterung
+
+Unified ONTAP-Cluster unterstützen bis zu 24 Knoten und jeder hinzugefügte Knoten muss ebenfalls mit Festplatten hinzugefügt werden (sowohl für Systemfunktionen als auch für Datendienste). Festplattengehäuse können dem Cluster hinzugefügt werden, sind jedoch immer mit einem einzigen HA-Paar verbunden und gehören ausschließlich einem einzelnen Knoten, selbst wenn der Cluster 24 Knoten umfasst. Das bedeutet, dass dem Cluster Kapazität hinzugefügt wird, selbst wenn nur Leistung erforderlich ist, und dass die Leistungssteigerung größtenteils auf einen bestimmten Satz von Festplatten der neuen Knoten beschränkt ist. Dadurch kann es passieren, dass Sie über zusätzliche Kapazität verfügen, die Sie nicht unbedingt benötigen.
+
+*Vereinheitlichtes ONTAP – zusätzliche Skalierungsüberlegungen*
+
+image:image30.png["Bild"]
+
+NetApp AFX unterstützt größere Cluster. Ab Version 9.19.1 können AFX-Cluster bis zu 32 Knoten in einem einzelnen Cluster umfassen. Und da alle Knoten alle Festplatten sehen und darauf zugreifen können, können sie sich die Performance und Kapazität (bis zu 32 PB ab ONTAP 9.19.1) dieser Laufwerke teilen, sodass niemals Ressourcen ungenutzt bleiben. Volume-Verschiebungen erfordern keine Kopien, sodass ONTAP Volumes automatisch auf neu hinzugefügte Knoten verschieben kann, um eine gleichmäßige Knotenauslastung sicherzustellen, während die Kapazität gleichmäßig über die Storage Availability Zone verteilt wird.
+
+*NetApp AFX – zusätzliche Skalierungsüberlegungen*
+
+image:image31.png["Bild"]
+
+Informationen zur maximalen Clustergröße sind auf der link:afx-limits.html["Grenzen"] Seite verfügbar.
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-volume-moves.html["Vorherige: Volume-Verschiebungen"] | link:afx-architecture-root-volume.html["Weiter: Änderungen am Root-Volume"] 
+|===

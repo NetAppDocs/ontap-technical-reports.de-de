@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-capacity-pool.html 
+keywords: netapp afx, single capacity pool, storage availability zone, aggregates, capacity 
+summary: Es wird erläutert, wie die NetApp AFX Storage Availability Zone physische Aggregate durch einen einzigen clusterweiten Kapazitätspool ersetzt. 
+---
+= Einzelner Kapazitätspool
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+NetApp AFX ersetzt physische Aggregate pro Knoten durch eine einzige Speicherverfügbarkeitszone, die dem gesamten Cluster zur Verfügung steht.
+
+
+
+[[no-more-physical-aggregates]]
+== Keine physischen Aggregate mehr
+
+Unified ONTAP fasst Festplatten in RAID-Gruppen zusammen und kombiniert diese zu einem Kapazitätskonstrukt, dem sogenannten Aggregat. Dieses Aggregat stellt die physische Kapazität dar und ist die Grenze des Speicherplatzes, der für die Erstellung von Volumes zur Bereitstellung von Daten für Endbenutzer zur Verfügung steht. Jedem Knoten muss mindestens ein Aggregat zugewiesen sein und diese Aggregate haben derzeit ein Limit von 800TB. Sobald dieses Limit erreicht ist, steht kein Speicherplatz mehr für zusätzliche Schreibvorgänge zur Verfügung.
+
+Physische Aggregate können auch Kapazitätsmanagement-Herausforderungen mit sich bringen, da Speicheradministratoren Volumes mitunter manuell verschieben müssen, um eine ausgewogene Kapazitätsverteilung zwischen den Clusterknoten zu gewährleisten. Diese Herausforderungen können sich bei Verwendung einer Scale-Out-Volume-Architektur (z. B. eines FlexGroup-Volumes) noch verstärken. Aggregate können zudem hinsichtlich Größe, Anzahl und Typ der Festplatten usw. variieren, was beim Wechsel zwischen den Knoten ebenfalls zu Leistungsunterschieden führen kann.
+
+*Aggregate in Unified ONTAP*
+
+image:image8.png["Bild"]
+
+NetApp AFX virtualisiert das Konzept eines physischen Aggregats, macht es ONTAP-verwaltet und verlagert das physische Kapazitätsmanagement von einer knotenbasierten auf eine clusterbasierte Verwaltung über die neue Storage Availability Zone. Dieser zentrale Kapazitätspool bietet einen „What you see is what you get“-Ansatz für das Speicherplatzmanagement.
+
+*NetApp AFX-Speicherverfügbarkeitszone*
+
+image:image9.png["Bild"]
+
+
+
+[[data-written-to-any-and-all-disks-in-the-availability-zone]]
+== Daten, die auf beliebige (und alle) Datenträger in der Verfügbarkeitszone geschrieben werden
+
+NetApp AFX beseitigt das Konzept des Festplattenbesitzes und verlagert die physische Aggregatstruktur auf einen virtualisierten Ansatz, der von ONTAP verwaltet wird, wobei die für den Cluster erworbene Kapazität allen an den Cluster angeschlossenen Knoten zur Verfügung steht. Mit AFX können alle Knoten unabhängig von der Knoten:Volume-Zugehörigkeit auf alle Festplatten in der Storage Availability Zone schreiben. Knoten besitzen weiterhin ein Konzept des Volume-Besitzes, da Schreibvorgänge nach wie vor über den NVRAM laufen, aber diese Daten können an beliebiger Stelle innerhalb der verfügbaren Kapazität abgelegt werden. Dies bedeutet, dass eine größere Anzahl von Festplatten an einer einzelnen Arbeitslast teilnehmen kann, was Leistungssteigerungen bietet.
+
+*Wie Daten in einer Storage Availability Zone landen*
+
+image:image11.png["Bild"]
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-node-disk.html["Vorheriges Thema: Knoten-zu-Festplatten-Beziehungen"] | link:afx-architecture-nvram-ha.html["Nächstes Thema: Repliziertes NVRAM und HA Failover-Verhalten"] 
+|===

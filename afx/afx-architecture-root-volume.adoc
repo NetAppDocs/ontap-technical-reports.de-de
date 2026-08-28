@@ -1,0 +1,39 @@
+---
+sidebar: sidebar 
+permalink: afx/afx-architecture-root-volume.html 
+keywords: netapp afx, root volume, boot media, nvme, m.2, cluster database 
+summary: Es wird erläutert, wie NetApp AFX Root-Volumes virtualisiert und Boot-Images sowie Cluster-Datenbanken auf Onboard-Bootmedien verschiebt. 
+---
+= Änderungen des Root-Volumes
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/afx/
+
+
+[role="lead"]
+NetApp AFX entfernt physische Root-Aggregate und verwendet Onboard-NVMe-Bootmedien für Boot-Images und replizierte Clusterdatenbanken.
+
+
+
+[[root-volume-changes]]
+== Änderungen des Root-Volumes
+
+In NetApp ONTAP wird jedem Knoten ein Root-Volume zugewiesen, das für systemspezifische Dateien und Funktionen wie Protokolldateien, Boot-Images, Core-Dateien, Cluster-Datenbanken und mehr verwendet wird.
+
+In unified ONTAP befanden sich diese Root-Volumes auf physischen Root-Aggregaten. Um die von den Root-Aggregaten belegte Kapazität zu reduzieren, wurden sie über Datenlaufwerk-Partitionen hinweg mittels Advanced Disk Partitioning (ADP) erstellt.
+
+NetApp AFX eliminiert physische Aggregate und macht dadurch Root-Aggregate und ADP überflüssig. Root-Volumes existieren weiterhin, befinden sich aber nun in virtualisierten Bereichen des Kapazitätspools und erfordern keine zusätzliche Konfiguration. Auch die Funktionalität von Root-Volumes ändert sich. Boot-Images und replizierte Cluster-Datenbanken werden vom Storage-Stack auf ein Onboard-Bootmedium auf jedem AFX-Knoten verschoben. Jetzt können die Knoten selbst bei einem Ausfall des Storage-Stacks weiterhin booten und ihre Cluster-Berechtigung behalten, was die Fehlersuche vereinfacht.
+
+
+
+[[onboard-boot-media]]
+== Onboard-Bootmedien
+
+NetApp AFX-Knoten nutzen ein integriertes Bootmedium, eine NVMe-angeschlossene M.2-Gerät mit ca. 3,8 TB Größe. Diese Bootmedien enthalten Boot-Image-Dateien und replizierte Datenbanken, die von den Speichergehäusen getrennt sind, was zusätzliche Redundanz bei Festplattenzugriffsproblemen bietet. Fällt das Bootmedium aus, wird der Knoten von seinem HA-Partner übernommen und das Bootmedium kann ersetzt werden. Nach dem Austausch lädt ein Speicheradministrator ein neues ONTAP-Image auf das Gerät und ONTAP stellt die Cluster-Datenbank automatisch wieder her, um die volle Funktionalität wiederherzustellen.
+
+[cols="1,1"]
+|===
+
+
+| link:afx-architecture-cluster-scale.html["Vorheriges: Cluster Scale"] | link:afx-performance.html["Weiter: Performance"] 
+|===
