@@ -1,0 +1,130 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-06-maxdirsize-volume-types.html 
+keywords: ONTAP, NAS, maxdir-size, maxdirsize, FlexVol, FlexGroup, volume language, utf8mb4, volume options 
+summary: Informationen dazu, wie sich Volumentyp, Volumenoptionen und Volumensprache auf das Verhalten von ONTAP maxdir-size auswirken. 
+---
+= Überlegungen zu Volumes
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+`maxdir-size` ist zwar eine Beschränkung pro Verzeichnis, aber das Volume um dieses Verzeichnis herum ist dennoch relevant. Volume Typ, Volume Optionen und Volume Sprache beeinflussen, wie schnell eine Verzeichnisdatei wächst und wie Sie die Beschränkung verwalten.
+
+
+
+[[volume-type]]
+== Volumentyp
+
+`maxdir-size` gilt für jedes Verzeichnis in beiden FlexVol- und FlexGroup-Volumes. FlexGroup-Verzeichniseinträge und das Layout der Bestandteile beeinflussen, wie schnell eine Verzeichnisdatei wachsen kann.
+
+
+
+[[flexvol-volumes]]
+=== FlexVol Volumes
+
+Ein FlexVol verfügt über ein Dateisystem und einen öffentlichen Inode-Speicher. `maxdir-size` Dies gilt weiterhin unabhängig für jedes Verzeichnis. Ein einzelnes häufig genutztes Verzeichnis wird innerhalb der Zuständigkeit dieses Volumes verarbeitet und gewinnt nicht an Parallelität, nur weil der Cluster zusätzliche Knoten enthält.
+
+
+
+[[flexgroup-volumes]]
+=== FlexGroup Volumes
+
+Eine FlexGroup stellt einen Namespace bereit, der von mehreren FlexVol Bestandteilen unterstützt wird. Dies verbessert die aggregierte Anzahl von Dateien und die Kapazitätsskalierung und ermöglicht gleichzeitig die Datenverteilung über Knoten und Festplatten hinweg, multipliziert jedoch nicht das Limit eines logischen Verzeichnisses (`maxdir-size`) mit der Anzahl der Bestandteile.
+
+Die folgende Abbildung zeigt, wie eine Verzeichnisdatei auf einem Bestandteil verbleibt, während die von diesem Verzeichnis benannten Dateiobjekte auf anderen Bestandteilen liegen können.
+
+[link=../media/high-file-count-workloads/flexgroup-directory-placement.png]
+image::flexgroup-directory-placement.png[Diagramm einer FlexGroup mit einem Verzeichnis-Inode und einer Verzeichnisdatei auf einem einzelnen Bestandteil,700,and remote links counting against maxdir-size]
+
+Die folgenden Unterschiede sind zu berücksichtigen:
+
+* Verzeichniseinträge können auf Dateien auf entfernten Bestandteilen verweisen und erfordern daher eine größere Darstellung auf dem Datenträger als lokale FlexVol Einträge.
+* Die gleichen sichtbaren Dateinamen können daher den Speicherplatz der Verzeichnisdatei mit einer anderen Rate belegen als in einem FlexVol.
+* Die Datei- und Inode-Kapazität wird pro Komponente aufrechterhalten, daher spielen Datenverteilung und Druck auf die Komponente eine Rolle.
+* `maxdir-size` wird auf der FlexGroup Ebene modifiziert, nicht direkt auf der Ebene eines Bestandteils.
+* Durch die Aufteilung einer Anwendung auf mehrere Verzeichnisse mithilfe von FlexGroup Volumes bietet ONTAP mehr Möglichkeiten, Arbeit und Dateien zu verteilen.
+
+
+Im Endeffekt speichert dieselbe `maxdir-size` Einstellung auf einer FlexGroup oft weniger Namen als auf einem FlexVol, da Einträge in entfernten Verzeichnissen mehr Speicherplatz benötigen. Wie groß dieser Unterschied ist, hängt vom Layout des Datensatzes und davon ab, wie viel Remote-Platzierung erfolgt ist.
+
+FlexGroup Volume-Remote-Hardlinks erhöhen den Wert pro Verzeichnis um einen Betrag, der mit dem Anteil der remote gespeicherten Einträge skaliert. Für große, flache Verzeichnisse (etwa 85 % Remote-Einträge) ist mit einer Obergrenze von ungefähr 2× zu rechnen, wodurch die praktische Obergrenze bei den standardmäßigen 320 MB auf etwa 2 bis 2,6 Millionen link:high-file-count-workloads-02-maxdirsize.html#estimating-the-number-of-names-per-directory-file["gewöhnliche Namen"] sinkt, gegenüber bis zu etwa 4,3 Millionen auf einem FlexVol. Breite oder tiefe Verzeichnislayouts halten das Verhältnis und die Aufblähung durch Remote-Hardlinks niedriger. Eine Validierung anhand eines repräsentativen Verzeichnisses mit  `stat`,  `ls -ld` oder XCP ist vorzunehmen.
+
+
+
+[[volume-options]]
+== Volume-Optionen
+
+Die folgenden Volume-Felder sind diejenigen, die bei der Planung oder Fehlerbehebung großer Verzeichnisse am häufigsten auftreten.
+
+|===
+| Feld | Einstellbar und privilegiert | Zweck 
+
+
+| `maxdir-size` | Ja, erweitert | Ermöglicht eine größere Datei pro Verzeichnis für mehr Dateien pro Verzeichnis. 
+
+
+| `is-dir-index-transfer-enabled` | Ja, Admin | Verschiebt Verzeichnisindizes in den öffentlichen Inode-Bereich, um die Portabilität von Replikation und Wiederherstellung für unterstützte Vorgänge zu gewährleisten. 
+
+
+| `has-dir-index-public` | Nein, erweitert | Meldet, ob öffentliche Inodes für die Verzeichnisindizierung vorhanden sind. 
+
+
+| `has-optimized-sparse-directories` | Nein, erweitert | Meldet, ob das Volume optimierte, lochgestanzte Sparse-Verzeichnisse enthält. 
+
+
+| `language` | Beschränkt, Admin | Steuert die Namensinterpretation. Nicht-ASCII-Namen und 4-Byte-UTF-8 (`utf8mb4` Zeichen können die Anzahl der Namen pro Verzeichnis reduzieren; siehe <<volume-language>>. 
+
+
+| `analytics-state` | Ja, Admin | Dateisystemanalyse wird aktiviert. Namespace-Scans können bei Volumes mit hoher Dateianzahl zusätzlichen Aufwand verursachen, ändern aber nichts `maxdir-size`. 
+|===
+
+
+[[volume-language]]
+== Volumesprache
+
+Die  `-language`Einstellung des Volume steuert, wie NFS Namen zwischen der Client-Codierung und den auf der Festplatte gespeicherten Unicode-Namen konvertiert. Volumes übernehmen die SVM-Standardeinstellung, sofern  `-language`nicht bei der Erstellung eine andere Einstellung festgelegt wird. Die ONTAP Standardeinstellung ist  `C.UTF-8`. Ab ONTAP 9.5 speichert  `utf8mb4`4-Byte-UTF-8-Namen (Emojis und andere ergänzende Unicode-Zeichen), anstatt die zusätzlichen Bytes in bag-of-bits abzulegen.
+
+Der Sprachcode selbst ändert nicht, wie viele ASCII-Namen in ein Verzeichnis passen. `C.UTF-8`, `en_US.UTF-8`, `de.UTF-8`, `ja.UTF-8` und `utf8mb4` verwenden alle dieselbe Unicode-Verzeichnispaketierung für dieselben Zeichen. Die Anzahl wird durch die Zeichen in den Namen bestimmt, die die jeweilige Sprache enthalten soll: Nicht-ASCII-Text wird in einer breiteren Form gespeichert, und 4-Byte-Zusatzzeichen auf einem  `utf8mb4` Volume sind noch breiter. NFSv3 Clients, die einen Namen nicht in der Volume-Kodierung darstellen können, können außerdem dazu führen, dass ONTAP einen alternativen NFS-Namen mit 8 Zeichen speichert, der noch mehr Verzeichnisplatz benötigt.
+
+Die folgenden Beispiele verwenden 32-stellige Namen bei 320 MB `maxdir-size` und enthalten die `.` und `..` Einträge. Es handelt sich um Planungszahlen, nicht um Garantien.
+
+[cols="2,3,3,1,2,2"]
+|===
+| Volumesprache | Typische Verwendung | Beispiel für einen 32 Zeichen langen Namensstil | Namen pro 4 KiB-Block | Namen in einem Verzeichnis bei 320 MB | Im Vergleich zu Standard-ASCII 
+
+
+| `C.UTF-8` (ONTAP Standard) | POSIX C Locale mit UTF-8. Neue SVMs und Volumes übernehmen dies, sofern  `-language`nicht festgelegt ist. | ASCII, wie etwa `project-alpha-run0142-input1.dat` | 53 | 4.341.758 | Baseline 
+
+
+| `en_US.UTF-8` | US-Englisch UTF-8 | Dieselben ASCII- oder einfachen lateinischen Namen | 53 | 4.341.758 | Keine Reduzierung gegenüber dem Standardwert für ASCII-Namen 
+
+
+| `de.UTF-8` | Deutsches UTF-8, einschließlich Umlaute (`ä`, `ö`, `ü`, `ß`) | Akzentuiertes Latein, wie `Geschäftsbericht-2026-Q3-v03.docx` | 26 | 2.129.918 | Etwa 49 % der Standard-ASCII-Anzahl 
+
+
+| `ja.UTF-8` | Japanisch UTF-8 (CJK in der Basic Multilingual Plane) | Japanische Namen derselben Länge von 32 Zeichen | 26 | 2.129.918 | Etwa 49 % der Standard-ASCII-Anzahl 
+
+
+| `utf8mb4` | 4-Byte-UTF-8 (ONTAP 9.5 und höher). Diese Option wird verwendet, wenn Namen Emojis oder andere ergänzende Zeichen enthalten. | Gewöhnlicher deutscher oder japanischer Text wird weiterhin wie die obigen UTF-8-Zeilen gepackt. Ein 32 Zeichen langer Name, der zusätzliche Zeichen (z. B. ein Emoji) enthält, wird breiter gepackt. | 22 | 1.802.238 | Etwa 41 % der Standard-ASCII-Zeichenanzahl, wenn zusätzliche Zeichen vorhanden sind 
+|===
+Wenn die Namen im einfachen ASCII-Format bleiben, verringert die Umstellung von `C.UTF-8` auf `en_US.UTF-8`, `de.UTF-8`, `ja.UTF-8` oder `utf8mb4` die Anzahl pro Verzeichnis nicht. Bei gemischtem NFS- und SMB-Zugriff können zusätzlich zu diesen Werten NFS-Alternativnamen oder SMB-8.3-Aliase hinzukommen.
+
+Die Packregeln hinter der Tabelle sind unter link:high-file-count-workloads-02-maxdirsize.html#estimating-the-number-of-names-per-directory-file["Schätzung der Anzahl der Namen pro Verzeichnisdatei"] zu finden.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-05-maxdirsize-impact.html["← Vorherige: Auswirkungen von maxdir-size"] | link:high-file-count-workloads-07-maxdirsize-features-ems.html["Als Nächstes: Funktionen, EMS und Überwachung für maxdir-size →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:https://docs.netapp.com/us-en/ontap/smb-admin/multi-byte-file-directory-qtree-names-concept.html["SMB Mehrbyte-Datei-, Verzeichnis- und qtree-Namen"^]
+* link:https://docs.netapp.com/us-en/ontap/flexgroup/index.html["FlexGroup Volumenmanagement"^]
+

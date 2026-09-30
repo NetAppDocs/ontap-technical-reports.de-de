@@ -1,0 +1,36 @@
+---
+section: high-file-count-workloads
+title: NAS Workloads mit hoher Dateianzahl
+entries:
+- title: Überblick
+  url: "/high-file-count-workloads/high-file-count-workloads-01-overview.html"
+- title: Maxdir size und große Verzeichnisse
+  entries:
+  - title: Überblick
+    url: "/high-file-count-workloads/high-file-count-workloads-02-maxdirsize.html"
+  - title: maxdir-size und aktuelles Verzeichnis Größe anzeigen
+    url: "/high-file-count-workloads/high-file-count-workloads-03-maxdirsize-view.html"
+  - title: Verzeichnisindizierung in ONTAP
+    url: "/high-file-count-workloads/high-file-count-workloads-04-maxdirsize-indexing.html"
+  - title: Auswirkungen von maxdir-size
+    url: "/high-file-count-workloads/high-file-count-workloads-05-maxdirsize-impact.html"
+  - title: Überlegungen zu Volumes
+    url: "/high-file-count-workloads/high-file-count-workloads-06-maxdirsize-volume-types.html"
+  - title: Funktionen, EMS und Überwachung
+    url: "/high-file-count-workloads/high-file-count-workloads-07-maxdirsize-features-ems.html"
+- title: Hohe Dateianzahl und Inode-Kapazität
+  entries:
+  - title: Überblick
+    url: "/high-file-count-workloads/high-file-count-workloads-08-maxfiles-high-file-counts.html"
+  - title: Inode-Typen
+    url: "/high-file-count-workloads/high-file-count-workloads-09-maxfiles.html"
+  - title: Maxfiles und ONTAP inode-Informationen
+    url: "/high-file-count-workloads/high-file-count-workloads-10-maxfiles-limits.html"
+  - title: Steuerung von maxfiles
+    url: "/high-file-count-workloads/high-file-count-workloads-11-maxfiles-controlling.html"
+  - title: Überwachung, EMS und Verbesserungen
+    url: "/high-file-count-workloads/high-file-count-workloads-12-maxfiles-monitoring.html"
+- title: Planungsansatz
+  url: "/high-file-count-workloads/high-file-count-workloads-13-planning.html"
+- title: Best Practices
+  url: "/high-file-count-workloads/high-file-count-workloads-14-best-practices.html"

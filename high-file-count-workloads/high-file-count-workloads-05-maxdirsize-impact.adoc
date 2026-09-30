@@ -1,0 +1,92 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-05-maxdirsize-impact.html 
+keywords: ONTAP, NAS, maxdir-size, maxdirsize, capacity, performance, ENOSPC 
+summary: Die Auswirkungen großer ONTAP Verzeichnisse auf Kapazität und Leistung sowie die Folgen einer Überschreitung des Grenzwerts maxdir-size werden erläutert. 
+---
+= Auswirkungen von maxdir-size
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+Durch Anheben des `maxdir-size` Limits wird das Wachstum der Verzeichnisdatei ermöglicht. Kapazitäts- und Leistungskosten treten erst auf, wenn eine Verzeichnisdatei tatsächlich groß wird, während Erstellungs- und Umbenennungsvorgänge fehlschlagen, sobald das Limit erreicht ist.
+
+
+
+[[capacity-impact]]
+== Kapazitätsauswirkungen
+
+Die Änderung der `maxdir-size` Einstellung selbst verbraucht keinen Speicherplatz. Das Wachstum der Verzeichniseinträge hingegen schon. Verzeichnisdateien belegen beim Hinzufügen von Namen jeweils 4 KiB-Blöcke; zugehörige Indizes und von Snapshot beibehaltene Verzeichnisblöcke benötigen zusätzlichen Speicherplatz. Das Festlegen der Obergrenze reserviert diesen Speicherplatz nicht. Die maximale Größe nach dem Löschen wird in link:high-file-count-workloads-02-maxdirsize.html#how-the-maxdir-size-cap-behaves["Wie sich die maxdir size Beschränkung verhält"] beschrieben.
+
+Bei der Schätzung `maxdir-size` von Werten müssen Sie die in den Dateien unterhalb des Verzeichnisses gespeicherten Daten nicht berücksichtigen. Stattdessen sind nur die Einträge in einem einzelnen Verzeichnis zu berücksichtigen. Die Option wird zwar auf Volume-Ebene festgelegt, aber pro Verzeichnis angewendet.
+
+Bei der Planung der Kapazitätsnutzung von Verzeichnissen mit vielen Dateien muss der Overhead für Verzeichnisse und Indizes berücksichtigt werden. Beispielsweise enthält ein Volume mit 100 Verzeichnissen, die jeweils bis zur Obergrenze von 320 MB anwachsen, etwa 32 GB an Verzeichnisdatei-Metadaten, die auf die genutzte Volume-Kapazität angerechnet werden. Wenn diese Verzeichnisse indiziert und öffentlich sind, werden dem maxfiles Budget etwa 100 Inodes hinzugefügt. Zusätzliche Snapshot Kapazität sollte berücksichtigt werden, wenn sich Verzeichnismetadaten häufig ändern, da Snapshot Kopien ersetzte Verzeichnis- und Indexblöcke beibehalten.
+
+
+
+[[performance-impact]]
+== Auswirkungen auf die Leistung
+
+Große Verzeichnisse in einem ONTAP System können folgende Auswirkungen haben:
+
+* Namensauflösung, Erstellen, Aufheben von Verknüpfungen und Länge des Umbenennungspfads
+* Vollständige Verzeichnisaufzählung und Platzhaltersuchen
+* CPU- und Speicherverbrauch für die Namespace-Verarbeitung
+* Cold-cache-E/A zum Laden von Index- und Verzeichnisblöcken erforderlich
+* Protokolllatenz und Zeitüberschreitungen des Clients bei langen Vorgängen
+* Namespace Scans, die von Analyse-, Sicherungs-, Replikations- oder Sicherheitsfunktionen durchgeführt werden
+
+
+Die Indizierung reduziert zwar die Kosten gezielter Suchvorgänge, macht aber ein sehr großes, flaches Verzeichnis nicht gleichwertig mit einer Sharded-Hierarchie. Operationen für ein einzelnes Verzeichnis können weiterhin an Serialisierungs- und Affinitätsgrenzen stoßen, selbst wenn das umgebende Volume oder der Cluster über ungenutzte Ressourcen verfügt. Die Indizierung unterstützt gezielte Namensoperationen wie lookup, open, create, rename und remove. Vollständige Verzeichnisscans und Wildcard-Suchen durchlaufen weiterhin den Verzeichnisnamensraum; sie verwenden den Index nicht als Abkürzung von Namen zu Blöcken. Bei hole-punched Verzeichnissen kann der Index während  `READDIR` leere Blöcke überspringen, dies ist jedoch kein Ersatz für ein Sharded-Layout.
+
+Es gibt keine separate Verzeichnisdateigröße, ab der ONTAP einen Leistungsfehler deklariert. Der ungefähr 2 MiB große Indexschwellenwert, beschrieben in link:high-file-count-workloads-04-maxdirsize-indexing.html#why-directory-indexing-exists["Warum die Verzeichnisindizierung existiert"], verändert, wie gezielte Suchvorgänge bereitgestellt werden. Unterhalb dieser Größe kann das Auffinden eines Namens Verzeichnisblöcke scannen und einen temporären In-Memory-Hash erstellen, sodass die Kosten mit dem Verzeichnis steigen, ONTAP jedoch keinen persistenten Index erstellt. Oberhalb dieser Größe verwenden gezielte Namensoperationen den Index. Was mit dem Wachstum eines Verzeichnisses weiterhin teurer wird, sind die vollständige Enumeration und die Wildcard-Suche, Cold-Cache-Ladevorgänge von Verzeichnis- und Indexblöcken sowie die Serialisierung von Operationen für dieses Verzeichnis.
+
+Clients können längere Verzeichnisauflistungen, Wildcard-Suchen und Anwendungsscans, höhere Protokolllatenz und Zeitüberschreitungen während dieser Vorgänge feststellen. Der Knoten, dem das Verzeichnis gehört, kann CPU und Arbeitsspeicher für Metadaten aufwenden, während der Datendurchsatz gering bleibt. Die Auswirkungen hängen von der Operationsrate, der Parallelität, dem Cache-Zustand und davon ab, wie viele Namen in diesem Verzeichnis konzentriert sind. `wafl.dir.size.warning`, typischerweise bei etwa 90 % von  `maxdir-size`, warnt davor, dass sich das Verzeichnis seiner Größengrenze nähert. Dies kennzeichnet keinen gemessenen Latenzschwellenwert.
+
+Zum Beispiel kann das Öffnen einer bekannten Datei in diesem Verzeichnis weiterhin schnell erfolgen, da der Index die Namensauflösung übernimmt. Das Auflisten desselben Verzeichnisses mit  `ls`, das Durchlaufen mit  `find` oder das Ausführen einer Anwendung, eines Backups oder eines Sicherheits-Scans, die bzw. das jeden Namen liest, kann lange dauern, scheinbar hängen bleiben oder eine Client- oder Anwendungs-Zeitüberschreitung verursachen. Während dieser Zeit überträgt der Client nur wenige Dateidaten. Das Lesen oder Schreiben einer bereits geöffneten Datei ist in der Regel nicht beeinträchtigt.
+
+Erhöhen Sie sie  `maxdir-size`nur, wenn die Arbeitslast ein größeres einzelnes Verzeichnis erfordert und eine Umstrukturierung nicht praktikabel ist. Eine breite oder tiefe Hierarchie ist zu bevorzugen, sofern die Anwendung dies zulässt.
+
+
+
+[[what-happens-when-maxdir-size-is-exceeded]]
+== Was passiert, wenn maxdir-size überschritten wird?
+
+Wenn eine Verzeichnisdatei die Obergrenze erreicht:
+
+* ONTAP lehnt Operationen ab, bei denen diesem Verzeichnis ein weiterer Name hinzugefügt werden müsste (z. B. Erstellungs- oder Umbenennungsvorgänge).
+* Der Client kann ENOSPC, "Datei zu groß", NFS-Fehler 27 `STATUS_CANNOT_MAKE` oder einen anderen anwendungsspezifischen Fehler beim Erstellen oder Umbenennen melden.
+* Andere Verzeichnisse können weiterhin Einträge annehmen, sofern sie über Kapazität und Inodes verfügen.
+* Das Volume kann weiterhin über freie Datenkapazität und öffentliche Inodes verfügen.
+* Das Lesen bereits vorhandener Dateien ist nicht gleichzusetzen mit dem Hinzufügen eines weiteren Verzeichniseintrags und bleibt im Allgemeinen unberührt.
+
+
+Das Überschreiten von  `maxfiles` oder  `maxdir-size` kann wie ein Kapazitätsproblem aussehen. Ein Blick in die EMS-Meldungen zeigt, dass sich die Clientfehler mit der Inode-Erschöpfung überschneiden. Siehe link:high-file-count-workloads-01-overview.html#maxfiles-compared-with-maxdir-size["Maxfiles im Vergleich mit maxdir-size"].
+
+Wenn ein flacher Namensraum nicht geändert werden kann, sollte eine kontrollierte `maxdir-size` Erhöhung geprüft werden:
+
+[listing]
+----
+set -privilege advanced
+volume modify -vserver <svm> -volume <volume> -maxdir-size 327MB
+----
+Bei durchschnittlichem Wachstum sollte die aktuelle Obergrenze in Schritten von etwa 2 % erhöht werden. Bei einer Migration mit einer bekannten gemessenen Anforderung sollte die Obergrenze etwa 2 % über dieser Anforderung festgelegt werden. Die Änderung erfolgt sofort und unterbrechungsfrei.
+
+Der Grenzwert kann später gesenkt werden, jedoch nicht unter die größte vorhandene Höchstmarke einer Verzeichnisdatei; durch das Senken werden bestehende Verzeichnisse nicht komprimiert. Der unterstützte Wert für die ONTAP Version und Plattform sollte validiert und die Leistung nach der Änderung überwacht werden.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-04-maxdirsize-indexing.html["← Zurück: Verzeichnisindizierung in ONTAP"] | link:high-file-count-workloads-06-maxdirsize-volume-types.html["Weiter: Überlegungen zu Volumes →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:high-file-count-workloads-07-maxdirsize-features-ems.html["Funktionen, EMS und Überwachung für maxdir-size"]
+* link:high-file-count-workloads-14-best-practices.html["Best Practices für NAS-Workloads mit hoher Dateianzahl"]
+

@@ -1,0 +1,87 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-11-maxfiles-controlling.html 
+keywords: ONTAP, NAS, maxfiles, files, files-set-maximum, files-maximum-possible, FlexGroup 
+summary: Die maximale Anzahl der ONTAP Volume-Dateien kann auf einen bestimmten Wert oder auf das aktuelle Maximum festgelegt werden, wobei die Auswirkungen einer frühzeitigen Erhöhung zu berücksichtigen sind. 
+---
+= Steuerung von maxfiles
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+Die Volume `-files` Option ist die Obergrenze für öffentliche Inodes. Dieser Wert sollte vor dem Erschöpfen der Inodes durch die Workload auf einen geplanten Wert oder auf den aktuellen `files-maximum-possible` erhöht werden. Grenzwerte, das Verhalten von NFS-Datei-IDs und Erschöpfungssymptome werden in link:high-file-count-workloads-10-maxfiles-limits.html["Maxfiles und ONTAP inode-Informationen"] beschrieben.
+
+
+
+[[set-a-specific-ceiling]]
+== Festlegen einer bestimmten Obergrenze
+
+Diese  `volume modify -files`Option wird verwendet, wenn die Kapazitätsplanung einen bestimmten Wert erfordert:
+
+[listing]
+----
+volume modify -vserver <svm> -volume <volume> -files <inode-count>
+----
+ONTAP prüft den angeforderten Wert anhand der Volume-Größe, des maximal möglichen Werts und der bereits zugewiesenen Inode-Dateikapazität. Ein konfigurierter Maximalwert kann nicht unter die bereits erreichte Inode-Dateikapazität reduziert werden.
+
+Für eine FlexGroup geben Sie den FlexGroup Namen und die gewünschte FlexGroup weite Gesamtsumme an. Die Einstellung darf  `files` nicht unabhängig auf einer Komponente festgelegt werden. ONTAP verteilt die angeforderte Gesamtsumme gleichmäßig auf die aktuellen Komponenten, und jede Komponente setzt ihren Anteil durch:
+
+[listing]
+----
+volume modify -vserver <svm> -volume <flexgroup> -files <flexgroup-total-inodes>
+----
+Nach der Änderung des Werts empfiehlt sich eine Überprüfung auf Komponentenebene `files` und `files-used`, da die Nutzung nicht unbedingt so gleichmäßig verteilt bleibt wie die konfigurierten Grenzwerte:
+
+[listing]
+----
+volume show -vserver <svm> -volume-style-extended flexgroup-constituent -fields files,files-used
+----
+Einige ONTAP Befehle akzeptieren eine relative Erhöhung:
+
+[listing]
+----
+volume modify -vserver <svm> -volume <volume> -files +<additional-inodes>
+----
+Das Ergebnis wird mit  `volume show` bestätigt.
+
+
+
+[[setting-files-to-the-maximum-up-front]]
+== Dateien von Anfang an auf die maximale Größe einstellen
+
+Durch Erhöhen `files` auf den aktuellen `files-maximum-possible` wird die öffentliche Inode-Datei nicht vorab zugewiesen und die entsprechende Inode-Record-Kapazität nicht reserviert. Das unmittelbare Speicherplatzrisiko ist daher gering. Bei NAS Volumes mit einer hohen Anzahl an Dateien sollte `files` der Wert auf das Maximum gesetzt werden, das das Volume aufnehmen kann, sofern die Volume-Größe und die Protokollbeschränkungen dies zulassen, anstatt auf ein Out-of-Inodes-Ereignis zu warten.
+
+Die verbleibenden Auswirkungen betreffen die Frage, was passiert, wenn der Namespace tatsächlich bis zu dieser Obergrenze anwächst, und was passiert, wenn eine Grenze erreicht wird, die sich nicht weiter erhöhen lässt:
+
+* *Kapazität wird nur verbraucht, wenn Inodes zugewiesen werden.* Jeder öffentliche Inode in ONTAP 9 belegt 288 Byte in der Inode-Datei, zuzüglich der Inode-Dateistruktur und anderer Metadaten. Bei der absoluten Obergrenze von FlexVol umfassen allein die rohen Inode-Datensätze etwa 2.040.109.451 × 288 Byte (ca. 547 GiB). Dieser belegte Speicherplatz belegt auch den zugrunde liegenden Storage, daher sollte der gesamte freie Speicherplatz überwacht werden, nicht nur der Prozentsatz des belegten Volumes. Siehe link:high-file-count-workloads-08-maxfiles-high-file-counts.html#capacity-impact["Kapazitätsauswirkungen"].
+* *Nachdem die Inode-Datei angewachsen ist, kann sie nicht  `files`unter `inodefile-public-capacity` gesenkt werden.* Das Festlegen eines hohen Grenzwerts sperrt keine ungenutzte Kapazität; zugewiesene Datensätze hingegen schon.
+* *Bei einem FlexVol volume ist 2,040,109,451 die absolute Obergrenze.* Diesem Volume können keine weiteren öffentlichen Inodes hinzugefügt werden. Falls die Workload die absolute Obergrenze eines Volumes überschreiten könnte, ist die Verwendung eines FlexGroup sinnvoll, sodass Constituents hinzugefügt werden können. Es ist weiterhin sinnvoll, ein FlexVol oder einen Constituent auf den Maximalwert festzulegen, den *seine aktuelle Größe* zulässt; dieser Wert liegt oft weit unter 2,040,109,451.
+* *Die FlexGroup Gesamtzahl der Inodes kann zwei Milliarden überschreiten* (bis zu 400 Milliarden in unified ONTAP und bis zu 1 Billion in AFX mit ONTAP 9.19.1 und höher). Für NFS sollten 64-Bit-Dateikennungen aktiviert sein, bevor die Anzahl der sichtbaren Dateikennungen zwei Milliarden erreicht. Siehe link:high-file-count-workloads-10-maxfiles-limits.html#nfs-64-bit-file-identifiers-and-flexgroup-file-counts["NFS 64-Bit-Dateikennungen und FlexGroup Dateianzahlen"].
+* *Die Überwachung `files-used` gegenüber `files` wird fortgesetzt.* Eine maximale Einstellung beseitigt die standardmäßige Obergrenze als Überraschung, aber dem Volume können bei der unterstützten Obergrenze weiterhin die Inodes ausgehen.
+
+
+Zum Anwenden des aktuellen Maximalwerts wird ab ONTAP 9.9.1 die erweiterte `files-set-maximum` Aktion verwendet:
+
+[listing]
+----
+set -privilege advanced
+volume modify -vserver <svm> -volume <volume> -files-set-maximum true
+----
+Dies ist eine einmalige Aktion, kein dauerhafter Zuweisungsmodus. Nur  `true` ist gültig. Wenn das Volume später wächst, sollte der Vorgang erneut ausgeführt werden, falls der neue Maximalwert angewendet werden soll.  `-files` ist zu verwenden, wenn ein absichtlicher Wert unterhalb des Maximalwerts festgelegt werden soll. Wenn ein FlexVol volume (oder FlexGroup constituent) ungefähr 7,8 TB oder größer ist, ist der maximal einstellbare Wert die absolute Obergrenze von 2.040.109.451, und dieser Wert erhöht sich mit der Volume-Größe nicht weiter.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-10-maxfiles-limits.html["← Zurück: Maxfiles und ONTAP Inode-Informationen"] | link:high-file-count-workloads-12-maxfiles-monitoring.html["Als Nächstes: Überwachung von maxfiles, EMS-Ereignissen und ONTAP Erweiterungen →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:https://docs.netapp.com/us-en/ontap/volumes/change-maximum-number-files-allowed-concept.html["Standardmäßig und maximal zulässige Dateianzahl pro FlexVol volume"^]
+* link:https://www.netapp.com/pdf.html?item=/media/12385-tr4571.pdf["TR-4571: NetApp ONTAP FlexGroup Volumes"^]
+

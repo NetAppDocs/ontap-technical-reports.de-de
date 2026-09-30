@@ -1,0 +1,133 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-13-planning.html 
+keywords: ONTAP, NAS, high file count, planning, maxfiles, maxdir-size, maxdirsize, inodes, metadata, XCP 
+summary: Vor der Dimensionierung eines NAS-Workload mit hoher Dateianzahl auf ONTAP sollten Schätzungen zu Inodes, Verzeichnissen, Operationsraten und Kapazität vorliegen. 
+---
+= Planungsansatz
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+Beginnen Sie die Planung für NAS mit hoher Dateianzahl mit vier separaten Schätzungen statt mit einer einzigen Dateianzahl oder Kapazitätsangabe.
+
+. Gesamtzahl der Dateisystemobjekte über den gesamten Workload-Lebenszyklus
+. Spitzeneinträge im größten Verzeichnis
+. Spitzenwerte für Erstellungs-, Such-, Auflistungs- und Löschraten
+. Kapazität für Benutzerdaten, Inodes, Verzeichnisse, Verzeichnisindizes, Snapshot Kopien und Wachstum
+
+
+Die folgenden Methoden dienen zum Erfassen dieser Eingaben:
+
+
+
+[[find-total-objects-and-inode-headroom]]
+== Die Gesamtzahl der Objekte und den Inode-Headroom ermitteln
+
+Vergleich des Anwendungsbestands mit den öffentlichen Inode-Zählern von ONTAP:
+
+[listing]
+----
+volume show -vserver <svm> -volume <volume> -fields files,files-used
+
+set -privilege advanced
+volume show -vserver <svm> -volume <volume> -fields files-maximum-possible,inodefile-public-capacity
+----
+Für FlexGroup sind sowohl die konfigurierte Gesamtmenge als auch die Nutzung jeder einzelnen Komponente zu prüfen:
+
+[listing]
+----
+volume show -vserver <svm> -volume-style-extended flexgroup-constituent -fields files,files-used
+----
+* Projizierte Dateien, Verzeichnisse, Streams, ACLs, öffentliche Verzeichnisindizes, temporäre Objekte und Migrationsüberschneidungen sind in die Gesamtschätzung einzubeziehen.
+* Wo ACLs häufig verwendet werden, ist als konservative anfängliche Schätzung für `files` bis zum Doppelten der prognostizierten Datei- und Verzeichnisanzahl anzusetzen. Jede NTFS- oder NFSv4-ACL kann einen zusätzlichen öffentlichen Inode belegen, aber link:high-file-count-workloads-09-maxfiles.html#acl-inodes["ACL Freigabe"] die tatsächliche Nutzung verringern. Eine Validierung anhand repräsentativer Daten ist erforderlich.
+* Verwenden Sie den Anwendungsbestand oder eine Migrationsanalyse, um das Wachstum zu prognostizieren. `files-used` Es handelt sich um die aktuelle Nutzung, nicht um den zukünftigen Spitzenwert.
+
+
+NetApp XCP kann Dateien und Verzeichnisse im aktuellen Namensraum zählen. Unter XCP 1.5 und höher:
+
+[listing]
+----
+xcp scan -stats <host>:/<export>
+xcp scan -stats \\<server>\<share>
+----
+Der `-stats` Bericht enthält die Anzahl der Dateien und Verzeichnisse. ACL-Inodes und benannte Streams, die nie als Verzeichniseinträge erscheinen, sind nicht enthalten; diese sind daher aus dem Anwendungsprofil hinzuzufügen. Bei Datensätzen mit einer hohen Anzahl an Dateien ist etwas Zeit einzuplanen; XCP durchsucht die Verzeichnisstruktur, bevor die Gesamtzahlen ausgegeben werden. Hinweise zum XCP 1.5 Unterbefehl und zugehörige Scans sind unter link:high-file-count-workloads-03-maxdirsize-view.html#scan-directory-sizes-with-xcp["Verzeichnisgrößen mit XCP scannen"] zu finden.
+
+
+
+[[find-the-largest-directories]]
+== Ermitteln der größten Verzeichnisse
+
+* Mithilfe von Anwendungsinventar, Migrationstools oder einem kontrollierten Namespace-Scan lassen sich Verzeichnisse mit den meisten Einträgen identifizieren.
+* Überprüfung `wafl.dir.size.warning` und zugehörige EMS-Ereignisse für Verzeichnisse, die sich bereits der Grenze nähern.
+* Das Verzeichnisobjekt selbst wird wie in link:high-file-count-workloads-03-maxdirsize-view.html["maxdir-size und aktuelles Verzeichnis Größe anzeigen"] beschrieben gemessen.
+* Längen von Modelldateinamen und alternative Namen, wie in link:high-file-count-workloads-02-maxdirsize.html["Maxdir-Größe und große ONTAP Verzeichnisse"] beschrieben.
+
+
+XCP kann Verzeichnisse nach Anzahl der Einträge oder nach Verzeichnis-Dateigröße sortieren. Der `-stats` Bericht enthält die Eintragsanzahl des größten Verzeichnisses als `Dirsize`. Alle Verzeichnisse mit ihrer Metadaten-Dateigröße, beginnend mit dem größten:
+
+[listing]
+----
+xcp scan -match "type == d" -fmt "'{} {}'.format(used, x)" <host>:/<export> | sort -rn
+----
+So lassen sich Verzeichnisse mit mehr als einer gewählten Anzahl von Einträgen auflisten (2.000 in diesem Beispiel):
+
+[listing]
+----
+xcp diag find --branch-match True -fmt "'{size} {name}'.format(size=x.digest, name=x)" <host>:/<export> 2>/dev/null | awk '{if ($1 > 2000) print $1 " " $2}'
+----
+Diese Scans finden die stark frequentierten Verzeichnisse. Sie ersetzen nicht die Modellierung der Namenslänge und Kodierung für `maxdir-size`.
+
+
+
+[[measure-metadata-operation-rates]]
+== Messen von Metadaten-Operationsraten
+
+* Anwendungstelemetrie, Client-Workload-Tools, Paket-Traces, ONTAP Performance-Statistiken oder ein Überwachungstool wie Harvest dienen zur Messung der Raten für Erstellen, Suchen, Öffnen, Schließen, Attribute, Auflisten, Umbenennen und Löschen.
+* Die repräsentative Parallelität sowie das Verhalten von Warm- und Cold-Cache sollten getestet werden.
+* Durchsatzmessungen sind nicht unbedingt aussagekräftig für metadatenintensive Workloads. Ops-Zähler können jedoch ein Hinweis sein, insbesondere `other_ops`.
+
+
+
+
+[[find-metadata-and-snapshot-capacity]]
+== Metadaten und Snapshot Kapazität ermitteln
+
+* Verwenden Sie  `volume show-space`zum Trennen von Benutzerdaten, Dateisystem-Metadaten, Inodes und Snapshot Reserve.
+* Dient `volume show-footprint` zur Überprüfung des Aggregat-Footprints des Volume.
+* Die Anzahl der ONTAP 9 Inode-Einträge wird auf  `peak allocated inodes × 288 bytes` geschätzt, anschließend wird die Verzeichnisdateigröße addiert.
+* Auf unified ONTAP können die Aggregatmetadaten mit  `storage aggregate show-space` überprüft werden.
+* Auf AFX können die Metadaten der Speicherverfügbarkeitszone mit  `storage availability-zone show` überprüft werden.
+* Etwa 1 % der Kapazität entfallen auf sonstige Systemmetadaten, die nicht vom Host inventarisiert werden können.
+
+
+
+
+[[dont-conflate-maxdir-size-with-maxfiles]]
+== Verwechseln Sie maxdir-size nicht mit maxfiles
+
+* `files` (maxfiles) ist die Obergrenze für öffentliche Inodes eines FlexVol- oder FlexGroup-Bestandteils.
+* `maxdir-size` ist die Byte-Obergrenze für jede Verzeichnisdatei im Volume. Wie viele Namen hineinpassen, hängt von der Namenslänge und der Kodierung ab, nicht von der Anzahl der Dateien im Volume.
+* Leiten Sie dies `maxdir-size` nicht aus der Gesamtzahl der Dateien im Volume ab, und verwenden Sie dies `maxfiles` nicht, um abzuschätzen, wie viele Namen in ein Verzeichnis passen.
+
+
+Empfehlungen zum Design und Betrieb finden Sie unter link:high-file-count-workloads-14-best-practices.html["Best Practices für NAS-Workloads mit hoher Dateianzahl"].
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-12-maxfiles-monitoring.html["← Zurück: Überwachung von Maxfiles, EMS-Ereignissen und ONTAP Erweiterungen"] | link:high-file-count-workloads-14-best-practices.html["Als Nächstes: Best Practices für NAS-Workloads mit hoher Dateianzahl →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:high-file-count-workloads-09-maxfiles.html["ONTAP Inode-Typen"]
+* link:high-file-count-workloads-03-maxdirsize-view.html["maxdir-size und aktuelles Verzeichnis Größe anzeigen"]
+* link:https://docs.netapp.com/us-en/ontap/volumes/display-file-inode-usage-task.html["Ermitteln der Datei- und Inode-Nutzung für ein ONTAP Volume"^]
+* link:https://www.netapp.com/pdf.html?item=/media/12385-tr4571.pdf["TR-4571: NetApp ONTAP FlexGroup Volumes"^]
+

@@ -1,0 +1,128 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-03-maxdirsize-view.html 
+keywords: ONTAP, NAS, maxdir-size, maxdirsize, volume show, stat, find, XCP, SMB, EMS 
+summary: Die maximale Verzeichnisgröße in ONTAP anzeigen, eine Verzeichnisdatei von NFS, SMB oder XCP messen und EMS-Datei-IDs in Pfade auflösen. 
+---
+= maxdir-size und aktuelles Verzeichnis Größe anzeigen
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+Das Feld „Volume“ `maxdir-size` gibt die zulässige Obergrenze für jedes Verzeichnis im Volume an. Für die Messung eines einzelnen Verzeichnisses ist die Prüfung dieses Verzeichnisobjekts erforderlich, nicht der im Volume verwendeten Daten.
+
+
+
+[[view-the-configured-cap]]
+== Anzeigen der konfigurierten Obergrenze
+
+[listing]
+----
+set -privilege advanced
+volume show -vserver <svm> -volume <volume> -fields maxdir-size
+----
+Hier wird die Begrenzung pro Verzeichnis angegeben, nicht die Größe eines bestimmten Verzeichnisses.
+
+
+
+[[view-the-directory-file-from-an-nfs-client]]
+== Anzeigen der Verzeichnisdatei von einem NFS-Client
+
+Es gibt keine ONTAP-Befehle, die die Größe eines einzelnen Verzeichnisses direkt ausgeben, daher muss der Wert von einem Client oder mit einem externen Tool abgefragt werden. Ein NFS-Client ist die bevorzugte Client-seitige Methode, wenn die genaue Größe eines Verzeichnisobjekts erforderlich ist.
+
+Auf einem eingebundenen NFS-Pfad von einem GNU/Linux-Client aus wird  `stat` oder eine lange Verzeichnisauflistung des Verzeichnisobjekts selbst verwendet:
+
+[listing]
+----
+stat -c '%n %s bytes' /mount/path/directory
+ls -ld /mount/path/directory
+----
+Dies sollte nicht  `du`für diesen Zweck verwendet werden. `du` meldet Daten, die unterhalb des Verzeichnisses erreichbar sind, während  `maxdir-size` auf die Metadatendatei des Verzeichnisses selbst zutrifft.
+
+Um die größten Verzeichnisse unter einem Mountpunkt zu finden, kann ein  `find` ausgeführt werden, der Blattverzeichnisse nach Größe auflistet und Snapshot-Kopien ausklammert. Der folgende Befehl gibt die 10 größten Verzeichnisse zurück:
+
+[listing]
+----
+find /mountpoint -name .snapshot -prune -o -type d -ls -links 2 -prune | sort -rn -k 7 | head
+----
+Die siebte Spalte gibt die Größe der Verzeichnisdatei in Bytes an; ein Verzeichnis mit dem Standardwert von 320 MB wird als 335.544.320 Bytes angezeigt. Dies funktioniert selbst bei Verzeichnissen mit Millionen von Dateien schnell.
+
+
+
+[[view-directory-size-from-an-smb-client]]
+== Anzeigen der Verzeichnisgröße von einem SMB-Client
+
+Windows und SMB-Clients geben die eigene Metadatengröße eines Verzeichnisses nicht preis, daher gibt es kein direktes SMB-Äquivalent zu `stat` oder `ls -ld` für `maxdir-size`:
+
+* `dir`führt ein Verzeichnis als `<DIR>` ohne eigene Größenangabe auf.
+* Im Dialogfeld „Eigenschaften“ eines Ordners im Datei-Explorer wird die Gesamtgröße der unterhalb des Ordners enthaltenen Daten (entspricht `du`) angezeigt, nicht die Metadatendatei des Verzeichnisses.
+
+
+Zum Messen der Verzeichnisgröße für ein über SMB bereitgestelltes Dataset steht stattdessen eine der folgenden Methoden zur Verfügung:
+
+* Wenn das Volume auch NFS zulässt, mounten Sie es und verwenden Sie die oben genannten  `stat`,  `ls -ld` oder  `find` Methoden.
+* Mit NetApp XCP kann eine SMB-Freigabe direkt gescannt werden (siehe folgenden Abschnitt).
+
+
+
+
+[[scan-directory-sizes-with-xcp]]
+== Verzeichnisgrößen mit XCP scannen
+
+NetApp XCP durchsucht ein Dateisystem parallel und meldet Verzeichnisgrößen und -anzahlen, was insbesondere bei großen oder FlexGroup Datensätzen hilfreich ist. Es funktioniert sowohl mit NFS-Exports als auch mit SMB-Freigaben. XCP durchsucht das gesamte Dateisystem, bevor Treffer zurückgegeben werden, daher sollte bei Datensätzen mit vielen Dateien ausreichend Zeit eingeplant werden.
+
+
+NOTE: XCP 1.5 hat das Tool in Unterbefehle wie  `scan` und  `diag` neu organisiert. Ab XCP 1.5 und höher ist die Form  `xcp scan` zu verwenden. In früheren Releases werden dieselben Optionen  `-match` und  `-fmt` direkt ohne das Verb  `scan` verwendet, zum Beispiel  `xcp -match "type == d" -fmt "..." <host>:/<export>`.
+
+Drucken eines Baumstatistikberichts, der die Anzahl der Einträge im größten Verzeichnis (angezeigt als `Dirsize`) sowie die Anzahl der Dateien und Verzeichnisse enthält:
+
+[listing]
+----
+xcp scan -stats <host>:/<export>
+----
+Jedes Verzeichnis wird mit seiner Verzeichnisdateigröße in Byte aufgeführt, beginnend mit dem größten. Bei einem Verzeichnisobjekt entspricht der  `used`Wert der Größe der Verzeichnismetadaten, die durch  `maxdir-size`begrenzt wird:
+
+[listing]
+----
+xcp scan -match "type == d" -fmt "'{} {}'.format(used, x)" <host>:/<export> | sort -rn
+----
+Fügen Sie  `-csv` oder  `-html` hinzu, um anstelle der abgekürzten Konsolensummen einen Bericht mit exakten Werten zu speichern.
+
+Um den Scan auf Verzeichnisse oberhalb einer ausgewählten Anzahl von Einträgen zu beschränken, wird  `xcp diag find` verwendet. Das folgende Beispiel listet Verzeichnisse mit mehr als 2.000 Einträgen auf (adaptiert von link:https://www.netapp.com/pdf.html?item=/media/12385-tr4571.pdf["TR-4571: NetApp ONTAP FlexGroup Volumes"^]):
+
+[listing]
+----
+xcp diag find --branch-match True -fmt "'{size} {name}'.format(size=x.digest, name=x)" <host>:/<export> 2>/dev/null | awk '{if ($1 > 2000) print $1 " " $2}'
+----
+
+
+[[locate-a-directory-reported-by-ems]]
+== Ein von EMS gemeldetes Verzeichnis lokalisieren
+
+Das EMS-Ereignis „maxdir-size“ enthält eine Volume- und eine Datei-ID. Dieser Inode kann mit folgendem Befehl in einen Pfad aufgelöst werden:
+
+[listing]
+----
+volume file show-inode -vserver <svm> -volume <volume-or-constituent> -inode-number <file-id>
+----
+Die gemeldete Datei-ID gehört zu dem Verzeichnis, das den Grenzwert erreicht hat oder sich ihm genähert hat, nicht zu der Datei, deren Erstellung fehlgeschlagen ist.
+
+
+NOTE: Bei einer FlexGroup `volume file show-inode` erfolgt der Vorgang für einen Bestandteil und nicht für den FlexGroup Namen. Als Beispiel ist der im EMS-Ereignis genannte Bestandteil  `fg__0024` zu verwenden.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-02-maxdirsize.html["← Zurück: Maxdir-Größe und große ONTAP Verzeichnisse"] | link:high-file-count-workloads-04-maxdirsize-indexing.html["Als Nächstes: Indizierung von Verzeichnissen in ONTAP →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:high-file-count-workloads-07-maxdirsize-features-ems.html["Funktionen, EMS und Überwachung für maxdir-size"]
+* link:https://docs.netapp.com/us-en/ontap-cli/volume-file-show-inode.html[`volume file show-inode` Befehlsreferenz^]
+

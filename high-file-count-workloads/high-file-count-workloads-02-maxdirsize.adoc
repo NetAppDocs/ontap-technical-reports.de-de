@@ -1,0 +1,172 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-02-maxdirsize.html 
+keywords: ONTAP, NAS, maxdir-size, maxdirsize, directory file, filename 
+summary: Informationen dazu, was ONTAP maxdir-size misst und wie die Verzeichnisdateigröße berechnet wird. 
+---
+= Maxdir-Größe und große ONTAP Verzeichnisse
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+`maxdir-size` begrenzt die Größe jeder Verzeichnisdatei in einem ONTAP Volume, indem die Kapazität begrenzt wird, die für die Namen in diesem Verzeichnis zugewiesen werden kann. Dies ist unabhängig vom  `maxfiles` Inode-Limit des Volumes, und es gibt keine statisch definierbare Begrenzung für die Anzahl der Namen in einem einzelnen Verzeichnis, da dieser Wert variabel ist und auf einer Reihe von Faktoren wie Namenslänge, Zeichentypen usw. basiert. Einzelheiten finden Sie unter link:high-file-count-workloads-02-maxdirsize.html#estimating-the-number-of-names-per-directory-file["Schätzung der Anzahl der Namen pro Verzeichnisdatei"].
+
+
+
+[[what-is-a-directory-in-ontap]]
+== Was ist ein Verzeichnis in ONTAP?
+
+Ein WAFL Verzeichnis ist eine Metadatendatei, die Namen Inode-Nummern zuordnet. Seine Größe ist nicht die Summe der in den Dateien unter diesem Verzeichnis gespeicherten Daten, sondern hängt davon ab, wie viele Namen das Verzeichnis enthält und wie viel Verzeichnisspeicher jeder dieser Namen benötigt. Ein neu erstelltes Verzeichnis beginnt bei 4 KiB und wächst in 4 KiB Verzeichnisblöcken, wenn Einträge hinzugefügt werden.
+
+Das Verzeichnis belegt einen Inode, dessen Eintrag in der Volume-Level-Inode-Datei gespeichert wird (die konzeptionell und funktional separat ist). Die Namen des Verzeichnisses werden in den eigenen Datenblöcken dieses Verzeichnisses gespeichert. Das Hinzufügen weiterer Namen vergrößert die einzelne Verzeichnisdatei und kann sich der  `maxdir-size` Grenze nähern, während das Erstellen weiterer Dateisystemobjekte (wie Dateien, Verzeichnisse, ACLs und benannte Streams) mehr Inode-Einträge belegt und die Volume-Level-Inode-Datei in Richtung der  `maxfiles` Grenzen wachsen lassen kann. Die Anzahl der Namenseinträge in einem einzelnen 4KiB-Verzeichnisblock wird dadurch bestimmt, wie jeder Name gespeichert werden muss, was von seiner Länge und Zeichenkodierung abhängt.
+
+
+
+[[directory-block-layout]]
+=== Verzeichnisblock-Layout
+
+Eine ONTAP Verzeichnisdatei wächst in 4-KiB-Blöcken, wobei jeder Block auf eine variable Anzahl von Eintragsdatensätzen und Namenssegmenten beschränkt ist, abhängig von deren jeweiliger Größe. Ein Namenssegment in ONTAP ist ein 16-Byte-Slot, der einen Teil eines Dateinamens speichert; jeder Name belegt einen Eintragsdatensatz plus so viele 16-Byte-Segmente, wie seine codierte Länge erfordert.
+
+Beispiel dafür, wie Namensfragmente auf einen 48 Byte langen Namen verteilt werden:
+
+[link=../media/high-file-count-workloads/directory-name-chunks-48-byte.png]
+image::directory-name-chunks-48-byte.png[Diagramm eines 48 Byte großen Dateinamens, gespeichert als drei 16 Byte große Namensblöcke plus ein 16 Byte großer Unicode-Kurzform-Overhead-Block]
+
+
+
+[[max-number-of-directory-blocks-and-maximum-number-of-names]]
+=== Maximale Anzahl von Verzeichnisblöcken und maximale Anzahl von Namen
+
+Die maximal zulässige Anzahl von Verzeichnisblöcken wird durch den  `maxdir-size`Wert bestimmt.
+
+Bei einer Verzeichnisgröße von 320 MB können bis zu 81.920 Verzeichnisblöcke zugewiesen werden (320 MB / 4 KiB, wobei 320 MB 335.544.320 Byte entsprechen, da ONTAP diese Werte in binären Einheiten angibt). Die Gesamtzahl der im Verzeichnis zulässigen Namen hängt somit von der Anzahl der Einträge pro Verzeichnisblock ab.
+
+
+
+==== Wie Verzeichnisblöcke aufgebaut sind
+
+Jeder 4-KiB-Verzeichnisblock ist auf dieselbe Weise unterteilt:
+
+* Bis zu 128 Eintragsdatensätze mit je 12 Byte (1536 Byte)
+* Ein gemeinsamer Pool von 160 Namensblöcken zu je 16 Byte (2560 Byte)
+
+
+Zusammen belegen diese einen 4-KiB-Block. Jeder gespeicherte Name benötigt einen Eintragssatz und einen oder mehrere Namensblöcke, und je nachdem, welcher Pool zuerst erschöpft ist, die 128 Eintragssätze oder die 160 Namensblöcke, wird bestimmt, wie viele Namen dieser Block aufnehmen kann. Bei ASCII-Namen sind es die Namensblöcke, die zuerst erschöpft sind. Daher ist weder  `maxdir-size / filename-length` noch ein festes Verhältnis von Dateien pro Megabyte exakt.
+
+In der folgenden Grafik sehen wir den 48 Byte langen Namen aus dem vorherigen Beispiel. Dieser eine Name belegt einen einzelnen 12 Byte langen Eintrag sowie die vier zuvor gezeigten 16 Byte langen Namensblöcke (64 Byte).
+
+[link=../media/high-file-count-workloads/directory-block-4kib-layout.png]
+image::directory-block-4kib-layout.png[Diagramm eines 4 KiB großen Verzeichnisblocks, das den 48 Byte langen Unicode-Kurznamen unter Verwendung eines 12 Byte langen Eintragsdatensatzes und vier 16 Byte langen Namensblöcken zeigt]
+
+{nbsp}
+
+Der 160-Chunk-Pool wird im Block keinen Speicherplatz mehr haben, bevor die Eintragsdatensätze verbraucht sind. 160 Chunks insgesamt / 4 Chunks ergeben 40 dieser Namen pro Block. Alternativ bleiben 88 der 128 Eintragsdatensätze ungenutzt. Ein kürzerer alltäglicher Name würde nur drei Chunks benötigen, sodass derselbe 4 KiB Verzeichnisblock stattdessen etwa 53 dieser Namen aufnehmen kann. Dies veranschaulicht, wie die Größe eines Namens die Anzahl der in einem einzelnen Verzeichnis zulässigen Namen direkt beeinflussen kann.
+
+
+
+[[estimating-the-number-of-names-per-directory-file]]
+=== Schätzung der Anzahl der Namen pro Verzeichnisdatei
+
+Um grob abzuschätzen, wie viele Namen in ein Verzeichnis passen, lässt sich zunächst ermitteln, wie viele Namen in einen einzelnen 4 KiB Block passen, und diese Zahl dann mit der Anzahl der Blöcke multiplizieren, die die Obergrenze zulässt. (Zur Erinnerung: Bei einer Obergrenze von 320 MB sind das 81.920 Blöcke.)
+
+Wie viele Namen in einen Block passen, hängt davon ab, wie viel Platz jeder Name im Block belegt. Kürzere, einfachere Namen benötigen weniger Platz, sodass mehr davon hineinpassen; längere Namen oder Namen, die ONTAP in einer breiteren Form speichern muss, benötigen mehr Platz und lassen Raum für weniger Namen.
+
+* Alltägliche Namen mit bis zu etwa 32 Zeichen (zum Beispiel `report-2026.csv`) werden alle gleich gepackt, und ungefähr 53 passen in einen Block.
+* Längere Namen passen in weniger Blöcke, beispielsweise passt ein 48-stelliger Name in etwa 40 Blöcke.
+* Namen, die in einer längeren Form gespeichert werden müssen, benötigen etwa doppelt so viel Speicherplatz, sodass weniger davon hineinpassen. Dies gilt für Namen mit Nicht-ASCII-Zeichen (z. B. Akzentzeichen oder ostasiatische Schrift), Namen, die zusätzlich einen alternativen NFS-Namen tragen, und FlexGroup Remote-Einträge. Ein 32 Zeichen langer Name dieser Art passt aufgrund des für Sonderzeichen erforderlichen Speicherplatzes nur etwa 26 Mal pro Block. Wenn SMB neben dem langen Namen auch einen kurzen „8.3“-Alias generiert, benötigt dieser ebenfalls zusätzlichen Speicherplatz.
+
+
+Ältere Volumes, die ältere DOS-Namen im Format „8.3“ speichern, können bis zu 128 Einträge pro Block aufnehmen, da diese Namen so klein sind (weniger Bytes). Dieses Verhalten tritt bei modernen Volumes mit normalen Namen jedoch nicht auf. Der Grund dafür ist, dass aktuelle ONTAP Volumes Namen im Unicode-Format (standardmäßig C.UTF-8) speichern, damit sie lange Dateinamen und internationale Zeichen über NFS und SMB unterstützen können, statt der achtstelligen DOS-Namen, auf die sich viel ältere Systeme stützten. Weitere Details zu Volume-Sprachen enthält <insert link here>.
+
+Da Namen sehr unterschiedlich sein können, gibt es keine feste maximale Anzahl von Dateien, die in einem Verzeichnis zulässig ist. Ein nützlicher Planungswert sind bis zu etwa 4,3 Millionen gewöhnliche Namen bei einer Einstellung von 320 MB für ein FlexVol volume. Gewöhnliche Namen bedeutet hier bis zu etwa 32 ASCII-Zeichen. Dies ist ein grobes Beispiel, keine Garantie, und es setzt nicht voraus, dass Namen eine bestimmte Länge haben. Die folgende Tabelle zeigt einige häufige Fälle und die ungefähre Anzahl von Namen, die jeweils in einem einzelnen Verzeichnis bei einer Einstellung von 320 MB zulässig sind.
+
+[cols="3,3,1,2"]
+|===
+| Profil benennen | Beispieldateiname | Namen pro 4 KiB-Block | Namen in einem Verzeichnis bei 320 MB 
+
+
+| Kurzer, alltagstauglicher Name (8 Zeichen) | `f0001.db` | 53 | 4.341.758 
+
+
+| Alltagsname (32 Zeichen) | `project-alpha-run0142-input1.dat` | 53 | 4.341.758 
+
+
+| Längerer Name (48 Zeichen) | `run-2026-09-21-node07-sensor-array-01423.parquet` | 40 | 3.276.798 
+
+
+| Name mit Nicht-ASCII-Zeichen oder ein FlexGroup Eintrag (32 Zeichen) | `résumé-final-2026-09-21-v03.docx` | 26 | 2.129.918 
+
+
+| Name, der auch einen alternativen NFS-Namen (32 Zeichen) trägt | `Marketing-Overview-2026Q3v2.pptx` mit Alternative  `MARKET~1.PPT` | 22 | 1.802.238 
+|===
+*Hinweis:* Die Zählungen setzen voraus, dass die  `.`- und  `..`-Einträge vorhanden sind. Daher ist jeder Wert etwas kleiner als das, was die Mathematik ergeben würde.
+
+Zusammenfassend reicht dieselbe Obergrenze von 320 MB für etwa 4,3 Millionen kurze, gebräuchliche Namen aus, aber für weniger als die Hälfte davon, wenn die Namen in einer breiteren Form gespeichert werden. Wenn jeder Name die maximale Protokolllänge von 255 Zeichen erreicht, wären nur etwa 737.000 Namen zulässig.
+
+
+
+[[filename-length-compared-with-path-length]]
+=== Dateinamenlänge im Vergleich zur Pfadlänge
+
+ `maxdir-size` berücksichtigt den im jeweiligen übergeordneten Verzeichnis gespeicherten Basisnamen. Der vollständige absolute Pfad wird nicht mit jedem Eintrag gespeichert. Jede Pfadkomponente ist ein Eintrag in ihrem eigenen übergeordneten Verzeichnis. Daher würden tiefere Verzeichnisstrukturen die  `maxdir-size`Nutzung nicht erhöhen.
+
+Eine tiefere Hierarchie fügt dem Volume Verzeichnisse und öffentliche Inodes hinzu, reduziert aber die Anzahl der in jedem Verzeichnis gespeicherten Namen. Dieser Kompromiss verbessert in der Regel die Skalierbarkeit und die Gesamtleistung.
+
+*Hinweis:* Protokoll- und Client-Pfadlängenbeschränkungen gelten weiterhin unabhängig voneinander.
+
+
+
+[[how-the-maxdir-size-cap-behaves]]
+== Wie sich die maxdir size Beschränkung verhält
+
+Die Begrenzung gilt unabhängig für jedes Verzeichnis im Volume und stellt eine Einschränkung, keine Reservierung dar. Eine Einstellung von 320 MB reserviert nicht sofort 320 MB Volume-Kapazität, sondern erlaubt lediglich, dass jedes einzelne Verzeichnis bis zu dieser Größe anwachsen kann.
+
+Nachfolgend sind einige Überlegungen aufgeführt:
+
+* Wenn eine Verzeichnisdatei auf 320 MB an Blöcken anwächst, belegen diese Blöcke 320 MB der tatsächlichen Kapazität des Volume.
+* Sobald eine Verzeichnisdatei anwächst, bleibt ihre Größe auf diesem Höchststand, selbst wenn später Einträge entfernt werden.
+* Durch das Löschen von Dateien oder Verzeichnissen werden diese Eintragsplätze wiederverwendbar, die Verzeichnisdatei wird dadurch jedoch nicht komprimiert.
+* Indizierte Verzeichnisse können vollständig leere 4-KiB-Blöcke ausstanzen (verfügbar in ONTAP 9.5 und höher) und diese physischen Blöcke auf der Festplatte freigeben, die gemeldete Verzeichnisdateigröße verringert sich dadurch jedoch normalerweise nicht.
+
+
+*Hinweis:* Der von ONTAP für große Verzeichnisse erstellte Begleitverzeichnisindex belegt eigene Metadatenkapazität und einen Inode, ist aber nicht Teil der Verzeichnisdatei und wird daher nicht auf  `maxdir-size` angerechnet. Wenn der Index so konfiguriert ist, dass er öffentlichen Inode-Speicherplatz für SnapMirror-Replikationszwecke belegt, wird er stattdessen auf  `maxfiles` (das Limit für öffentliche Inodes) angerechnet.
+
+Weitere Informationen finden Sie unter link:high-file-count-workloads-04-maxdirsize-indexing.html["Verzeichnisindizierung in ONTAP"].
+
+
+
+[[raising-the-maxdir-size-value]]
+=== Erhöhen des Werts maxdir-size
+
+* Gilt für alle Verzeichnisse im Volume
+* Ermöglicht es Verzeichnisdateien, über die bisherige Obergrenze hinaus zu wachsen
+* Das neue Maximum wird nicht vorab zugewiesen oder reserviert
+* Fügt keine öffentlichen Inodes hinzu und ändert  `maxfiles`sie nicht
+* Bewirkt nicht, dass ein bestehendes Verzeichnis sofort Speicherplatz belegt
+
+
+Informationen dazu, wie die konfigurierte Obergrenze und die aktuelle Größe eines Verzeichnisses überprüft werden können, finden Sie unter link:high-file-count-workloads-03-maxdirsize-view.html["maxdir-size und aktuelles Verzeichnis Größe anzeigen"].
+
+
+
+[[do-flexgroup-volumes-bypass-maxdir-size-limitations]]
+== Umgehen FlexGroup Volumes die Beschränkungen von maxdir-size?
+
+Nein. Eine FlexGroup multipliziert die Größe eines Verzeichnisses  `maxdir-size` nicht mit der Anzahl der Constituents. Die Verzeichnisdatei befindet sich weiterhin auf einem einzelnen Constituent, und Remote-Einträge können dazu führen, dass diese Datei schneller wächst als dieselben Namen auf einem FlexVol. Informationen zu Platzierung, Remote-Entry-Inflation und Planungswerten finden sich unter link:high-file-count-workloads-06-maxdirsize-volume-types.html#flexgroup-volumes["FlexGroup Volumes"].
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-01-overview.html["← Vorheriger Beitrag: NetApp ONTAP Workloads mit hoher Dateianzahl für NAS Volumes"] | link:high-file-count-workloads-03-maxdirsize-view.html["Weiter: Maximale Verzeichnisgröße und Größe des aktuellen Verzeichnisses anzeigen →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:high-file-count-workloads-06-maxdirsize-volume-types.html["Überlegungen zu Volumes"]
+* link:https://docs.netapp.com/us-en/ontap/volumes/cautions-increasing-maximum-directory-size-concept.html["Maximale Verzeichnisgröße für FlexVol volumes"^]
+

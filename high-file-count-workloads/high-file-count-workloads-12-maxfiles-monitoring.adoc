@@ -1,0 +1,108 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-12-maxfiles-monitoring.html 
+keywords: ONTAP, NAS, maxfiles, EMS, files-used, inodefile-public-capacity, monitoring 
+summary: Überwachung der ONTAP maxfiles Nutzung, Interpretation von Inode EMS Ereignissen und Prüfung der Verbesserungen der neuen Version. 
+---
+= Überwachung von Maxfiles, EMS-Ereignissen und ONTAP Erweiterungen
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+Sowohl die aktuelle Nutzung öffentlicher Inodes als auch die zugewiesene Auslastungsgrenze der öffentlichen Inode-Datei werden überwacht. EMS-Ereignisse dienen zur Erkennung von Erschöpfung und Ungleichgewichten zwischen den Bestandteilen.
+
+
+
+[[ems-messages-related-to-maxfiles]]
+== EMS-Meldungen im Zusammenhang mit maxfiles
+
+
+
+[[callhome-no-inodes]]
+=== `callhome.no.inodes`
+
+Dieses ERROR-Ereignis weist darauf hin, dass dem Volume die Inodes ausgegangen sind. Neue Dateisystemobjekte können erst erstellt werden, wenn Inodes verfügbar sind oder der konfigurierte Maximalwert erhöht wird. Vor dem Ändern des Grenzwerts sollten  `files`, `files-used`, `files-maximum-possible` und die Volume-Kapazität überprüft werden.
+
+
+
+[[flexgroup-constituent-events]]
+=== FlexGroup konstituierende Ereignisse
+
+* `fg.inodes.member.nearlyFull` gibt an, dass bei einem Konstituenten die Inodes fast erschöpft sind. ONTAP leitet weniger Erstellungen an diesen Konstituenten weiter, was sich potenziell auf die Verteilung und Leistung auswirken kann.
+* `fg.inodes.member.full` weist darauf hin, dass einem Bestandteil die Inodes ausgegangen sind und er keine neuen Dateien mehr annehmen kann.
+* `fg.inodes.member.allOK` bedeutet, dass die Bedingungen, die die Ereignisse „beinahe voll“ oder „voll“ ausgelöst haben, nicht mehr zutreffen.
+
+
+Bei FlexGroup Ereignissen sollten sowohl die Verteilung der Constituents als auch die Gesamtwerte auf FlexGroup Ebene untersucht werden. Die Dateikontingentgrenze für FlexGroup sollte erhöht werden, anstatt  `files` direkt für nur einen Constituent festzulegen. Ein Constituent, dessen *Daten*-Kapazität erschöpft ist, kann dazu führen, dass die gesamte FlexGroup  `ENOSPC` meldet und sogar bei  `ls` fehlschlägt; siehe link:high-file-count-workloads-10-maxfiles-limits.html#flexgroup-constituent-out-of-space["FlexGroup Bestandteil ohne freien Speicherplatz"].
+
+
+
+[[monitoring-example]]
+== Überwachungsbeispiel
+
+Mit der CLI lassen sich die öffentliche Obergrenze und die aktuelle Nutzung anzeigen:
+
+[listing]
+----
+volume show -vserver <svm> -volume <volume> -fields files,files-used
+----
+Bei erweiterten Berechtigungen sollten der maximal mögliche Wert und die zugewiesene öffentliche Inode-Dateikapazität angegeben werden:
+
+[listing]
+----
+set -privilege advanced
+volume show -vserver <svm> -volume <volume> -fields files,files-used,files-maximum-possible,files-set-maximum,inodefile-public-capacity
+
+volume show-space -vserver <svm> -volume <volume>
+----
+Mithilfe der REST API können die öffentliche `files` Obergrenze und die aktuelle Nutzung abgerufen werden:
+
+[listing]
+----
+GET /api/storage/volumes?name=<volume>&fields=files
+----
+Die REST `files.maximum`- und `files.used` Felder entsprechen CLI `files`- und `files-used`. Das erweiterte CLI-Feld wird für `inodefile-public-capacity` verwendet.
+
+`files-used` umfasst öffentliche ACL-Inodes, benannte Streams, Stream-Verzeichnisse, öffentliche Verzeichnisindizes und andere öffentliche Objekte. `volume show` stellt keinen separaten ACL-Inode-Zähler bereit.
+
+Sowohl die aktuelle Nutzung als auch die Inode-Dateikapazität werden erfasst. Ein niedriger `files-used` Wert nach einer großen Löschung bedeutet nicht, dass die Inode-Dateikapazität wiederhergestellt wurde.
+
+
+
+[[ontap-functionality-and-enhancements-related-to-maxfiles]]
+== ONTAP Funktionalität und Erweiterungen im Zusammenhang mit maxfiles
+
+|===
+| ONTAP Release | Funktionalität 
+
+
+| Frühere ONTAP 9 Versionen | Administratoren können  `files` und  `files-used` prüfen und einen bestimmten  `-files`Wert festlegen. Der standardmäßige automatische Wert stieg in der Vergangenheit nicht über 21,251,126 hinaus, wenn die Volume-Größe etwa 680 GB erreichte; dies war ein Plateau der Standardgröße, nicht der maximal konfigurierbare Wert. 
+
+
+| ONTAP 9.9.1 | Hinzugefügt wurde `-files-set-maximum true`, eine einmalige Aktion, die `files` auf den aktuellen `files-maximum-possible` festlegt. Siehe link:high-file-count-workloads-11-maxfiles-controlling.html#setting-files-to-the-maximum-up-front["Dateien von Anfang an auf die maximale Größe einstellen"]. 
+
+
+| ONTAP 9.13.1 | Die automatische Standard-Inode-Größenanpassung wird fortgesetzt, wenn volumes über das frühere Plateau von etwa 21 Millionen hinauswachsen. 
+
+
+| ONTAP 9.17.1 | Die Option zum Platzieren und Migrieren von directory-index inodes in den öffentlichen Inode-Bereich wurde hinzugefügt. Siehe link:high-file-count-workloads-04-maxdirsize-indexing.html#about-private-and-public-index-inodes["Über private und öffentliche Index-Inodes"]. 
+|===
+Die Unterstützung und die Beschränkungen können je nach Plattform und volume type variieren. Das Verhalten kann in der Befehlsreferenz für die verwendete ONTAP Version überprüft werden.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-11-maxfiles-controlling.html["← Zurück: Maxfiles steuern"] | link:high-file-count-workloads-13-planning.html["Als Nächstes: Planungsansatz →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:https://docs.netapp.com/us-en/ontap/volumes/display-file-inode-usage-task.html["Ermitteln der Datei- und Inode-Nutzung für ein ONTAP Volume"^]
+* Link:https://docs.netapp.com/us-en/ontap-ems/callhome-no-events.html[`callhome.no.inodes` EMS-Referenz^]
+* link:https://docs.netapp.com/us-en/ontap-ems/fg-inodes-events.html["FlexGroup inode EMS-Ereignisse"^]
+

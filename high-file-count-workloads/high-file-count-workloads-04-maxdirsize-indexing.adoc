@@ -1,0 +1,104 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-04-maxdirsize-indexing.html 
+keywords: ONTAP, NAS, directory indexing, sparse directory, hole punching, SnapMirror 
+summary: ONTAP Indizierung, öffentliche und private Index-Inodes sowie das Lochstanzen in Sparse-Directory-Systemen werden erläutert. 
+---
+= Verzeichnisindizierung in ONTAP
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+ONTAP indiziert große Verzeichnisse automatisch, sodass gezielte Suchvorgänge nicht die gesamte Verzeichnisdatei auf einmal lesen müssen. Die Indizierung ist getrennt von  `maxdir-size` und ändert die maximale Begrenzung der Verzeichnisdatei nicht.
+
+
+
+[[why-directory-indexing-exists]]
+== Warum die Verzeichnisindizierung existiert
+
+Ein Index in der Informatik ist eine Hilfsstruktur, die die Frage „Wo befindet sich das?“ beantwortet, ohne jeden einzelnen Datensatz durchsuchen zu müssen. Ein bekanntes Beispiel ist das Register eines Buches: Man sucht einen Begriff und springt direkt zur entsprechenden Seite, anstatt das ganze Buch zu lesen. Datenbanken, Suchmaschinen und Dateisysteme nutzen dasselbe Prinzip, damit eine Suche auch bei wachsender Sammlung wenig Aufwand verursacht. Der Index ist keine zweite Kopie der Daten. Er ist eine Zuordnung von einem Schlüssel, beispielsweise einem Namen, zum Speicherort des entsprechenden Eintrags.
+
+Ein Verzeichnis ist eine Namensliste. Ohne Index kann die Suche nach einem Namen das Durchsuchen eines großen Teils dieser Liste erfordern. Der Verzeichnisindex von ONTAP ist die Dateisystem-Entsprechung dieser Abkürzung.
+
+Ohne einen persistenten Index kann das Auffinden eines Namens das Lesen vieler Verzeichnisblöcke und das Erstellen eines In-Memory-Hashs erfordern. Ab ONTAP 9.2 erstellt ONTAP automatisch einen zugehörigen Verzeichnisindex-Inode, sobald eine Verzeichnisdatei auf etwa 2 MiB anwächst.
+
+Der persistente Index ordnet den Speicherort von Einträgen in der Verzeichnisdatei zu. Eine gezielte Suche kann daher den erforderlichen Index und bestimmte Verzeichnisblöcke lesen, anstatt die gesamte Verzeichnisdatei in den Speicher zu laden. Die Indizierung reduziert im Allgemeinen CPU-, Speicher- und E/A-Aufwand für suchorientierte Vorgänge in großen Verzeichnissen, wodurch zusätzlich zum Inhalt des großen Verzeichnisses mehr Knotenressourcen für andere Workloads frei werden.
+
+[link=../media/high-file-count-workloads/directory-file-index.png]
+image::directory-file-index.png[Flussdiagramm, das eine Client-Namensoperation für eine Verzeichnisdatei unter 2 MiB zeigt, die durch einen vollständigen Scan beantwortet wird]
+
+Es ist keine Administratoroption erforderlich, um die Verzeichnisindizierung zu aktivieren; sie ist standardmäßig aktiviert. Ein Verzeichnis kommt erst dann für einen persistenten Index infrage, wenn seine Verzeichnisdatei die Schwelle von etwa 2 MiB überschreitet. Sobald diese Bedingung erfüllt ist, kann die Indexerstellung durch den Vorgang initiiert werden, der das Verzeichnis über die Schwelle hinaus wachsen lässt, durch einen Indizierungsscanner oder durch eine entsprechende Frontend Namensoperation wie LOOKUP, ACCESS, ein pfadbasiertes Öffnen oder Erstellen, Umbenennen oder Entfernen. Diese Scanner- und Frontend-Trigger setzen die Größenschwelle nicht außer Kraft und erstellen keine persistenten Indizes für kleinere Verzeichnisse. Der Punkt bei etwa 2 MiB verändert, wie gezielte Suchvorgänge bedient werden. Dabei handelt es sich nicht um eine Latenzschwelle für die Verzeichnisgröße. Wie sich wachsende Verzeichnisse im Verhalten von Clients und Knoten zeigen, ist in link:high-file-count-workloads-05-maxdirsize-impact.html#performance-impact["Auswirkungen auf die Leistung"] beschrieben.
+
+
+
+[[what-indexing-does-not-change]]
+== Was sich durch die Indizierung nicht ändert
+
+Der Verzeichnisindex ist von der Verzeichnisdatei getrennt. Folgendes gilt trotz des Vorhandenseins eines Verzeichnisindex weiterhin:
+
+* `maxdir-size` begrenzt die Größe der Verzeichnisdatei weiterhin.
+* Der Begleitindex benötigt zusätzliche Metadaten und einen Inode, hat aber keinen Einfluss auf die Verzeichnisgröße.
+* Die Indizierung verbessert die gezielte Suche im Vergleich zur vollständigen Verzeichnisaufzählung.
+* Wildcard-Scans und  `READDIR` verarbeiten weiterhin den gesamten Verzeichnis-Namensraum.
+* Der Verlust oder die Neuerstellung des Index entfernt nicht die Namen des Verzeichnisses; ONTAP kann ihn aus der Verzeichnisdatei rekonstruieren.
+
+
+
+
+[[about-private-and-public-index-inodes]]
+== Über private und öffentliche Index-Inodes
+
+Jedes indizierte Verzeichnis verfügt über einen eigenen Index; Verzeichnisindizes werden nicht gemeinsam genutzt. Ein Volume kann daher für jedes Verzeichnis, das die Schwelle von ca. 2 MiB überschreitet, einen Index enthalten. Verzeichnisse unterhalb dieser Schwelle verbleiben auf dem nicht persistenten Suchpfad und erhalten keinen zugehörigen Verzeichnisindex-Inode, selbst wenn Scanner- oder Frontend-Operationen darauf zugreifen. Ob Indizes für berechtigte Verzeichnisse auf `maxfiles` angerechnet werden, hängt davon ab, ob es sich um private oder öffentliche Verzeichnisse handelt, wie hier beschrieben.
+
+Standardmäßig befinden sich Verzeichnisindizes traditionell im privaten Inode-Bereich. Private Verzeichnisindex-Inodes werden bei SnapMirror Übertragungen nicht berücksichtigt, sodass ONTAP die Indizes am Zielort nach der Aktivierung oder Wiederherstellung bei Bedarf neu erstellt.
+
+Ab ONTAP 9.17.1 verschiebt die Option auf Volume-Ebene `-is-dir-index-transfer-enabled true` Verzeichnisindizes in den öffentlichen Inode-Bereich, sodass unterstützte SnapMirror- und SnapMirror Cloud-Workflows sie übertragen können. Wenn die Option `true` aktiviert ist, werden neue Indizes im öffentlichen Inode-Bereich erstellt, und ein Scanner migriert vorhandene private Indizes. Dies kann den Aufwand für die Indexerstellung nach der Wiederherstellung reduzieren, jedoch belegen öffentliche Indizes öffentliche Inodes und müssen daher in die `maxfiles` Planung einbezogen werden.
+
+Mit der Option `volume show` kann geprüft werden, ob ein öffentlicher Verzeichnisindex vorhanden ist `-has-dir-index-public true`. Diese Option kann nicht manuell festgelegt werden; sie zeigt nur dann `true` an, wenn ein öffentlicher Verzeichnisindex vorhanden ist.
+
+Öffentliche Verzeichnisindizes zählen für  `files` und können  `files-used` sich für jedes indizierte Verzeichnis um etwa einen Inode erhöhen.
+
+Private Indizes beanspruchen nicht die öffentliche `files`Zulage.
+
+
+
+[[when-to-enable-public-directory-index-transfers]]
+=== Zeitpunkt für die Aktivierung öffentlicher Verzeichnisindexübertragungen
+
+Durch die Aktivierung von Indexübertragungen bleiben Indizes für die Replikation oder Wiederherstellung erhalten, um aufwändige Neuaufbauten für Verzeichnisse mit vielen Dateien zu vermeiden. Wenn die Indexübertragung deaktiviert ist, berücksichtigt SnapMirror private Indizes nicht. Nach der Aktivierung oder Wiederherstellung kann ONTAP fehlende Indizes für geeignete Verzeichnisse mithilfe eines Indizierungsscanners oder eines qualifizierenden Frontend Vorgangs neu erstellen, was nach einem Failover zu einem SnapMirror Ziel zu Leistungseinbußen führen kann. Die Aktivierung von Indexübertragungen verbessert die Leistung lokaler Suchvorgänge nicht; die lokale Indizierung erfolgt bereits, wenn die Option  `false` ist. Sie ist ausschließlich für die Verwendung mit Volumes vorgesehen, die Teil einer SnapMirror Beziehung sind.
+
+
+
+[[sparse-directories-and-hole-punching]]
+== Dünn besetzte Verzeichnisse und Hole Punching
+
+Eine Verzeichnisdatei kann groß werden und dann ausgedünnt sein, nachdem viele Namen gelöscht wurden (d. h. wenn Dateien aus dem Verzeichnis entfernt werden). Die Größe der Verzeichnisdatei bleibt auf ihrem Höchststand, sodass ein `READDIR` viel CPU und E/A für das Durchlaufen leerer Blöcke aufwenden könnte.
+
+Bei indizierten Verzeichnissen kann ONTAP eine Lücke erzeugen, wenn ein 4 KiB großer Verzeichnisblock vollständig leer wird.
+
+Der Index verfolgt das Loch so, dass:
+
+* `READDIR`Der leere Block kann übersprungen werden.
+* Der physische Block kann zurückgewonnen werden.
+* Ein Erstellen kann diesen logischen Speicherort später wiederverwenden.
+
+
+Das Feld „Erweitert“ `-has-optimized-sparse-directories` ist eine schreibgeschützte Option für volume show. Ein Wert von `true` bedeutet, dass das Volume Verzeichnisblöcke in dieser optimierten, lochgestanzten Form enthält.
+
+Wenn die Verzeichnisgröße einer Anwendung nach dem Löschen weiterhin problematisch ist, führt das Kopieren der verbleibenden Einträge in ein neu erstelltes Verzeichnis zu einer kompakteren Verzeichnisdatei-Anordnung. Das Verringern `maxdir-size` komprimiert ein lückenhaftes Verzeichnis nicht.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-03-maxdirsize-view.html["← Zurück: Maximale Verzeichnisgröße und Größe des aktuellen Verzeichnisses anzeigen"] | link:high-file-count-workloads-05-maxdirsize-impact.html["Weiter: Auswirkungen von maxdir-size →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:high-file-count-workloads-09-maxfiles.html["ONTAP Inode-Typen"]
+

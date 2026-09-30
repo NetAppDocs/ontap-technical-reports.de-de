@@ -59,7 +59,7 @@ Darüber hinaus unterstützt NetApp AFX viele der Sicherheitsfunktionen von unif
 
 Informationen darüber, welche Zertifizierungen unified ONTAP erhalten hat (sowie weitere Informationen zur Sicherheitshärtung), finden Sie hier:
 
-* link:https://security.netapp.com/certifications["NetApp Produktsicherheit"^]
+* link:https://security.netapp.com/resources/["NetApp Produktsicherheit"^]
 * link:https://docs.netapp.com/us-en/ontap-technical-reports/ontap-security-hardening/security-hardening-overview.html["Übersicht über die Erhöhung der Sicherheit durch ONTAP"^]
 
 

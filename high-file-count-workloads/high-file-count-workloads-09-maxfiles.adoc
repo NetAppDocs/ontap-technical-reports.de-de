@@ -1,0 +1,170 @@
+---
+sidebar: sidebar 
+permalink: high-file-count-workloads/high-file-count-workloads-09-maxfiles.html 
+keywords: ONTAP, NAS, maxfiles, files, inode, files-used, public inode, private inode 
+summary: Zu ONTAP Inodes, öffentlichen und privaten Inode-Typen, ACL Inodes und benannten Streams. 
+---
+= ONTAP Inode-Typen
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/high-file-count-workloads/
+
+
+[role="lead"]
+ONTAP verwendet öffentliche Inodes zur Darstellung von Dateisystemobjekten, die in FlexVol- und FlexGroup Volumes vorhanden sind. Jedes Volume hat eine definierte Obergrenze (siehe link:high-file-count-workloads-10-maxfiles-limits.html["Maxfiles und ONTAP inode-Informationen"]), und öffentliche Inodes werden im Dateisystem auf diese Obergrenze angerechnet.
+
+
+
+[[what-is-an-inode]]
+== Was ist ein Inode?
+
+Im Allgemeinen ist ein Inode der Dateisystemeintrag für ein Objekt. Er speichert Identität und Metadaten wie Typ, Eigentümerschaft, Zeitstempel und Berechtigungen und verweist auf die Daten des Objekts. Der Name des Objekts wird in einem Verzeichnis gespeichert, nicht im Inode selbst.
+
+In ONTAP speichert WAFL diese Datensätze in einer versteckten Inode-Datei auf Volume-Ebene auf jedem FlexVol oder FlexGroup Bestandteil. Öffentliche Inodes werden auf die Volume `files` Einstellung angerechnet, die üblicherweise als maxfiles bezeichnet wird. Das Erstellen eines öffentlichen Objekts erhöht die Nutzung öffentlicher Inodes, private Inodes hingegen nicht. Kapazität und Wachstum der Inode-Datei werden in link:high-file-count-workloads-08-maxfiles-high-file-counts.html#capacity-impact["Kapazitätsauswirkungen"] beschrieben.
+
+Die folgende Abbildung zeigt, wie die öffentliche Inode-Datei mit  `files-used`,  `inodefile-public-capacity`, der  `files` Obergrenze und der im Volume verbrauchten Kapazität zusammenhängt.
+
+[link=../media/high-file-count-workloads/ontap-inode-file.png]
+image::ontap-inode-file.png[Diagramm der ONTAP Volume Inode-Datei, das die in inodefile-public-capacity verschachtelten files-used zeigt,400,and files-maximum-possible]
+
+
+
+[[types-of-inodes-in-ontap]]
+== Arten von Inodes in ONTAP
+
+Der *Typ* eines Inodes beschreibt die Art des Objekts, das er repräsentiert. ONTAP ordnet jeden Inode entweder einem *öffentlichen* oder einem *privaten* Inode-Bereich zu. Öffentliche Inodes werden bei der Berechnung von maxfiles berücksichtigt, private Inodes nicht. Ein Verzeichnisindex-Inode kann je nach Volume Konfiguration einem der beiden Bereiche angehören.
+
+
+
+[[public-inodes]]
+=== Öffentliche Inodes
+
+Öffentliche Inodes werden aus der öffentlichen Inode-Datei des Volumes zugewiesen und zählen zu  `files` und  `files-used`. Sie umfassen für den Client sichtbare Objekte und öffentliche Metadatenobjekte, die nicht als Verzeichniseinträge erscheinen.
+
+Die folgende Tabelle zeigt eine Liste der in ONTAP gefundenen öffentlichen Inodes und zusätzliche Informationen dazu. Die Spalte „link:high-file-count-workloads-02-maxdirsize.html[`maxdir-size`]“ gibt an, ob beim Erstellen dieses Objekts ein Verzeichniseintrag zum übergeordneten Verzeichnis hinzugefügt wird und dadurch die Verzeichnisdatei des übergeordneten Verzeichnisses vergrößert wird.
+
+|===
+| Typ | Was es darstellt | Wird auch für link:high-file-count-workloads-02-maxdirsize.html[`maxdir-size`] gezählt 
+
+
+| Normale Datei | Standarddateiinhalte und -attribute | *Ja.* Das Erstellen der Datei fügt im übergeordneten Verzeichnis einen Namen hinzu. 
+
+
+| Verzeichnis | Die Namen eines Verzeichnisses und der zugehörige Inode des Verzeichnisses | *Ja.* Durch das Erstellen des Verzeichnisses wird dem übergeordneten Verzeichnis ein Name hinzugefügt. Das neue Verzeichnis verfügt außerdem über eine eigene Verzeichnisdatei, die `maxdir-size` unabhängig Grenzen festlegt. 
+
+
+| Symbol-Link | Ein Pfadzeiger anstelle von Dateidaten | *Ja.* ^{asterisk}^ Durch das Erstellen des Symbol-Link wird im übergeordneten Verzeichnis ein Name hinzugefügt. 
+
+
+| Spezialdatei | UNIX FIFO, Socket oder Geräteknoten | *Ja.* Beim Erstellen der speziellen Datei wird ein Name im übergeordneten Verzeichnis hinzugefügt. 
+
+
+| Benannter Stream | Zusätzliche Daten neben dem Standardinhalt der Datei (alternativer NTFS-Datenstrom) | *Nein.* Der Stream ist kein Name im übergeordneten Benutzerverzeichnis. 
+
+
+| Stream-Verzeichnis | Versteckter Container, der die Namen der benannten Datenströme einer Datei enthält | *Nein.* Es handelt sich nicht um einen für Benutzer sichtbaren Verzeichniseintrag. 
+
+
+| ACL (xinode) | NTFS Sicherheitsdeskriptor oder NFSv4 ACL, gespeichert als Zugriffssteuerungseintrag (ACE)-Daten | *Nein.* Die ACL ist kein Verzeichniseintrag. 
+
+
+| Verzeichnisindex (wenn öffentlich)^{asterisk}{asterisk}^ | Zugehöriger B+tree zum Nachschlagen von Namen in einem großen Verzeichnis | *Nein.* Der Index ist kein Verzeichniseintrag. 
+|===
+
+NOTE: ^*^ Ein Symbol-Link ist ein eigener öffentlicher Inode und Verzeichniseintrag. Ein Hardlink hingegen ist ein anderer Verzeichnisname für einen bereits vorhandenen regulären Datei-Inode und kein separater Inode-Typ. Das Erstellen eines Hardlinks fügt einen Verzeichniseintrag hinzu und vergrößert die Datei des übergeordneten Verzeichnisses, weist aber keinen weiteren öffentlichen Inode zu.
+
+
+NOTE: ^**^ Directory-Index-Inodes sind standardmäßig privat. Wie in link:high-file-count-workloads-04-maxdirsize-indexing.html#about-private-and-public-index-inodes["Über private und öffentliche Index-Inodes"] beschrieben, können sie in den öffentlichen Inode-Bereich verschoben werden.
+
+
+
+==== ACL Inodes
+
+Wenn eine Datei oder ein Verzeichnis über einen NTFS-Sicherheitsdeskriptor oder eine NFSv4-ACL verfügt, speichert ONTAP diese ACL als separaten ACL-Inode (auch als erweiterter Inode oder xinode bezeichnet). Der ACL-Inode enthält die ACEs. ONTAP weist ihn aus dem öffentlichen Inode-Bereich zu, sodass er auf  `files` und  `files-used` angerechnet wird. Der Datei- oder Verzeichnis-Inode verweist auf seinen ACL-Inode.
+
+
+NOTE: UNIX-Modusbits werden im eigenen Inode der Datei oder des Verzeichnisses gespeichert. Sie belegen keinen zusätzlichen öffentlichen Inode.
+
+Die Verwendung von ACL-Inodes steht nicht immer in einer 1:1-Beziehung zu einer Datei oder einem Verzeichnis:
+
+* Dateien oder Verzeichnisse mit demselben gespeicherten Sicherheitsdeskriptor können sich einen ACL-Inode teilen, wenn ONTAPs ACL-Sharing-Optimierung sie zusammenfasst. Vererbung erzeugt häufig identische Deskriptoren, die für die gemeinsame Nutzung infrage kommen.
+* Die gemeinsame Nutzung erfolgt möglicherweise nicht, wenn sich ACEs, Eigentümer- oder Gruppeninformationen, Kontrollflags oder Vererbungsergebnisse unterscheiden. Selbst identische Deskriptoren werden nicht garantiert zusammengeführt, beispielsweise wenn sie in separaten Vorgängen erstellt oder aktualisiert werden, bevor die gemeinsame Nutzung erkannt wird.
+* Ein Erstellen kann die ACL des übergeordneten Elements erben, wenn die Anforderung keine eigenen ACEs bereitstellt und die übergeordnete ACL Vererbungsattribute besitzt.
+* Volumes mit dem Sicherheitsstil NTFS verwenden standardmäßig NTFS ACLs. Neue Dateien und Verzeichnisse können sich einen ACL Inode teilen, wenn ihre resultierenden gespeicherten Deskriptoren identisch sind, Administratoren dürfen jedoch nicht davon ausgehen, dass alle Standard- oder geerbten ACLs einen gemeinsamen Inode verwenden.
+* UNIX security-style objects, die bei Modusbits verbleiben, belegen erst dann eine ACL-Inode, wenn eine NFSv4 ACL gespeichert wird. Mixed security style kann sowohl Objekte enthalten, die nur auf Modusbits basieren, als auch ACL-geschützte Objekte.
+
+
+
+
+==== Benannte Streams
+
+Ein benannter Datenstrom sind zusätzliche Daten, die an eine Datei angehängt werden, zusätzlich zu dem Inhalt, den Benutzer normalerweise öffnen. In ONTAP ist dies die WAFL Darstellung eines alternativen NTFS-Datenstroms (ADS). Die standardmäßigen, unbenannten Daten der Datei befinden sich im Basisdatei-Inode. Jeder zusätzliche benannte Datenstrom ist ein separater öffentlicher Inode und wird auf  `files` und  `files-used` angerechnet.
+
+Benannte Datenströme bleiben mit der Datei verbunden. Sie sind kein temporärer Arbeitsbereich, den ONTAP nur beim Öffnen, Kopieren oder Speichern verwendet. Ein Datenstrom bleibt so lange belegt, bis dieser Datenstrom oder die Basisdatei gelöscht wird. Eine Anwendung kann einen Datenstrom erstellen und später wieder entfernen, ONTAP lässt benannte Datenströme jedoch nicht automatisch ablaufen.
+
+Einige Punkte sind zu beachten:
+
+* SMB Workloads erstellen und verwenden benannte Datenströme. Windows adressiert sie als `filename:stream_name`, zum Beispiel `report.docx:Zone.Identifier`. `Zone.Identifier` sind Windows Mark of the Web Metadaten. Wenn eine Datei aus dem Internet heruntergeladen wird, erfassen Windows oder der Browser eine Zonen-ID (häufig die Internetzone), damit Explorer, SmartScreen und Office die Datei als nicht vertrauenswürdig behandeln können, bis ein Benutzer die Blockierung aufhebt. Dieser Datenstrom bleibt an der Datei, bis er entfernt wird. Weitere häufige Quellen sind Backup- und Sicherheitsanwendungen sowie Anwendungen, die Begleitdaten als ADS speichern. Microsoft Office `~$` Sperrdateien und temporäre Speicherdateien sind gewöhnliche Dateien und Verzeichniseinträge, keine benannten Datenströme. Von OneDrive synchronisierte Dateien erhalten nicht unbedingt einen `Zone.Identifier` Datenstrom; das Verhalten hängt vom Client und vom Übertragungspfad ab.
+* macOS Clients, die auf SMB zugreifen, können benannte Streams für Finder Metadaten und Ressourcenforks verwenden, die üblicherweise als  `AFP_AfpInfo` und  `AFP_Resource` dargestellt werden.
+* Normale Auflistungen blenden benannte Streams aus. Windows Explorer, macOS Finder `dir`, und NFS `ls` / `stat` zeigen die Standarddatei an, sodass `files-used` die sichtbare Anzahl überschritten werden kann. Streams können von einem Windows SMB Client mit `dir /r` oder PowerShell `Get-Item <file> -Stream *` aufgelistet werden. ONTAP unterstützt keine benannten NFSv4-Attribute, daher sehen NFS-Clients SMB-Streams nicht als zusätzliche Namen, die Inodes sind aber weiterhin vorhanden.
+* Eine versteckte Datei, eine Auslagerungsdatei oder eine Sicherungsdatei, die von  `vi` erstellt wird (zum Beispiel  `.file.swp` oder  `file~`), ist eine gewöhnliche Datei und ein Verzeichniseintrag, kein benannter Datenstrom.
+* NFSv4.2 erweiterte Attribute (xattrs), die ab ONTAP 9.12.1 unterstützt werden, stellen ein anderes Merkmal dar. Sie sind keine ACL Inodes und sollten nicht als ACL xinodes gezählt werden.
+
+
+
+
+==== Auswirkungen auf NDMP-Backups und Wiederherstellungen
+
+Während der NDMP-Dump- und Wiederherstellungsverarbeitung identifiziert ONTAP Objektklassen wie reguläre Dateien, Verzeichnisse, NT-Streams, Stream-Verzeichnisse und ACL-Inodes separat, sodass die Daten und Metadaten jedes Objekts serialisiert, in den Dump-Statistiken gemeldet und korrekt rekonstruiert werden können. Diese Klassifizierung erzeugt keine separaten Maxfiles-Limits oder separaten  `volume show`Zähler. `files-used` Die Gesamtzahl der öffentlichen Inodes bleibt bestehen.
+
+NDMP dump durchläuft den Namensraum und serialisiert diese Objekte einzeln. Restore rekonstruiert sie auf dieselbe Weise. Eine hohe Anzahl öffentlicher Inodes verlängert daher dump und restore, selbst wenn die Datenkapazität des Volumes gering ist oder die Anzahl der sichtbaren Dateien niedrig erscheint. Benannte Streams und ACL-Inodes werden auch dann gesichert und wiederhergestellt, wenn Explorer, Finder `dir`, oder `ls` sie nicht anzeigen, sodass dump Statistiken mehr Stream- und ACL-Objekte ausweisen können, als eine einfache Verzeichnisauflistung vermuten lässt.
+
+Der Prozess ist oft eher metadaten- als durchsatzabhängig. Das Erstellen, Suchen und Wiederherstellen von Millionen von Inodes, ACLs und Streams beansprucht CPU, Arbeitsspeicher und Speicher-I/O, obwohl die Datenmenge pro Objekt relativ gering ist. Kleine Dateien, eine hohe ACL-Nutzung und viele benannte Streams erhöhen diesen Aufwand. Große, flache Verzeichnisse verursachen zusätzliche Kosten beim Sichern, und die Wiederherstellung eines Volumes mit vielen Dateien kann auch Zeit für den Neuaufbau der Verzeichnisindizes beanspruchen, nachdem die Objekte vorhanden sind. Die Dauer von Sicherung und Wiederherstellung sollte anhand einer repräsentativen Objektanzahl einschließlich Streams und ACLs gemessen werden, anstatt sie allein anhand der Datengröße zu schätzen.
+
+
+
+[[private-inodes]]
+=== Private Inodes
+
+Private Inodes sind ONTAP-interne Metadatensätze. Sie befinden sich in einem separaten privaten Inode-Bereich, zählen weder zu  `files` noch zu  `files-used` und können nicht als zusätzliche Clientdateien verwendet werden.
+
+Die folgende Tabelle zeigt gängige private Inode-Typen.
+
+|===
+| Typ | Was es darstellt | Wird auch für link:high-file-count-workloads-02-maxdirsize.html[`maxdir-size`] gezählt 
+
+
+| Verzeichnisindex (Standard)^{asterisk}^ | Zugehöriger B+tree zum Nachschlagen von Namen in einem großen Verzeichnis | *Nein.* 
+
+
+| Private Metadatei | Von ONTAP verwendete versteckte WAFL Metadaten | *Nein.* 
+
+
+| Zombie | Ein nicht verknüpftes Objekt, das beibehalten wird, bis Referenzen oder asynchrones Löschen abgeschlossen sind | *Nein.* 
+|===
+
+NOTE: ^*^ Verzeichnisindizes sind standardmäßig privat. Die Übertragung öffentlicher Indizes wird in link:high-file-count-workloads-04-maxdirsize-indexing.html#about-private-and-public-index-inodes["Über private und öffentliche Index-Inodes"] beschrieben.
+
+
+NOTE: In den meisten Fällen ist eine Überwachung der privaten Inode-Nutzung nicht erforderlich, da private Inodes nicht auf maxfiles angerechnet werden, es sei denn, der NetApp Support weist Sie dazu an.
+
+
+
+==== Zombie-Inodes
+
+Eine nicht verknüpfte Datei kann nicht immer sofort freigegeben werden. ONTAP kann sie vorübergehend als Zombiedatei beibehalten, während Referenzen oder asynchrone Vorgänge abgeschlossen werden. Umfangreiche asynchrone Löschvorgänge können daher die Nutzung privater Inodes während der Bereinigung erhöhen. Private Inodes werden jedoch nicht auf die im Volume maximal  `files`zulässige Gesamtzahl angerechnet.
+
+[cols="<,>"]
+|===
+
+
+| link:high-file-count-workloads-08-maxfiles-high-file-counts.html["← Zurück: Hohe Dateianzahl und Inode-Kapazität"] | link:high-file-count-workloads-10-maxfiles-limits.html["Als Nächstes: Maxfiles und ONTAP inode Informationen →"] 
+|===
+
+
+[[related-information]]
+== Verwandte Informationen
+
+* link:https://docs.netapp.com/us-en/ontap/nfs-admin/security-styles-their-effects-concept.html["ONTAP NAS Sicherheitsstile"^]
+* link:https://docs.netapp.com/us-en/ontap/nas-audit/audit-alternate-ntfs-data-streams-concept.html["Überwachung alternativer NTFS-Datenströme"^]
+

@@ -18,6 +18,13 @@ NetApp NAS-Lösungen vereinfachen die Datenverwaltung und helfen Ihnen, mit dem 
 
 
 
+[[high-file-count-workloads]]
+== Arbeitslasten mit hoher Dateianzahl
+
+link:high-file-count-workloads/high-file-count-workloads-01-overview.html["NetApp ONTAP Workloads mit hoher Dateianzahl für NAS Volumes"] Wie NAS-Workloads mit hoher Dateianzahl ONTAP Metadaten nutzen, wie `maxfiles` und `maxdir-size` unterschiedliche Skalierungsgrenzen definieren und wie Namespaces für Kapazität und Leistung geplant werden.
+
+
+
 [[smb]]
 == SMB
 
