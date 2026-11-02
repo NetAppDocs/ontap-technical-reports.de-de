@@ -37,7 +37,7 @@ NOTE: Die maximale Leistung wurde durch den Einsatz mehrerer Clients erreicht, d
 | AFX 1K | ~35GB/s | ~10GB/s 
 
 
-| AFX 2K | ~35GB/s | ~17GB/s (+70 % Steigerung) 
+| AFX 2K | ~35GB/s | ~16GB/s (+60 % Steigerung) 
 |===
 
 NOTE: Die aktuellsten Leistungsschätzungen erhalten Sie von Ihrem NetApp Vertriebsteam.
@@ -223,7 +223,7 @@ Noch beeindruckender sind die Verbesserungen bei einem der größten Leistungsen
 
 Mit den Änderungen in AFX ONTAP 9.18.1 hat sich die Leistung von NFSv4.x für diese Art von Arbeitslasten erheblich verbessert und die Lücke zur Leistung von NFSv3 (innerhalb von 15%) geschlossen.
 
-Unsere Performance-Engineering-Teams verglichen die Leistung von Standard-Benchmarks für KI-Bild, EDA und Software-Builds und stellten massive Verbesserungen gegenüber der vorherigen ONTAP Version fest.
+Unsere Performance Engineering Teams verglichen die Performance von Standard-KI-, EDA- und Software-Build-Benchmarks und stellten gegenüber dem vorherigen ONTAP Release massive Verbesserungen fest.
 
 *NetApp AFX – NFSv4.1 Metadaten-IO-Leistung in NetApp AFX*
 
